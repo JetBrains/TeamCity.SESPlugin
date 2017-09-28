@@ -1,10 +1,10 @@
-package jetbrains.buildServer.sesPlugin
+package jetbrains.buildServer.sesPlugin.dataHolders
 
 import com.google.gson.Gson
 import java.io.InputStream
 import java.io.InputStreamReader
 
-class JsonResponseDataParser {
+class JsonRequestDataParser {
 
     companion object {
         const val SUBSCRIBE_TYPE = "SubscriptionConfirmation"
@@ -12,18 +12,18 @@ class JsonResponseDataParser {
         const val NOTIFICATION_TYPE = "Notification"
     }
 
-    fun parse(type: String?, inputStream: InputStream): ResponseDataHolder {
+    fun parse(type: String?, inputStream: InputStream): RequestData {
 
         val gson = Gson()
         val holder = when (type) {
             SUBSCRIBE_TYPE -> {
-                gson.fromJson<SubscribeResponseDataHolder>(InputStreamReader(inputStream, "UTF-8"), SubscribeResponseDataHolder::class.java)
+                gson.fromJson<SubscribeRequestData>(InputStreamReader(inputStream, "UTF-8"), SubscribeRequestData::class.java)
             }
             UNSUBSCRIBE_TYPE -> {
-                gson.fromJson<UnsubscribeResponseDataHolder>(InputStreamReader(inputStream, "UTF-8"), UnsubscribeResponseDataHolder::class.java)
+                gson.fromJson<UnsubscribeRequestData>(InputStreamReader(inputStream, "UTF-8"), UnsubscribeRequestData::class.java)
             }
             NOTIFICATION_TYPE -> {
-                gson.fromJson<NotificationResponseDataHolder>(InputStreamReader(inputStream, "UTF-8"), NotificationResponseDataHolder::class.java)
+                gson.fromJson<NotificationRequestData>(InputStreamReader(inputStream, "UTF-8"), NotificationRequestData::class.java)
             }
             null -> throw IllegalArgumentException("No type provided")
             else -> throw IllegalArgumentException("Unknown type $type")
