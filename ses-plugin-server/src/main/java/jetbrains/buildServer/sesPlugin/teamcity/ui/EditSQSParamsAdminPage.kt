@@ -1,5 +1,6 @@
 package jetbrains.buildServer.sesPlugin.teamcity.ui
 
+import jetbrains.buildServer.controllers.BasePropertiesBean
 import jetbrains.buildServer.controllers.admin.AdminPage
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl
 import jetbrains.buildServer.web.openapi.Groupable
@@ -16,17 +17,15 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
         addJsFile(pluginDescriptor.getPluginResourcesPath("editSESParams.js"))
         addCssFile(pluginDescriptor.getPluginResourcesPath("editSESParams.css"))
     }
-
     fun init() = register()
-
     override fun fillModel(model: MutableMap<String, Any>, request: HttpServletRequest) {
-//        val bean = sesIntegrationManager.getBean()
+        val beans = sesIntegrationManager.getBeans("")
 
-//        val propsBean = BasePropertiesBean(bean.toMap())
+        val propsBean = BasePropertiesBean(if (!beans.isEmpty()) beans.first().toMap() else emptyMap<String, String>())
 
-//        PluginPropertiesUtil.bindPropertiesFromRequest(request, propsBean, true)
+        PluginPropertiesUtil.bindPropertiesFromRequest(request, propsBean, true)
 
-//        model.put("propertiesBean", propsBean)
+        model.put("propertiesBean", propsBean)
     }
 
     override fun getGroup() = Groupable.SERVER_RELATED_GROUP

@@ -9,18 +9,42 @@
 <%@ taglib prefix="admin" tagdir="/WEB-INF/tags/admin" %>
 
 <jsp:useBean id="constants" class="jetbrains.buildServer.sesPlugin.teamcity.util.Constants"/>
+<jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
-<table class="runnerFormTable">
-    <jsp:include page="editAWSCommonParams.jsp"/>
+<div id="editSQSParams">
+    <div>
+        Some sort of header
+    </div>
 
-    <tr>
-        <th><label for="${constants.ACCOUNT_ID_PARAM}">Account id</label></th>
-        <td></td>
-    </tr>
-</table>
+    <table class="runnerFormTable">
+        <jsp:include page="editAWSCommonParams.jsp"/>
+
+        <l:settingsGroup title="SQS Queue Parameters">
+            <tr>
+                <th><label for="${constants.ACCOUNT_ID_PARAM}">Owner Account ID: <l:star/></label></th>
+                <td>
+                    <props:textProperty name="${constants.ACCOUNT_ID_PARAM}"
+                                        value="${propertiesBean.properties[constants.ACCOUNT_ID_PARAM]}"
+                                        className="longField" maxlength="256"/>
+                    <span class="smallNote">Owner ID/span>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="${constants.QUEUE_NAME_PARAM}">SQS Queue Name: <l:star/></label></th>
+                <td>
+                    <props:textProperty name="${constants.QUEUE_NAME_PARAM}"
+                                        value="${propertiesBean.properties[constants.QUEUE_NAME_PARAM]}"
+                                        className="longField" maxlength="256"/>
+                    <span class="smallNote">Queue Name to pull SES events from</span>
+                </td>
+            </tr>
+        </l:settingsGroup>
+    </table>
+
+    <forms:button id="submit">Submit</forms:button>
+    <forms:button id="check">Check connection</forms:button>
+</div>
 
 <script>
-    $j(function () {
-//        $j('aws.access.keys').click();
-    });
+    $j(BS.SESPlugin.EditSQSParams.init);
 </script>

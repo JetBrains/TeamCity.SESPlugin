@@ -9,7 +9,6 @@ import com.amazonaws.services.sqs.AmazonSQSClientBuilder
 import com.amazonaws.services.sqs.model.GetQueueUrlRequest
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest
 import jetbrains.buildServer.sesPlugin.teamcity.SESBean
-import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl
 import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
 import jetbrains.buildServer.util.amazon.AWSCommonParams
 
