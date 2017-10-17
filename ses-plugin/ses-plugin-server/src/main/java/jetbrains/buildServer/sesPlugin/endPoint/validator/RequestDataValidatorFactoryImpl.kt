@@ -1,6 +1,6 @@
-package jetbrains.buildServer.sesPlugin.validator
+package jetbrains.buildServer.sesPlugin.endPoint.validator
 
-import jetbrains.buildServer.sesPlugin.dataHolders.RequestData
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.RequestData
 
 class RequestDataValidatorFactoryImpl : RequestDataValidatorFactory {
     override fun getValidator(data: RequestData): RequestDataValidator {

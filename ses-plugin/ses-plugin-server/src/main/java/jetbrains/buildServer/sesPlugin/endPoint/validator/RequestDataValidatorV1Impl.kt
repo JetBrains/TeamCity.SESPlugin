@@ -1,8 +1,8 @@
-package jetbrains.buildServer.sesPlugin.validator
+package jetbrains.buildServer.sesPlugin.endPoint.validator
 
-import jetbrains.buildServer.sesPlugin.dataHolders.NotificationRequestData
-import jetbrains.buildServer.sesPlugin.dataHolders.RequestData
-import jetbrains.buildServer.sesPlugin.dataHolders.SubscriptionRequestData
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.NotificationRequestData
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.RequestData
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.SubscriptionRequestData
 import jetbrains.buildServer.util.HTTPRequestBuilder
 import java.io.IOException
 import java.io.InputStream
@@ -67,20 +67,18 @@ class RequestDataValidatorV1Impl : RequestDataValidator {
 
     private fun notificationBytesToSign(data: NotificationRequestData): ByteArray {
         with(data) {
-            val sb = StringBuilder()
-            sb.append("Message\n")
-            sb.append(message).append("\n")
-            sb.append("MessageId\n")
-            sb.append(messageId).append("\n")
-            sb.append("Subject\n")
-            sb.append(subject).append("\n")
-            sb.append("Timestamp\n")
-            sb.append(timestamp).append("\n")
-            sb.append("TopicArn\n")
-            sb.append(topicArn).append("\n")
-            sb.append("Type\n")
-            sb.append(type).append("\n")
-            return sb.toString().toByteArray(Charset.forName("UTF-8"))
+            return ("Message\n" +
+                    "$message\n" +
+                    "MessageId\n" +
+                    "$messageId\n" +
+                    "Subject\n" +
+                    "$subject\n" +
+                    "Timestamp\n" +
+                    "$timestamp\n" +
+                    "TopicArn\n" +
+                    "$topicArn\n" +
+                    "Type\n" +
+                    "$type\n").toByteArray(Charset.forName("UTF-8"));
         }
     }
 

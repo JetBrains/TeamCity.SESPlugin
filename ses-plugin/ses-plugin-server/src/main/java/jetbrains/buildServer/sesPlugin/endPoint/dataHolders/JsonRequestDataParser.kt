@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.dataHolders
+package jetbrains.buildServer.sesPlugin.endPoint.dataHolders
 
 import com.google.gson.Gson
 import java.io.InputStream

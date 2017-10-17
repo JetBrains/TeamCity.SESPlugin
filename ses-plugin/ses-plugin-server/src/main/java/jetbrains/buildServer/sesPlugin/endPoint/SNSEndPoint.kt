@@ -1,30 +1,28 @@
-package jetbrains.buildServer.sesPlugin
+package jetbrains.buildServer.sesPlugin.endPoint
 
 import com.google.gson.JsonIOException
 import com.google.gson.JsonSyntaxException
 import jetbrains.buildServer.controllers.BaseController
 import jetbrains.buildServer.serverSide.SBuildServer
-import jetbrains.buildServer.sesPlugin.dataHolders.JsonRequestDataParser
-import jetbrains.buildServer.sesPlugin.dataHolders.RequestData
-import jetbrains.buildServer.sesPlugin.handlers.RequestHandlerFactory
-import jetbrains.buildServer.sesPlugin.handlers.RequestHandlerFactoryImpl
-import jetbrains.buildServer.sesPlugin.validator.RequestDataValidatorFactory
-import jetbrains.buildServer.sesPlugin.validator.RequestDataValidatorFactoryImpl
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.JsonRequestDataParser
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.RequestData
+import jetbrains.buildServer.sesPlugin.endPoint.handlers.RequestHandlerFactory
+import jetbrains.buildServer.sesPlugin.endPoint.validator.RequestDataValidatorFactory
+import jetbrains.buildServer.web.openapi.WebControllerManager
 import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class EndPoint(server: SBuildServer) : BaseController(server) {
-    private val AMAZON_TYPE_HEADER = "x-amz-sns-message-type"
+class EndPoint(server: SBuildServer,
+               webControllerManager: WebControllerManager,
+               private val myRequestDataValidatorFactory: RequestDataValidatorFactory,
+               private val myRequestHandlerFactory: RequestHandlerFactory) : BaseController(server) {
 
-    private val myRequestDataValidatorFactory: RequestDataValidatorFactory
-        get() {
-            return RequestDataValidatorFactoryImpl()
-        }
-    private val myRequestHandlerFactory: RequestHandlerFactory
-        get() {
-            return RequestHandlerFactoryImpl()
-        }
+    init {
+        webControllerManager.registerController("ses-endpoint", this)
+    }
+
+    private val AMAZON_TYPE_HEADER = "x-amz-sns-message-type"
 
     override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? {
         if (!acceptedContentLength(request.contentLength)) {

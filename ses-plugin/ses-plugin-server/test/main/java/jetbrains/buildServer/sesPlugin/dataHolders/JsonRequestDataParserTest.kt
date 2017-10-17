@@ -1,5 +1,9 @@
 package jetbrains.buildServer.sesPlugin.dataHolders
 
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.JsonRequestDataParser
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.NotificationRequestData
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.SubscribeRequestData
+import jetbrains.buildServer.sesPlugin.endPoint.dataHolders.UnsubscribeRequestData
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.BDDAssertions.then
 import org.junit.Test

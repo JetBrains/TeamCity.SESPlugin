@@ -31,6 +31,10 @@
             <id>JetBrains</id>
             <url>http://repository.jetbrains.com/all</url>
         </repository>
+        <repository>
+            <id>teamcity-repository</id>
+            <url>https://download.jetbrains.com/teamcity-repository</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>

@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.dataHolders
+package jetbrains.buildServer.sesPlugin.endPoint.dataHolders
 
 interface SubscriptionRequestData : RequestData {
     val token: String
