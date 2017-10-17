@@ -10,6 +10,7 @@ import com.amazonaws.services.sqs.model.GetQueueUrlRequest
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest
 import jetbrains.buildServer.sesPlugin.teamcity.SESBean
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl
+import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
 import jetbrains.buildServer.util.amazon.AWSCommonParams
 
 class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotificationParser) : SQSMessagesReceiver {
@@ -38,10 +39,10 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
             }
 
             val queueUrlResult = try {
-                sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(params[SESIntegrationManagerImpl.QUEUE_NAME_PARAM]).withQueueOwnerAWSAccountId(params[SESIntegrationManagerImpl.ACCOUNT_ID_PARAM]))
+                sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(params[Constants.QUEUE_NAME_PARAM]).withQueueOwnerAWSAccountId(params[Constants.ACCOUNT_ID_PARAM]))
             } catch (ex: Exception) {
                 tryShutdownSilently(sqs)
-                return@withAWSClients ReceiveMessagesResult(emptyList(), ex, "Cannot get queue url for ${params[SESIntegrationManagerImpl.ARN_PARAM]}")
+                return@withAWSClients ReceiveMessagesResult(emptyList(), ex, "Cannot get queue url with name ${params[Constants.QUEUE_NAME_PARAM]} and owner ${params[Constants.ACCOUNT_ID_PARAM]}")
             }
 
             val messagesResult = try {
@@ -76,7 +77,7 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
             }
 
             try {
-                sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(params[SESIntegrationManagerImpl.QUEUE_NAME_PARAM]).withQueueOwnerAWSAccountId(params[SESIntegrationManagerImpl.ACCOUNT_ID_PARAM]))
+                sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(params[Constants.QUEUE_NAME_PARAM]).withQueueOwnerAWSAccountId(params[Constants.ACCOUNT_ID_PARAM]))
             } catch (ex: Exception) {
                 return@withAWSClients CheckConnectionResult(false, ex, "Cannot get queue url")
             } finally {

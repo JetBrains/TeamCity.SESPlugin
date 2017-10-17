@@ -8,12 +8,13 @@
 <%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="admin" tagdir="/WEB-INF/tags/admin" %>
 
+<jsp:useBean id="constants" class="jetbrains.buildServer.sesPlugin.teamcity.util.Constants"/>
+
 <table class="runnerFormTable">
     <jsp:include page="editAWSCommonParams.jsp"/>
 
-
     <tr>
-        <th><label for=""></label></th>
+        <th><label for="${constants.ACCOUNT_ID_PARAM}">Account id</label></th>
         <td></td>
     </tr>
 </table>

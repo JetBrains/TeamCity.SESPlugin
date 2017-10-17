@@ -28,10 +28,4 @@ class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager) : 
             SESBeanMapImpl(it.parameters)
         }.toList()
     }
-
-    companion object {
-        val ARN_PARAM = "aws.sesIntegration.sqsArn"
-        val ACCOUNT_ID_PARAM = "aws.sesIntegration.accountId"
-        val QUEUE_NAME_PARAM = "aws.sesIntegration.queueName"
-    }
 }
