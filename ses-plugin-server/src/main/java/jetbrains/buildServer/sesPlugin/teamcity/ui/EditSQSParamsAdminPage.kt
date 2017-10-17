@@ -15,6 +15,9 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
 
     init {
         addJsFile(pluginDescriptor.getPluginResourcesPath("editSESParams.js"))
+        addJsFile("/bs/pluginProperties.js")
+        addJsFile("/bs/encrypt.js")
+
         addCssFile(pluginDescriptor.getPluginResourcesPath("editSESParams.css"))
     }
     fun init() = register()

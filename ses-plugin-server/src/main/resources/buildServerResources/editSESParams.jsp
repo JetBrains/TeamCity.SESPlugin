@@ -16,30 +16,32 @@
         Some sort of header
     </div>
 
-    <table class="runnerFormTable">
-        <jsp:include page="editAWSCommonParams.jsp"/>
+    <form id="editSQSParamsForm">
+        <table class="runnerFormTable">
+            <jsp:include page="editAWSCommonParams.jsp"/>
 
-        <l:settingsGroup title="SQS Queue Parameters">
-            <tr>
-                <th><label for="${constants.ACCOUNT_ID_PARAM}">Owner Account ID: <l:star/></label></th>
-                <td>
-                    <props:textProperty name="${constants.ACCOUNT_ID_PARAM}"
-                                        value="${propertiesBean.properties[constants.ACCOUNT_ID_PARAM]}"
-                                        className="longField" maxlength="256"/>
-                    <span class="smallNote">Owner ID/span>
-                </td>
-            </tr>
-            <tr>
-                <th><label for="${constants.QUEUE_NAME_PARAM}">SQS Queue Name: <l:star/></label></th>
-                <td>
-                    <props:textProperty name="${constants.QUEUE_NAME_PARAM}"
-                                        value="${propertiesBean.properties[constants.QUEUE_NAME_PARAM]}"
-                                        className="longField" maxlength="256"/>
-                    <span class="smallNote">Queue Name to pull SES events from</span>
-                </td>
-            </tr>
-        </l:settingsGroup>
-    </table>
+            <l:settingsGroup title="SQS Queue Parameters">
+                <tr>
+                    <th><label for="${constants.ACCOUNT_ID_PARAM}">Owner Account ID: <l:star/></label></th>
+                    <td>
+                        <props:textProperty name="${constants.ACCOUNT_ID_PARAM}"
+                                            value="${propertiesBean.properties[constants.ACCOUNT_ID_PARAM]}"
+                                            className="longField" maxlength="256"/>
+                        <span class="smallNote">Owner ID/span>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="${constants.QUEUE_NAME_PARAM}">SQS Queue Name: <l:star/></label></th>
+                    <td>
+                        <props:textProperty name="${constants.QUEUE_NAME_PARAM}"
+                                            value="${propertiesBean.properties[constants.QUEUE_NAME_PARAM]}"
+                                            className="longField" maxlength="256"/>
+                        <span class="smallNote">Queue Name to pull SES events from</span>
+                    </td>
+                </tr>
+            </l:settingsGroup>
+        </table>
+    </form>
 
     <forms:button id="submit">Submit</forms:button>
     <forms:button id="check">Check connection</forms:button>
