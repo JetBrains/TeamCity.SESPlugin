@@ -10,6 +10,6 @@
 
     <!-- UI -->
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSParamsAdminPage" init-method="init"/>
-    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxController"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxController" init-method="init"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.CheckAjaxRequest"/>
 </beans>
