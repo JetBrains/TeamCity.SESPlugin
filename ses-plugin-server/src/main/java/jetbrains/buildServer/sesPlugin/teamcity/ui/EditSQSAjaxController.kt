@@ -1,14 +1,13 @@
 package jetbrains.buildServer.sesPlugin.teamcity.ui
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.Gson
 import jetbrains.buildServer.controllers.BaseController
 import jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.AjaxRequest
 import jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.AjaxRequestData
 import jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.AjaxRequestResult
+import jetbrains.buildServer.sesPlugin.teamcity.util.GsonView
 import jetbrains.buildServer.web.openapi.WebControllerManager
 import org.springframework.web.servlet.ModelAndView
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -23,17 +22,22 @@ class EditSQSAjaxController(private val ajaxRequests: List<AjaxRequest>,
 
     override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? {
         // todo handle permissions
+        val modelAndView = ModelAndView(GsonView())
 
-        val jsonString = request.getParameter("json") ?: return null
+        val parameter = request.getParameter("json")
+        val jsonString = if (parameter != null) parameter else {
+            modelAndView.model.put("result", AjaxRequestResult(false, null, "No data provided"))
+            return modelAndView
+        }
 
-        val req = ObjectMapper().readValue<AjaxRequestData>(jsonString, AjaxRequestData::class.java)
+        val req = Gson().fromJson<AjaxRequestData>(jsonString, AjaxRequestData::class.java)
 
         val res = ajaxRequests.find {
             it.id == req.type
         }?.handle(req) ?: AjaxRequestResult(false, null, "Unknown action ${req.type}")
 
 
-        val jsonRes: JsonNode = ObjectMapper().valueToTree(res)
-        return ModelAndView(MappingJackson2JsonView(), mapOf("res" to jsonRes))
+        modelAndView.model.put("result", res)
+        return modelAndView
     }
 }
