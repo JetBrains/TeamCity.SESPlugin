@@ -76,6 +76,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- todo filter aws sdk - it's huge -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
