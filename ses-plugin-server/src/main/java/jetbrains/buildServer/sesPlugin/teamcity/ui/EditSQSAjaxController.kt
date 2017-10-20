@@ -1,9 +1,8 @@
 package jetbrains.buildServer.sesPlugin.teamcity.ui
 
-import com.google.gson.Gson
 import jetbrains.buildServer.controllers.BaseController
+import jetbrains.buildServer.controllers.BasePropertiesBean
 import jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.AjaxRequest
-import jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.AjaxRequestData
 import jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.AjaxRequestResult
 import jetbrains.buildServer.sesPlugin.teamcity.util.GsonView
 import jetbrains.buildServer.web.openapi.WebControllerManager
@@ -24,20 +23,23 @@ class EditSQSAjaxController(private val ajaxRequests: List<AjaxRequest>,
         // todo handle permissions
         val modelAndView = ModelAndView(GsonView())
 
-        val parameter = request.getParameter("json")
-        val jsonString = if (parameter != null) parameter else {
-            modelAndView.model.put("result", AjaxRequestResult(false, null, "No data provided"))
-            return modelAndView
-        }
-
-        val req = Gson().fromJson<AjaxRequestData>(jsonString, AjaxRequestData::class.java)
-
-        val res = ajaxRequests.find {
-            it.id == req.type
-        }?.handle(req) ?: AjaxRequestResult(false, null, "Unknown action ${req.type}")
-
+        val res = doHandleInternal(request, response)
 
         modelAndView.model.put("result", res)
+
         return modelAndView
+    }
+
+    private fun doHandleInternal(request: HttpServletRequest, response: HttpServletResponse): AjaxRequestResult {
+        val type = request.getParameter("type") ?: return AjaxRequestResult(false, null, "No action type provided")
+
+        return ajaxRequests.find {
+            it.id == type
+        }?.let {
+            val bean = BasePropertiesBean(HashMap())
+            PluginPropertiesUtil.bindPropertiesFromRequest(request, bean, true)
+
+            return@let it.handle(bean)
+        } ?: AjaxRequestResult(false, null, "Unknown action $type")
     }
 }

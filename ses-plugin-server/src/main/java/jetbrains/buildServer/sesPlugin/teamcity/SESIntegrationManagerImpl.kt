@@ -7,9 +7,13 @@ interface SESIntegrationManager {
     fun persistBean(bean: SESBean, project: SProject)
 
     fun getBeans(projectId: String): List<SESBean>
+
+    fun createFrom(map: Map<String, String>): SESBean
 }
 
 class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager) : SESIntegrationManager {
+    override fun createFrom(map: Map<String, String>): SESBean = SESBeanMapImpl(map)
+
     private val FEATURE_TYPE = "sesIntegration"
 
     @Synchronized

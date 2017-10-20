@@ -9,16 +9,12 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
             serialized['type'] = 'submit';
             $j.ajax(window['base_uri'] + '/admin/editSQSParams.html',
                 {
-                    data: {
-                        json: serialized
-                    },
+                    data: serialized,
                     dataType: 'json'
                 })
                 .done(function (data) {
-                    alert(data);
                 })
                 .fail(function (data) {
-                    alert(data);
                 });
         });
 
@@ -27,16 +23,17 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
             serialized['type'] = 'check';
             $j.ajax(window['base_uri'] + '/admin/editSQSParams.html',
                 {
-                    data: {
-                        json: serialized
-                    },
+                    data: serialized,
                     dataType: 'json'
                 })
                 .done(function (data) {
-                    alert(data);
+                    if (data.successful) {
+                        alert("Successfully connected to Amazon server")
+                    } else {
+                        alert(data.description)
+                    }
                 })
                 .fail(function (data) {
-                    alert(data);
                 });
         });
     }

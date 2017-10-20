@@ -2,6 +2,7 @@ package jetbrains.buildServer.sesPlugin.teamcity.ui
 
 import jetbrains.buildServer.controllers.BasePropertiesBean
 import jetbrains.buildServer.controllers.admin.AdminPage
+import jetbrains.buildServer.serverSide.crypt.RSACipher
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl
 import jetbrains.buildServer.web.openapi.Groupable
 import jetbrains.buildServer.web.openapi.PagePlaces
@@ -15,9 +16,6 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
 
     init {
         addJsFile(pluginDescriptor.getPluginResourcesPath("editSESParams.js"))
-        addJsFile("/bs/pluginProperties.js")
-        addJsFile("/bs/encrypt.js")
-
         addCssFile(pluginDescriptor.getPluginResourcesPath("editSESParams.css"))
     }
     fun init() = register()
@@ -28,6 +26,7 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
 
         PluginPropertiesUtil.bindPropertiesFromRequest(request, propsBean, true)
 
+        model.put("publicKey", RSACipher.getHexEncodedPublicKey())
         model.put("propertiesBean", propsBean)
     }
 

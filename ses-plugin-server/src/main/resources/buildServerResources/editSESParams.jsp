@@ -10,6 +10,7 @@
 
 <jsp:useBean id="constants" class="jetbrains.buildServer.sesPlugin.teamcity.util.Constants"/>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
+<%--@elvariable id="publicKey" type="java.lang.String"--%>
 
 <div id="editSQSParams">
     <div>
@@ -41,6 +42,8 @@
                 </tr>
             </l:settingsGroup>
         </table>
+
+        <input type="hidden" id="publicKey" name="publicKey" value="${publicKey}"/>
     </form>
 
     <forms:button id="submit">Submit</forms:button>
