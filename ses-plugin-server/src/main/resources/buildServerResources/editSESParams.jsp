@@ -13,10 +13,6 @@
 <%--@elvariable id="publicKey" type="java.lang.String"--%>
 
 <div id="editSQSParams">
-    <div>
-        Some sort of header
-    </div>
-
     <form id="editSQSParamsForm">
         <table class="runnerFormTable" id="editSQSParamsTable">
             <tr>
