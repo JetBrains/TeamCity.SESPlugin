@@ -28,7 +28,7 @@
                         <props:textProperty name="${constants.ACCOUNT_ID_PARAM}"
                                             value="${propertiesBean.properties[constants.ACCOUNT_ID_PARAM]}"
                                             className="longField" maxlength="256"/>
-                        <span class="smallNote">Owner ID/span>
+                        <span class="smallNote">Owner ID</span>
                     </td>
                 </tr>
                 <tr>
