@@ -20,7 +20,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
             return $j.ajax(window['base_uri'] + '/admin/editSQSParams.html', {
                 data: serialized,
                 dataType: 'json'
-            }).always(function() {
+            }).always(function () {
                 BS.SESPlugin.EditSQSParams.enableAllInputs();
                 $j('#editSQSParams .spinner').hide();
             });
