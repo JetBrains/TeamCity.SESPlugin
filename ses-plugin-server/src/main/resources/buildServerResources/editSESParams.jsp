@@ -18,7 +18,12 @@
     </div>
 
     <form id="editSQSParamsForm">
-        <table class="runnerFormTable">
+        <table class="runnerFormTable" id="editSQSParamsTable">
+            <tr>
+                <th><label for="${constants.ENABLED}">Enable SES Integration: </label></th>
+                <td><props:checkboxProperty className="enableDisableSESIntegration" name="${constants.ENABLED}"/></td>
+            </tr>
+
             <jsp:include page="editAWSCommonParams.jsp"/>
 
             <l:settingsGroup title="SQS Queue Parameters">

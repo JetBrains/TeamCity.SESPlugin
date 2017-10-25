@@ -1,9 +1,15 @@
 BS.SESPlugin = BS.SESPlugin || {};
 
 BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
-    init: function () {
-        $j('#editSQSParams input[id=\'aws.access.keys\']').trigger('click');
+    disableAllInputs: function () {
+        $j('#editSQSParamsTable').find('input[class!=\'enableDisableSESIntegration\']').attr('disabled', 'disabled');
+    },
 
+    enableAllInputs: function () {
+        $j('#editSQSParamsTable').find('input[class!=\'enableDisableSESIntegration\']').removeAttr('disabled');
+    },
+
+    init: function () {
         $j('#editSQSParams').on('click', '#submit', function (e) {
             var serialized = BS.SESPlugin.EditSQSParams.FormCrutch.serializeParameters().toQueryParams();
             serialized['type'] = 'submit';
@@ -16,9 +22,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 })
                 .fail(function (data) {
                 });
-        });
-
-        $j('#editSQSParams').on('click', '#check', function (e) {
+        }).on('click', '#check', function (e) {
             var serialized = BS.SESPlugin.EditSQSParams.FormCrutch.serializeParameters().toQueryParams();
             serialized['type'] = 'check';
             $j.ajax(window['base_uri'] + '/admin/editSQSParams.html',
@@ -35,7 +39,18 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 })
                 .fail(function (data) {
                 });
+        }).on('click', '.enableDisableSESIntegration', function (e) {
+            if (!e.target.checked) {
+                BS.SESPlugin.EditSQSParams.disableAllInputs();
+            } else {
+                BS.SESPlugin.EditSQSParams.enableAllInputs();
+            }
         });
+
+        awsCommonParamsUpdateVisibility();
+        if (!$j('.enableDisableSESIntegration').checked()) {
+            BS.SESPlugin.EditSQSParams.disableAllInputs();
+        }
     }
 };
 

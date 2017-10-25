@@ -13,6 +13,7 @@ class SubmitAjaxRequest(private val sesIntegrationManager: SESIntegrationManager
         val id = properties["projectExtId"] ?: return AjaxRequestResult(false, "Project ID should be provided")
 
         properties.values.removeIf({ it.isNullOrBlank() })
+        properties.values.remove("projectExtId")
 
         val persistResult = sesIntegrationManager.persistBean(sesIntegrationManager.createFrom(properties), id)
 
