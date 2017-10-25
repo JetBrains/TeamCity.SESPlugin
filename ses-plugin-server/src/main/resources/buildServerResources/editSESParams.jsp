@@ -55,6 +55,7 @@
     <forms:button id="submit">Submit</forms:button>
     <forms:button id="check">Check connection</forms:button>
     <forms:button id="delete">Delete integration...</forms:button>
+    <span style="display: none" class="spinner"><i class="icon-refresh icon-spin"></i></span>
 </div>
 
 <script>

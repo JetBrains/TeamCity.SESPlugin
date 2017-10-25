@@ -10,26 +10,30 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
     },
 
     init: function () {
-        $j('#editSQSParams').on('click', '#submit', function (e) {
+        function sendRequest(type) {
             var serialized = BS.SESPlugin.EditSQSParams.FormCrutch.serializeParameters().toQueryParams();
-            serialized['type'] = 'submit';
-            $j.ajax(window['base_uri'] + '/admin/editSQSParams.html',
-                {
-                    data: serialized,
-                    dataType: 'json'
-                })
+            serialized['type'] = type;
+
+            BS.SESPlugin.EditSQSParams.disableAllInputs();
+            $j('#editSQSParams .spinner').show();
+
+            return $j.ajax(window['base_uri'] + '/admin/editSQSParams.html', {
+                data: serialized,
+                dataType: 'json'
+            }).always(function() {
+                BS.SESPlugin.EditSQSParams.enableAllInputs();
+                $j('#editSQSParams .spinner').hide();
+            });
+        }
+
+        $j('#editSQSParams').on('click', '#submit', function (e) {
+            sendRequest('submit')
                 .done(function (data) {
                 })
                 .fail(function (data) {
                 });
         }).on('click', '#check', function (e) {
-            var serialized = BS.SESPlugin.EditSQSParams.FormCrutch.serializeParameters().toQueryParams();
-            serialized['type'] = 'check';
-            $j.ajax(window['base_uri'] + '/admin/editSQSParams.html',
-                {
-                    data: serialized,
-                    dataType: 'json'
-                })
+            sendRequest('submit')
                 .done(function (data) {
                     if (data.successful) {
                         alert("Successfully connected to Amazon server")
@@ -45,14 +49,8 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
             } else {
                 BS.SESPlugin.EditSQSParams.enableAllInputs();
             }
-        }).on('click', '#delete', function() {
-            var serialized = BS.SESPlugin.EditSQSParams.FormCrutch.serializeParameters().toQueryParams();
-            serialized['type'] = 'delete';
-            $j.ajax(window['base_uri'] + '/admin/editSQSParams.html',
-                {
-                    data: serialized,
-                    dataType: 'json'
-                })
+        }).on('click', '#delete', function () {
+            sendRequest('submit')
                 .done(function (data) {
                     if (data.successful) {
                     }
@@ -62,7 +60,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
         });
 
         awsCommonParamsUpdateVisibility();
-        if (!$j('.enableDisableSESIntegration').checked()) {
+        if (!$j('.enableDisableSESIntegration').attr('checked')) {
             BS.SESPlugin.EditSQSParams.disableAllInputs();
         }
     }
