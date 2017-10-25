@@ -15,6 +15,6 @@ class CheckAjaxRequest(private val sqsMessagesReceiver: SQSMessagesReceiver,
 
         val checkConnectionResult = sqsMessagesReceiver.checkConnection(bean)
 
-        return AjaxRequestResult(checkConnectionResult.status, checkConnectionResult.exception, checkConnectionResult.description)
+        return AjaxRequestResult(checkConnectionResult.status, checkConnectionResult.description, checkConnectionResult.exception)
     }
 }

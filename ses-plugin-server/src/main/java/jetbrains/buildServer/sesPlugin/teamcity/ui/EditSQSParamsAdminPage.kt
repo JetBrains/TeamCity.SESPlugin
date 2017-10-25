@@ -18,7 +18,9 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
         addJsFile(pluginDescriptor.getPluginResourcesPath("editSESParams.js"))
         addCssFile(pluginDescriptor.getPluginResourcesPath("editSESParams.css"))
     }
+
     fun init() = register()
+
     override fun fillModel(model: MutableMap<String, Any>, request: HttpServletRequest) {
         val beans = sesIntegrationManager.getBeans("")
 

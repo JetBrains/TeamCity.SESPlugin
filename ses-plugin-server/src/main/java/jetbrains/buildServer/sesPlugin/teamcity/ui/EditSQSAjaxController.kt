@@ -31,7 +31,7 @@ class EditSQSAjaxController(private val ajaxRequests: List<AjaxRequest>,
     }
 
     private fun doHandleInternal(request: HttpServletRequest, response: HttpServletResponse): AjaxRequestResult {
-        val type = request.getParameter("type") ?: return AjaxRequestResult(false, null, "No action type provided")
+        val type = request.getParameter("type") ?: return AjaxRequestResult(false, "No action type provided")
 
         return ajaxRequests.find {
             it.id == type
@@ -40,6 +40,6 @@ class EditSQSAjaxController(private val ajaxRequests: List<AjaxRequest>,
             PluginPropertiesUtil.bindPropertiesFromRequest(request, bean, true)
 
             return@let it.handle(bean)
-        } ?: AjaxRequestResult(false, null, "Unknown action $type")
+        } ?: AjaxRequestResult(false, "Unknown action $type")
     }
 }

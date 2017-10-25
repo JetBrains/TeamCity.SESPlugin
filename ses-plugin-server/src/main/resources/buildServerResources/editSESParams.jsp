@@ -43,6 +43,7 @@
             </l:settingsGroup>
         </table>
 
+        <input type="hidden" id="prop:projectExtId" name="prop:projectExtId" value="_Root"/>
         <input type="hidden" id="publicKey" name="publicKey" value="${publicKey}"/>
     </form>
 

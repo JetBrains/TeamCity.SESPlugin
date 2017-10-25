@@ -4,6 +4,6 @@ import jetbrains.buildServer.sesPlugin.teamcity.util.JsonModelComponent
 
 data class AjaxRequestResult(
         val successful: Boolean,
-        val exception: Exception? = null,
-        val description: String? = null
+        val description: String? = null,
+        val exception: Exception? = null
 ) : JsonModelComponent
