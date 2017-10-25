@@ -2,11 +2,11 @@ BS.SESPlugin = BS.SESPlugin || {};
 
 BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
     disableAllInputs: function () {
-        $j('#editSQSParamsTable').find('input[class!=\'enableDisableSESIntegration\']').attr('disabled', 'disabled');
+        $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').attr('disabled', 'disabled');
     },
 
     enableAllInputs: function () {
-        $j('#editSQSParamsTable').find('input[class!=\'enableDisableSESIntegration\']').removeAttr('disabled');
+        $j('#editSQSParamsTable').removeAttr('disabled');
     },
 
     init: function () {
