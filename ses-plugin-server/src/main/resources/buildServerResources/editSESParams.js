@@ -45,6 +45,20 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
             } else {
                 BS.SESPlugin.EditSQSParams.enableAllInputs();
             }
+        }).on('click', '#delete', function() {
+            var serialized = BS.SESPlugin.EditSQSParams.FormCrutch.serializeParameters().toQueryParams();
+            serialized['type'] = 'delete';
+            $j.ajax(window['base_uri'] + '/admin/editSQSParams.html',
+                {
+                    data: serialized,
+                    dataType: 'json'
+                })
+                .done(function (data) {
+                    if (data.successful) {
+                    }
+                })
+                .fail(function (data) {
+                });
         });
 
         awsCommonParamsUpdateVisibility();

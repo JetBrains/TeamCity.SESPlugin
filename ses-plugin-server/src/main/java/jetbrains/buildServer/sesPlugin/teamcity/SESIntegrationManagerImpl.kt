@@ -21,6 +21,20 @@ class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager,
         return PersistResult(true, "OK")
     }
 
+    override fun deleteBean(projectId: String): PersistResult {
+        var deleted = false
+        myProjectManager.rootProject.getOwnFeaturesOfType(FEATURE_TYPE).forEach {
+            myProjectManager.rootProject.removeFeature(it.id)
+            deleted = true
+        }
+
+        if (deleted) {
+            myProjectManager.rootProject.persist(myConfigActionFactory.createAction(myProjectManager.rootProject, "SES Integration config removed"))
+        }
+
+        return if (deleted) PersistResult(true, "OK") else PersistResult(false, "No SES integration configured")
+    }
+
     @Synchronized
     override fun getBeans(projectId: String): List<SESBean> {
         val f = myProjectManager.rootProject.getOwnFeaturesOfType(FEATURE_TYPE)

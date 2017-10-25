@@ -54,6 +54,7 @@
 
     <forms:button id="submit">Submit</forms:button>
     <forms:button id="check">Check connection</forms:button>
+    <forms:button id="delete">Delete integration...</forms:button>
 </div>
 
 <script>
