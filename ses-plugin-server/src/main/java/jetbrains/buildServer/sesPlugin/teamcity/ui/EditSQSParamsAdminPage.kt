@@ -24,9 +24,7 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
     override fun fillModel(model: MutableMap<String, Any>, request: HttpServletRequest) {
         val beans = sesIntegrationManager.getBeans("")
 
-        val propsBean = BasePropertiesBean(if (!beans.isEmpty()) beans.first().toMap() else emptyMap<String, String>())
-
-        PluginPropertiesUtil.bindPropertiesFromRequest(request, propsBean, true)
+        val propsBean = BasePropertiesBean(beans[0].toMap())
 
         model.put("publicKey", RSACipher.getHexEncodedPublicKey())
         model.put("propertiesBean", propsBean)
