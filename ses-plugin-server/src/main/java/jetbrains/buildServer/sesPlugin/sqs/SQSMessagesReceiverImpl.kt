@@ -57,11 +57,12 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
             }
 
             try {
-                if (TeamCityProperties.getBooleanOrTrue("teamcity.sesIntegration.markMessagesAsUnread"))
-                for (i in messagesResult.messages) {
-                    if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
+                if (TeamCityProperties.getBooleanOrTrue("teamcity.sesIntegration.markMessagesAsUnread")) {
+                    for (i in messagesResult.messages) {
+                        if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
 
-                    sqs.changeMessageVisibility(ChangeMessageVisibilityRequest().withQueueUrl(queueUrlResult.queueUrl).withReceiptHandle(i.receiptHandle).withVisibilityTimeout(0))
+                        sqs.changeMessageVisibility(ChangeMessageVisibilityRequest().withQueueUrl(queueUrlResult.queueUrl).withReceiptHandle(i.receiptHandle).withVisibilityTimeout(0))
+                    }
                 }
             } finally {
                 tryShutdownSilently(sqs)
