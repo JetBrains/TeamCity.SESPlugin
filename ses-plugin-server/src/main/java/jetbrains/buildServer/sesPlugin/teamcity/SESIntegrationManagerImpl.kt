@@ -5,12 +5,12 @@ import jetbrains.buildServer.serverSide.ProjectManager
 
 class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager,
                                 private val myConfigActionFactory: ConfigActionFactory) : SESIntegrationManager {
-    override fun createFrom(map: Map<String, String>): SESBean = SESBeanMapImpl(map)
+    override fun createFrom(map: Map<String, String>): SQSBean = SQSBeanMapImpl(map)
 
     private val FEATURE_TYPE = "sesIntegration"
 
     @Synchronized
-    override fun persistBean(bean: SESBean, projectId: String): PersistResult {
+    override fun persistBean(bean: SQSBean, projectId: String): PersistResult {
         myProjectManager.rootProject.getOwnFeaturesOfType(FEATURE_TYPE).forEach {
             myProjectManager.rootProject.removeFeature(it.id)
         }
@@ -36,11 +36,11 @@ class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager,
     }
 
     @Synchronized
-    override fun getBeans(projectId: String): List<SESBean> {
+    override fun getBeans(projectId: String): List<SQSBean> {
         val f = myProjectManager.rootProject.getOwnFeaturesOfType(FEATURE_TYPE)
 
         return f.asSequence().map {
-            SESBeanMapImpl(it.parameters)
+            SQSBeanMapImpl(it.parameters)
         }.toList()
     }
 }

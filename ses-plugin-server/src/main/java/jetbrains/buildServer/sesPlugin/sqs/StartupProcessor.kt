@@ -7,7 +7,7 @@ import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManager
 import java.util.concurrent.TimeUnit
 
 class StartupProcessor(private val executorServices: ExecutorServices,
-                       private val queueReader: SQSBounceMessagesReader,
+                       private val queueReader: SQSMessagesReader,
                        private val sesIntegrationManager: SESIntegrationManager,
                        private val eventDispatcher: ServerListenerEventDispatcher) : ServerListenerAdapter() {
 
