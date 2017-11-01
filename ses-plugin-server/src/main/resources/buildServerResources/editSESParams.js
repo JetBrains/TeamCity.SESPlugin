@@ -52,6 +52,8 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 BS.SESPlugin.EditSQSParams.enableAllInputs();
             }
         }).on('click', '#delete', function () {
+            if (!confirm("Delete all setting?")) return;
+
             sendRequest('delete')
                 .done(function (data) {
                     if (data.successful) {
