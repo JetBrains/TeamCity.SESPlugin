@@ -44,9 +44,8 @@ class SQSMessagesReaderImpl(private val sqsMessagesReceiverImpl: SQSMessagesRece
     class UnknownMessageHandler : SQSMessageHandler {
         override fun accepts(type: String) = true
 
-        override fun handle(data: JsonObject): SQSMessageHandlerResult {
+        override fun handle(data: JsonObject) {
             // todo log
-            return SQSMessageHandlerResult()
         }
     }
 }

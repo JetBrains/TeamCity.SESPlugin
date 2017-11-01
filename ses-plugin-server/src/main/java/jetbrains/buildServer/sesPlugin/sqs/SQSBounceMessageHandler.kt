@@ -6,7 +6,7 @@ import jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandler
 class SQSBounceMessageHandler(private val bounceHandler: BounceHandler) : SQSMessageHandler {
     override fun accepts(type: String) = type == "Bounce"
 
-    override fun handle(data: JsonObject): SQSMessageHandlerResult {
+    override fun handle(data: JsonObject) {
         val data2 = data["bounce"].asJsonObject
         if (isCriticalBounce(data2)) {
             if (subtype(data2) == "Suppressed") {
@@ -37,7 +37,6 @@ class SQSBounceMessageHandler(private val bounceHandler: BounceHandler) : SQSMes
                 }
             }
         }
-        return SQSMessageHandlerResult()
     }
 
     private fun subtype(data: JsonObject) = data["bounceSubType"].asString
