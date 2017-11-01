@@ -1,6 +1,6 @@
 package jetbrains.buildServer.sesPlugin.teamcity
 
-class SESBeanMapImpl(private val data: Map<String, String>) : SESBean {
+class SQSBeanMapImpl(private val data: Map<String, String>) : SQSBean {
     override fun toMap(): Map<String, String> {
         return data
     }

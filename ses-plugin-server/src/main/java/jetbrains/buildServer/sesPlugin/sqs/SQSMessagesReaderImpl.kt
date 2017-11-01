@@ -1,15 +1,15 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
 import com.google.gson.JsonObject
-import jetbrains.buildServer.sesPlugin.teamcity.SESBean
+import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 
-class SQSBounceMessagesReaderImpl(private val sqsMessagesReceiverImpl: SQSMessagesReceiver,
-                                  messageHandlers: Collection<SQSMessageHandler>) : SQSBounceMessagesReader {
+class SQSMessagesReaderImpl(private val sqsMessagesReceiverImpl: SQSMessagesReceiver,
+                            messageHandlers: Collection<SQSMessageHandler>) : SQSMessagesReader {
 
     private val messageHandlers: Sequence<SQSMessageHandler> = messageHandlers.asSequence()
 
-    private fun readQueue(sesBean: SESBean): Int {
-        val messages = sqsMessagesReceiverImpl.receiveMessages(sesBean).messages
+    private fun readQueue(sqsBean: SQSBean): Int {
+        val messages = sqsMessagesReceiverImpl.receiveMessages(sqsBean).messages
 
         messages.forEach {
             if (it.result != null) {
@@ -27,7 +27,7 @@ class SQSBounceMessagesReaderImpl(private val sqsMessagesReceiverImpl: SQSMessag
         return messages.size
     }
 
-    override fun readAllQueues(beans: Sequence<SESBean>): Int {
+    override fun readAllQueues(beans: Sequence<SQSBean>): Int {
         return beans.map { readQueue(it) }.sum()
     }
 

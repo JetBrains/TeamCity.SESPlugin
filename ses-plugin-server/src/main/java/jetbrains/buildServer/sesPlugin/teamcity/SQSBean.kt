@@ -1,5 +1,5 @@
 package jetbrains.buildServer.sesPlugin.teamcity
 
-interface SESBean {
+interface SQSBean {
     fun toMap(): Map<String, String>
 }

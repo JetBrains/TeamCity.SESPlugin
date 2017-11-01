@@ -20,7 +20,7 @@
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReceiverImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParserImpl"/>
 
-    <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSBounceMessagesReaderImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReaderImpl"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSBounceMessageHandler"/>
 

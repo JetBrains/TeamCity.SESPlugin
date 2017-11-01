@@ -1,8 +1,8 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
-import jetbrains.buildServer.sesPlugin.teamcity.SESBean
+import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 
 interface SQSMessagesReceiver {
-    fun receiveMessages(bean: SESBean): ReceiveMessagesResult
-    fun checkConnection(bean: SESBean): CheckConnectionResult
+    fun receiveMessages(bean: SQSBean): ReceiveMessagesResult
+    fun checkConnection(bean: SQSBean): CheckConnectionResult
 }

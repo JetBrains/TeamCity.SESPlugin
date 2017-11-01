@@ -10,7 +10,7 @@ import com.amazonaws.services.sqs.model.ChangeMessageVisibilityRequest
 import com.amazonaws.services.sqs.model.GetQueueUrlRequest
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest
 import jetbrains.buildServer.serverSide.TeamCityProperties
-import jetbrains.buildServer.sesPlugin.teamcity.SESBean
+import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
 import jetbrains.buildServer.util.amazon.AWSCommonParams
 
@@ -19,7 +19,7 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
     private fun prepareRequest() =
             ReceiveMessageRequest().withMaxNumberOfMessages(10)
 
-    override fun receiveMessages(bean: SESBean): ReceiveMessagesResult {
+    override fun receiveMessages(bean: SQSBean): ReceiveMessagesResult {
         val params = bean.toMap()
 
         if (isDisabled(params)) {
@@ -78,7 +78,7 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
         }
     }
 
-    override fun checkConnection(bean: SESBean): CheckConnectionResult {
+    override fun checkConnection(bean: SQSBean): CheckConnectionResult {
         val params = bean.toMap()
 
         if (isDisabled(params)) {
