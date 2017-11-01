@@ -69,7 +69,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 .fail(function (data) {
                 });
         }).on('click', '#receive', function () {
-            if (isEnabled()) {
+            if (BS.SESPlugin.EditSQSParams.isEnabled()) {
                 sendRequest('receive').done(function (data) {
                     alert(data.description)
                 });
