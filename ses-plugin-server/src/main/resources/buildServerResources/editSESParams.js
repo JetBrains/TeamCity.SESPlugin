@@ -56,6 +56,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
 
             sendRequest('delete')
                 .done(function (data) {
+                    $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').val('');
                     if (data.successful) {
                     }
                 })
