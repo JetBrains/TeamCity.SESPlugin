@@ -6,7 +6,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
     },
 
     enableAllInputs: function () {
-        $j('#editSQSParamsTable').removeAttr('disabled');
+        $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').removeAttr('disabled');
     },
 
     init: function () {
@@ -33,7 +33,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 .fail(function (data) {
                 });
         }).on('click', '#check', function (e) {
-            sendRequest('submit')
+            sendRequest('check')
                 .done(function (data) {
                     if (data.successful) {
                         alert("Successfully connected to Amazon server")
@@ -50,7 +50,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 BS.SESPlugin.EditSQSParams.enableAllInputs();
             }
         }).on('click', '#delete', function () {
-            sendRequest('submit')
+            sendRequest('delete')
                 .done(function (data) {
                     if (data.successful) {
                     }
