@@ -8,11 +8,15 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
     },
 
     enableAllInputs: function () {
-        if ($j('#editSQSParamsTable .enableDisableSESIntegration')[0].checked) {
+        if (BS.SESPlugin.EditSQSParams.isEnabled()) {
             $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').removeAttr('disabled');
             $j('#editSQSParams').find('#check').removeAttr('disabled');
             $j('#editSQSParams').find('#receive').removeAttr('disabled');
         }
+    },
+
+    isEnabled: function () {
+        return $j('#editSQSParamsTable .enableDisableSESIntegration')[0].checked;
     },
 
     init: function () {
@@ -39,12 +43,14 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 .fail(function (data) {
                 });
         }).on('click', '#check', function (e) {
-            sendRequest('check')
-                .done(function (data) {
-                    alert(data.description)
-                })
-                .fail(function (data) {
-                });
+            if (BS.SESPlugin.EditSQSParams.isEnabled()) {
+                sendRequest('check')
+                    .done(function (data) {
+                        alert(data.description)
+                    })
+                    .fail(function (data) {
+                    });
+            }
         }).on('click', '.enableDisableSESIntegration', function (e) {
             if (!e.target.checked) {
                 BS.SESPlugin.EditSQSParams.disableAllInputs();
@@ -63,9 +69,11 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 .fail(function (data) {
                 });
         }).on('click', '#receive', function () {
-            sendRequest('receive').done(function (data) {
-                alert(data.description)
-            });
+            if (isEnabled()) {
+                sendRequest('receive').done(function (data) {
+                    alert(data.description)
+                });
+            }
         });
 
         awsCommonParamsUpdateVisibility();
