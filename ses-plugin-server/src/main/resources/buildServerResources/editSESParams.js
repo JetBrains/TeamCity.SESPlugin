@@ -6,7 +6,9 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
     },
 
     enableAllInputs: function () {
-        $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').removeAttr('disabled');
+        if ($j('#editSQSParamsTable .enableDisableSESIntegration')[0].checked) {
+            $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').removeAttr('disabled');
+        }
     },
 
     init: function () {
