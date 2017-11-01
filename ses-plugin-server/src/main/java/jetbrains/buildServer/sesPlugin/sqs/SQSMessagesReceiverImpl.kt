@@ -6,8 +6,8 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder
-import com.amazonaws.services.sqs.model.GetQueueUrlRequest
-import com.amazonaws.services.sqs.model.ReceiveMessageRequest
+import com.amazonaws.services.sqs.model.*
+import jetbrains.buildServer.serverSide.TeamCityProperties
 import jetbrains.buildServer.sesPlugin.teamcity.SESBean
 import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
 import jetbrains.buildServer.util.amazon.AWSCommonParams
@@ -24,6 +24,10 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
 
     override fun receiveMessages(bean: SESBean): ReceiveMessagesResult {
         val params = bean.toMap()
+
+        if (params[Constants.ENABLED]?.toBoolean() == false) {
+            return ReceiveMessagesResult(emptyList(), null, "Disabled")
+        }
 
         return AWSCommonParams.withAWSClients<ReceiveMessagesResult, Exception>(params) {
             val credentials: AWSCredentials = it.credentials ?: return@withAWSClients ReceiveMessagesResult(emptyList(), null, "No credentials provided")
@@ -47,7 +51,15 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
             val messagesResult = try {
                 sqs.receiveMessage(prepareRequest().withQueueUrl(queueUrlResult.queueUrl))
             } catch (ex: Exception) {
+                tryShutdownSilently(sqs)
                 return@withAWSClients ReceiveMessagesResult(emptyList(), ex, "No credentials provided")
+            }
+
+            try {
+                if (TeamCityProperties.getBooleanOrTrue("teamcity.sesIntegration.markMessagesAsUnread"))
+                for (i in messagesResult.messages) {
+                    sqs.changeMessageVisibility(ChangeMessageVisibilityRequest().withQueueUrl(queueUrlResult.queueUrl).withReceiptHandle(i.receiptHandle).withVisibilityTimeout(0))
+                }
             } finally {
                 tryShutdownSilently(sqs)
             }
