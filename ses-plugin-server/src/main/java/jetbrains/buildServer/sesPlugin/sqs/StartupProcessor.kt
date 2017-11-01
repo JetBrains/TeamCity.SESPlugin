@@ -15,9 +15,9 @@ class StartupProcessor(private val executorServices: ExecutorServices,
         eventDispatcher.addListener(this)
     }
 
-    private val initialDelay = TimeUnit.MINUTES.toMillis(1L)
+    private val initialDelay = TimeUnit.MINUTES.toMillis(10L)
 
-    private val period = TimeUnit.MINUTES.toMillis(1L)
+    private val period = TimeUnit.MINUTES.toMillis(10L)
 
     override fun serverStartup() {
         executorServices.normalExecutorService.scheduleAtFixedRate({
