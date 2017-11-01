@@ -3,7 +3,7 @@ package jetbrains.buildServer.sesPlugin.sqs
 import com.google.gson.JsonObject
 import jetbrains.buildServer.sesPlugin.teamcity.SESBean
 
-class SQSBounceMessagesReaderImpl(private val sqsMessagesReceiverImpl: SQSMessagesReceiverImpl,
+class SQSBounceMessagesReaderImpl(private val sqsMessagesReceiverImpl: SQSMessagesReceiver,
                                   messageHandlers: Collection<SQSMessageHandler>) : SQSBounceMessagesReader {
 
     private val messageHandlers: Sequence<SQSMessageHandler> = messageHandlers.asSequence()
