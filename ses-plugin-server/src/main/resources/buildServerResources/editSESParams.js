@@ -3,11 +3,15 @@ BS.SESPlugin = BS.SESPlugin || {};
 BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
     disableAllInputs: function () {
         $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').attr('disabled', 'disabled');
+        $j('#editSQSParams').find('#check').attr('disabled', 'disabled');
+        $j('#editSQSParams').find('#receive').attr('disabled', 'disabled');
     },
 
     enableAllInputs: function () {
         if ($j('#editSQSParamsTable .enableDisableSESIntegration')[0].checked) {
             $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').removeAttr('disabled');
+            $j('#editSQSParams').find('#check').removeAttr('disabled');
+            $j('#editSQSParams').find('#receive').removeAttr('disabled');
         }
     },
 
@@ -37,11 +41,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
         }).on('click', '#check', function (e) {
             sendRequest('check')
                 .done(function (data) {
-                    if (data.successful) {
-                        alert("Successfully connected to Amazon server")
-                    } else {
-                        alert(data.description)
-                    }
+                    alert(data.description)
                 })
                 .fail(function (data) {
                 });
