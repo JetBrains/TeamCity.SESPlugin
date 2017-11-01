@@ -6,7 +6,9 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder
-import com.amazonaws.services.sqs.model.*
+import com.amazonaws.services.sqs.model.ChangeMessageVisibilityRequest
+import com.amazonaws.services.sqs.model.GetQueueUrlRequest
+import com.amazonaws.services.sqs.model.ReceiveMessageRequest
 import jetbrains.buildServer.serverSide.TeamCityProperties
 import jetbrains.buildServer.sesPlugin.teamcity.SESBean
 import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
@@ -41,12 +43,16 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
                 return@withAWSClients ReceiveMessagesResult(emptyList(), ex, "Cannot open connection to Amazon SQS")
             }
 
+            if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
+
             val queueUrlResult = try {
                 sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(params[Constants.QUEUE_NAME_PARAM]).withQueueOwnerAWSAccountId(params[Constants.ACCOUNT_ID_PARAM]))
             } catch (ex: Exception) {
                 tryShutdownSilently(sqs)
                 return@withAWSClients ReceiveMessagesResult(emptyList(), ex, "Cannot get queue url with name ${params[Constants.QUEUE_NAME_PARAM]} and owner ${params[Constants.ACCOUNT_ID_PARAM]}")
             }
+
+            if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
 
             val messagesResult = try {
                 sqs.receiveMessage(prepareRequest().withQueueUrl(queueUrlResult.queueUrl))
@@ -58,11 +64,15 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
             try {
                 if (TeamCityProperties.getBooleanOrTrue("teamcity.sesIntegration.markMessagesAsUnread"))
                 for (i in messagesResult.messages) {
+                    if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
+
                     sqs.changeMessageVisibility(ChangeMessageVisibilityRequest().withQueueUrl(queueUrlResult.queueUrl).withReceiptHandle(i.receiptHandle).withVisibilityTimeout(0))
                 }
             } finally {
                 tryShutdownSilently(sqs)
             }
+
+            if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
 
             return@withAWSClients messagesResult.messages.map {
                 sqsNotificationParser.parse(it.body)
