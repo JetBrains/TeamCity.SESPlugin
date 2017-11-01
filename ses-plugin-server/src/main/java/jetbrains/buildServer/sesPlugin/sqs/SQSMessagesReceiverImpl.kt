@@ -16,13 +16,8 @@ import jetbrains.buildServer.util.amazon.AWSCommonParams
 
 class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotificationParser) : SQSMessagesReceiver {
 
-    private fun prepareRequest(): ReceiveMessageRequest {
-        with(ReceiveMessageRequest()) {
-            maxNumberOfMessages = 10
-
-            return this
-        }
-    }
+    private fun prepareRequest() =
+            ReceiveMessageRequest().withMaxNumberOfMessages(10)
 
     override fun receiveMessages(bean: SESBean): ReceiveMessagesResult {
         val params = bean.toMap()
