@@ -57,6 +57,10 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 })
                 .fail(function (data) {
                 });
+        }).on('click', '#receive', function () {
+            sendRequest('receive').done(function (data) {
+                alert(data.description)
+            });
         });
 
         awsCommonParamsUpdateVisibility();
