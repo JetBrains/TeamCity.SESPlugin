@@ -22,7 +22,7 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
     override fun receiveMessages(bean: SESBean): ReceiveMessagesResult {
         val params = bean.toMap()
 
-        if (params[Constants.ENABLED]?.toBoolean() == false) {
+        if (isDisabled(params)) {
             return ReceiveMessagesResult(emptyList(), null, "Disabled")
         }
 
@@ -81,6 +81,10 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
     override fun checkConnection(bean: SESBean): CheckConnectionResult {
         val params = bean.toMap()
 
+        if (isDisabled(params)) {
+            return CheckConnectionResult(false, null, "Disabled")
+        }
+
         return AWSCommonParams.withAWSClients<CheckConnectionResult, Exception>(params) {
             val credentials: AWSCredentials = it.credentials ?: return@withAWSClients CheckConnectionResult(false, null, "no credentials provided")
 
@@ -104,6 +108,9 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
             return@withAWSClients CheckConnectionResult(true)
         }
     }
+
+    private fun isDisabled(params: Map<String, String>) =
+            !(params[Constants.ENABLED]?.toBoolean() ?: false)
 
     private fun tryShutdownSilently(sqs: AmazonSQS) {
         try {
