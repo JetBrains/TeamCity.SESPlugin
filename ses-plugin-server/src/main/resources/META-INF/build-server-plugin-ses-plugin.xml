@@ -10,6 +10,9 @@
     <bean class="jetbrains.buildServer.sesPlugin.email.BouncedUsersFilter"/>
     <bean class="jetbrains.buildServer.sesPlugin.email.DisabledEMailStateProviderImpl"/>
 
+    <!-- util -->
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.LogServiceImpl"/>
+
     <!-- UI -->
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSParamsAdminPage" init-method="register"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxController" init-method="init"/>
@@ -28,5 +31,11 @@
 
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSBounceMessageHandler"/>
 
-    <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandlerImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandlerImpl">
+        <constructor-arg index="0" ref="allUsersProvider"/>
+    </bean>
+    <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.DisableEmailOnBounce"/>
+    <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.RemoveVerifiedStateOnBounce"/>
+    <bean id="allUsersProvider"
+          class="jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandlerImpl$AllUsersProvider"/>
 </beans>
