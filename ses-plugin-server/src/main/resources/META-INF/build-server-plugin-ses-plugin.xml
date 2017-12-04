@@ -4,9 +4,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
        default-autowire="constructor">
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationConfigImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.StartupProcessor" init-method="init"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.email.BouncedUsersFilter"/>
+    <bean class="jetbrains.buildServer.sesPlugin.email.DisabledEMailStateProviderImpl"/>
 
     <!-- UI -->
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSParamsAdminPage" init-method="register"/>
