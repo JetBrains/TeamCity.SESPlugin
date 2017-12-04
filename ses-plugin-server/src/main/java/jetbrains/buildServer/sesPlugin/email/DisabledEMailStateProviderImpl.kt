@@ -7,8 +7,8 @@ import jetbrains.buildServer.users.impl.UserImpl
 class DisabledEMailStateProviderImpl : DisabledEMailStateProvider {
 
     companion object {
-        val DISABLED_PROPERTY_KEY = SimplePropertyKey("${UserImpl.PROTECTED_USER_PROPERTY_PREFIX}.email.disabled")
-        val DISABLE_DESCRIPTION_PROPERTY_KEY = SimplePropertyKey("${UserImpl.PROTECTED_USER_PROPERTY_PREFIX}.email.disableDescription")
+        val DISABLED_PROPERTY_KEY = SimplePropertyKey("${UserImpl.PROTECTED_USER_PROPERTY_PREFIX}email.disabled")
+        val DISABLE_DESCRIPTION_PROPERTY_KEY = SimplePropertyKey("${UserImpl.PROTECTED_USER_PROPERTY_PREFIX}email.disableDescription")
     }
 
     override fun disable(user: SUser, description: String) {
