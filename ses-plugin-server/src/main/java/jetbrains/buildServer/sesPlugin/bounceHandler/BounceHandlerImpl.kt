@@ -4,8 +4,7 @@ import com.intellij.openapi.diagnostic.Logger
 import jetbrains.buildServer.log.LogUtil
 import jetbrains.buildServer.sesPlugin.teamcity.util.LogService
 import jetbrains.buildServer.sesPlugin.teamcity.util.NoOpLogService
-import jetbrains.buildServer.users.SUser
-import jetbrains.buildServer.users.UserModel
+import jetbrains.buildServer.sesPlugin.teamcity.util.UserSetProvider
 
 class BounceHandlerImpl(private val userProvider: UserSetProvider,
                         private val userHandlers: Collection<UserBounceHandler>,
@@ -22,16 +21,5 @@ class BounceHandlerImpl(private val userProvider: UserSetProvider,
 
             userHandlers.forEach { handler -> handler.handleBounce(it) }
         }
-    }
-
-    /**
-     * Service interface to wrap UserModel
-     */
-    interface UserSetProvider {
-        val users: Set<SUser>
-    }
-
-    class AllUsersProvider(private val userModel: UserModel) : BounceHandlerImpl.UserSetProvider {
-        override val users: Set<SUser> get() = userModel.allUsers.users
     }
 }

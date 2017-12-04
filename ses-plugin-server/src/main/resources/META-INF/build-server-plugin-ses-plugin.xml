@@ -14,7 +14,9 @@
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.LogServiceImpl"/>
 
     <!-- UI -->
-    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSParamsAdminPage" init-method="register"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSParamsAdminPage" init-method="register">
+        <constructor-arg index="3" ref="allUsersProvider"/>
+    </bean>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxController" init-method="init"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.CheckAjaxRequest"/>
@@ -36,6 +38,7 @@
     </bean>
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.DisableEmailOnBounce"/>
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.RemoveVerifiedStateOnBounce"/>
+
     <bean id="allUsersProvider"
-          class="jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandlerImpl$AllUsersProvider"/>
+          class="jetbrains.buildServer.sesPlugin.teamcity.util.AllUsersProvider"/>
 </beans>

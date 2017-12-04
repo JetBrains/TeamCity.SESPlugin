@@ -1,3 +1,4 @@
+<%--@elvariable id="disabledUsers" type="java.util.List<jetbrains.buildServer.users.SUser>"--%>
 <%@ include file="/include.jsp" %>
 
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
@@ -7,6 +8,7 @@
 <%@ taglib prefix="util" uri="/WEB-INF/functions/util" %>
 <%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="admin" tagdir="/WEB-INF/tags/admin" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:useBean id="constants" class="jetbrains.buildServer.sesPlugin.teamcity.util.Constants"/>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
@@ -58,3 +60,14 @@
 <script>
     $j(BS.SESPlugin.EditSQSParams.init);
 </script>
+
+<div id="status">
+    <div>
+        <label for="disabledEmailsCount">Users with disabled emails count: </label><span
+            id="disabledEmailsCount">${fn:length(disabledUsers)}</span>
+        <c:forEach items="${disabledUsers}" var="user">
+            <div class="disabledUser"><span class="userName">User: <c:out value="${user.extendedName}"/></span> got
+                bounce on address <span class="email"><c:out value="${user.email}"/></span></div>
+        </c:forEach>
+    </div>
+</div>
