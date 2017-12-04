@@ -82,6 +82,12 @@
             <artifactId>aws-java-sdk</artifactId>
             <version>1.11.210</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.teamcity</groupId>
+            <artifactId>email-notificator</artifactId>
+            <version>2017.2</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -6,6 +6,8 @@
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.StartupProcessor" init-method="init"/>
 
+    <bean class="jetbrains.buildServer.sesPlugin.email.BouncedUsersFilter"/>
+
     <!-- UI -->
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSParamsAdminPage" init-method="register"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxController" init-method="init"/>
