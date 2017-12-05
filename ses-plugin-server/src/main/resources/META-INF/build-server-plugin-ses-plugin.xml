@@ -14,9 +14,12 @@
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.LogServiceImpl"/>
 
     <!-- UI -->
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.BouncedUserNotificationController" init-method="register"/>
+
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSParamsAdminPage" init-method="register">
         <constructor-arg index="3" ref="allUsersProvider"/>
     </bean>
+
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxController" init-method="init"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.CheckAjaxRequest"/>
