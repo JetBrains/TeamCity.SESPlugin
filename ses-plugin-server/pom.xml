@@ -87,6 +87,7 @@
             <groupId>org.jetbrains.teamcity</groupId>
             <artifactId>email-notificator</artifactId>
             <version>2017.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
