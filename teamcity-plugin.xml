@@ -15,4 +15,7 @@
         </vendor>
     </info>
     <deployment use-separate-classloader="true"/>
+    <dependencies>
+        <plugin name="email"/>
+    </dependencies>
 </teamcity-plugin>
