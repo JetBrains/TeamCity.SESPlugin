@@ -1,7 +1,6 @@
 package jetbrains.buildServer.sesPlugin.teamcity.util
 
 import com.google.gson.Gson
-import jetbrains.buildServer.sesPlugin.teamcity.util.JsonModelComponent
 import org.springframework.web.servlet.view.AbstractView
 import java.io.IOException
 import java.io.OutputStream
