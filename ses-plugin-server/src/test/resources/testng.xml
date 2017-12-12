@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All tests">
+    <test name="All tests">
+        <classes>
+            <class name="jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandlerImplTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.bounceHandler.DisableEmailOnBounceTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.bounceHandler.RemoveVerifiedStateOnBounceTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.email.BouncedUsersFilterTest"/>
+            <!--<class name="jetbrains.buildServer.sesPlugin.email.DisabledEMailStateProviderImplTest"/>-->
+            <class name="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.CheckAjaxRequestTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxControllerTest"/>
+        </classes>
+    </test>
+</suite>
