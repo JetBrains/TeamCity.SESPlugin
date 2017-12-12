@@ -76,11 +76,15 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- todo filter aws sdk - it's huge -->
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk</artifactId>
-            <version>1.11.210</version>
+            <artifactId>aws-java-sdk-sqs</artifactId>
+            <version>${aws-sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-ses</artifactId>
+            <version>${aws-sdk.version}</version>
         </dependency>
 
         <dependency>
