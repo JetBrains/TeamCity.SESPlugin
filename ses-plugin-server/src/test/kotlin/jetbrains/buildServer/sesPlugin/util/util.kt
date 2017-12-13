@@ -23,7 +23,7 @@ fun mocking(action: Mockery.() -> Unit) {
 }
 
 fun <T : Any> Mockery.mock(clazz: KClass<T>, name: String? = null): T {
-    return this.mock(clazz.java, name)
+    return if (name != null) this.mock(clazz.java, name) else this.mock(clazz.java)
 }
 
 fun Any.getResource(name: String): TestResource {
