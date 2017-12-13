@@ -2,6 +2,7 @@ package jetbrains.buildServer.sesPlugin.util
 
 import org.jmock.Expectations
 import org.jmock.Mockery
+import kotlin.reflect.KClass
 
 fun Mockery.check(action: Expectations.() -> Unit) {
     val expectations = Expectations()
@@ -16,4 +17,8 @@ fun mocking(action: Mockery.() -> Unit) {
     } finally {
         mockery.assertIsSatisfied()
     }
+}
+
+fun <T : Any> Mockery.mock(clazz: KClass<T>, name: String? = null): T {
+    return this.mock(clazz.java, name)
 }

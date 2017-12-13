@@ -1,6 +1,7 @@
 package jetbrains.buildServer.sesPlugin.email
 
 import jetbrains.buildServer.sesPlugin.util.check
+import jetbrains.buildServer.sesPlugin.util.mock
 import jetbrains.buildServer.sesPlugin.util.mocking
 import jetbrains.buildServer.users.SUser
 import org.jmock.Expectations
@@ -10,9 +11,9 @@ class BouncedUsersFilterTest {
     @Test
     fun test() {
         mocking {
-            val disabledUserWithDescription = mock(SUser::class.java, "disabledUserWithDescription")
-            val enabledUser = mock(SUser::class.java, "enabledUser")
-            val provider = mock(DisabledEMailStateProvider::class.java)
+            val disabledUserWithDescription = mock(SUser::class, "disabledUserWithDescription")
+            val enabledUser = mock(SUser::class, "enabledUser")
+            val provider = mock(DisabledEMailStateProvider::class)
 
             check {
                 one(provider).isDisabled(disabledUserWithDescription); will(Expectations.returnValue(true))

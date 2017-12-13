@@ -3,6 +3,7 @@ package jetbrains.buildServer.sesPlugin.email
 import jetbrains.buildServer.sesPlugin.email.DisabledEMailStateProviderImpl.Companion.DISABLED_PROPERTY_KEY
 import jetbrains.buildServer.sesPlugin.email.DisabledEMailStateProviderImpl.Companion.DISABLE_DESCRIPTION_PROPERTY_KEY
 import jetbrains.buildServer.sesPlugin.util.check
+import jetbrains.buildServer.sesPlugin.util.mock
 import jetbrains.buildServer.sesPlugin.util.mocking
 import jetbrains.buildServer.users.SUser
 import org.assertj.core.api.BDDAssertions.then
@@ -13,8 +14,8 @@ import org.testng.annotations.Test
 class DisabledEMailStateProviderImplTest {
     fun testIsDisabled() {
         mocking {
-            val disabledUser = mock(SUser::class.java, "disabledUser")
-            val enabledUser = mock(SUser::class.java, "enabledUser")
+            val disabledUser = mock(SUser::class, "disabledUser")
+            val enabledUser = mock(SUser::class, "enabledUser")
 
             check {
                 one(disabledUser).getBooleanProperty(DISABLED_PROPERTY_KEY); will(Expectations.returnValue(true))
@@ -28,11 +29,11 @@ class DisabledEMailStateProviderImplTest {
         }
     }
 
-    fun testDisable() {
+    fun testDisableDescription() {
         mocking {
-            val enabledUser = mock(SUser::class.java, "enabledUser")
-            val disabledUser = mock(SUser::class.java, "disabledUser")
-            val disabledUserWithDescr = mock(SUser::class.java, "disabledUser_withDescr")
+            val enabledUser = mock(SUser::class, "enabledUser")
+            val disabledUser = mock(SUser::class, "disabledUser")
+            val disabledUserWithDescr = mock(SUser::class, "disabledUser_withDescr")
 
             check {
                 one(enabledUser).getPropertyValue(DISABLE_DESCRIPTION_PROPERTY_KEY); will(Expectations.returnValue(null))

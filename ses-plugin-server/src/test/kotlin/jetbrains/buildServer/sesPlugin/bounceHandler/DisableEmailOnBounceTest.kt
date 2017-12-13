@@ -3,6 +3,7 @@ package jetbrains.buildServer.sesPlugin.bounceHandler
 import jetbrains.buildServer.sesPlugin.email.DisabledEMailStateProvider
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationConfig
 import jetbrains.buildServer.sesPlugin.util.check
+import jetbrains.buildServer.sesPlugin.util.mock
 import jetbrains.buildServer.sesPlugin.util.mocking
 import jetbrains.buildServer.users.SUser
 import org.jmock.Expectations
@@ -13,10 +14,10 @@ class DisableEmailOnBounceTest {
     @Test
     fun testHandleBounce() {
         mocking {
-            val sesIntegrationConfig = mock(SESIntegrationConfig::class.java)
-            val disabledEMailStateProvider = mock(DisabledEMailStateProvider::class.java)
+            val sesIntegrationConfig = mock(SESIntegrationConfig::class)
+            val disabledEMailStateProvider = mock(DisabledEMailStateProvider::class)
 
-            val user = mock(SUser::class.java)
+            val user = mock(SUser::class)
             val description = "Got bounce for email someMail"
 
             check {
@@ -33,10 +34,10 @@ class DisableEmailOnBounceTest {
     @Test
     fun testHandleBounceDisabled() {
         mocking {
-            val sesIntegrationConfig = mock(SESIntegrationConfig::class.java)
-            val disabledEMailStateProvider = mock(DisabledEMailStateProvider::class.java)
+            val sesIntegrationConfig = mock(SESIntegrationConfig::class)
+            val disabledEMailStateProvider = mock(DisabledEMailStateProvider::class)
 
-            val user = mock(SUser::class.java)
+            val user = mock(SUser::class)
             val description = "Got bounce for email someMail"
 
             check {

@@ -2,6 +2,7 @@ package jetbrains.buildServer.sesPlugin.bounceHandler
 
 import jetbrains.buildServer.sesPlugin.teamcity.util.UserSetProvider
 import jetbrains.buildServer.sesPlugin.util.check
+import jetbrains.buildServer.sesPlugin.util.mock
 import jetbrains.buildServer.sesPlugin.util.mocking
 import jetbrains.buildServer.users.SUser
 import org.jmock.Expectations
@@ -12,10 +13,10 @@ class BounceHandlerImplTest {
     @Test
     fun testHandleBounce() {
         mocking {
-            val userBounceHandler1 = mock(UserBounceHandler::class.java, "userBounceHandler1")
-            val userBounceHandler2 = mock(UserBounceHandler::class.java, "userBounceHandler2")
-            val userSetProvider = mock(UserSetProvider::class.java)
-            val user = mock(SUser::class.java)
+            val userBounceHandler1 = mock(UserBounceHandler::class, "userBounceHandler1")
+            val userBounceHandler2 = mock(UserBounceHandler::class, "userBounceHandler2")
+            val userSetProvider = mock(UserSetProvider::class)
+            val user = mock(SUser::class)
 
             val handler = BounceHandlerImpl(userSetProvider, listOf(userBounceHandler1, userBounceHandler2))
 
@@ -36,10 +37,10 @@ class BounceHandlerImplTest {
     @Test
     fun testHandleBounce2Users() {
         mocking {
-            val userBounceHandler = mock(UserBounceHandler::class.java)
-            val userSetProvider = mock(UserSetProvider::class.java)
-            val user1 = mock(SUser::class.java, "user1")
-            val user2 = mock(SUser::class.java, "user2")
+            val userBounceHandler = mock(UserBounceHandler::class)
+            val userSetProvider = mock(UserSetProvider::class)
+            val user1 = mock(SUser::class, "user1")
+            val user2 = mock(SUser::class, "user2")
 
             val handler = BounceHandlerImpl(userSetProvider, listOf(userBounceHandler))
 
@@ -61,9 +62,9 @@ class BounceHandlerImplTest {
     @Test
     fun testHandleBounceNoUsers() {
         mocking {
-            val userBounceHandler = mock(UserBounceHandler::class.java)
-            val userSetProvider = mock(UserSetProvider::class.java)
-            val user = mock(SUser::class.java)
+            val userBounceHandler = mock(UserBounceHandler::class)
+            val userSetProvider = mock(UserSetProvider::class)
+            val user = mock(SUser::class)
 
             val handler = BounceHandlerImpl(userSetProvider, listOf(userBounceHandler))
 
