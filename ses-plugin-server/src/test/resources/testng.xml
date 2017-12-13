@@ -11,6 +11,7 @@
             <class name="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxControllerTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParserImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.TaskSchedulerTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskImpl"/>
         </classes>
     </test>
 </suite>
