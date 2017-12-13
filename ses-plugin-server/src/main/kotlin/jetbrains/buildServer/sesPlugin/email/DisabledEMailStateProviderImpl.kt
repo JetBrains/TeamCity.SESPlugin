@@ -26,6 +26,10 @@ class DisabledEMailStateProviderImpl : DisabledEMailStateProvider {
         user.emailDisableDescription = description
     }
 
+    override fun removeEmailDisableDescription(user: SUser) {
+        user.emailDisableDescription = ""
+    }
+
     override fun getEmailDisableDescription(user: SUser) = user.emailDisableDescription
 }
 
@@ -34,8 +38,10 @@ var SUser.emailDisabled: Boolean
         setUserProperty(DisabledEMailStateProviderImpl.DISABLED_PROPERTY_KEY, state.toString())
     } else {
         deleteUserProperty(DisabledEMailStateProviderImpl.DISABLED_PROPERTY_KEY)
+        deleteUserProperty(DisabledEMailStateProviderImpl.DISABLE_DESCRIPTION_PROPERTY_KEY)
     }
     get() = getBooleanProperty(DisabledEMailStateProviderImpl.DISABLED_PROPERTY_KEY)
+
 var SUser.emailDisableDescription: String
     set(description) = if (!description.isEmpty()) {
         setUserProperty(DisabledEMailStateProviderImpl.DISABLE_DESCRIPTION_PROPERTY_KEY, description)

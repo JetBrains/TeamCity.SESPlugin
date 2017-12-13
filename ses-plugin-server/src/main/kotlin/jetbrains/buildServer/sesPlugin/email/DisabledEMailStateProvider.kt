@@ -11,5 +11,7 @@ interface DisabledEMailStateProvider {
 
     fun setEmailDisableDescription(user: SUser, description: String)
 
+    fun removeEmailDisableDescription(user: SUser)
+
     fun getEmailDisableDescription(user: SUser): String
 }

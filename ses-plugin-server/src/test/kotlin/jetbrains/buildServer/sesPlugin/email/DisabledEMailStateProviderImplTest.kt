@@ -50,4 +50,78 @@ class DisabledEMailStateProviderImplTest {
             then(prov.getEmailDisableDescription(disabledUserWithDescr)).isEqualTo("The reason")
         }
     }
+
+    fun testDisableWithDescription() {
+        mocking {
+            val user = mock(SUser::class)
+
+            check {
+                one(user).setUserProperty(DisabledEMailStateProviderImpl.DISABLED_PROPERTY_KEY, "true")
+                one(user).setUserProperty(DisabledEMailStateProviderImpl.DISABLE_DESCRIPTION_PROPERTY_KEY, "description")
+            }
+
+            DisabledEMailStateProviderImpl().disable(user, "description")
+        }
+    }
+
+    fun testEnable() {
+        mocking {
+            val user = mock(SUser::class)
+
+            check {
+                one(user).deleteUserProperty(DisabledEMailStateProviderImpl.DISABLED_PROPERTY_KEY)
+                one(user).deleteUserProperty(DisabledEMailStateProviderImpl.DISABLE_DESCRIPTION_PROPERTY_KEY)
+            }
+
+            DisabledEMailStateProviderImpl().setDisabled(user, false)
+        }
+    }
+
+    fun testDisable() {
+        mocking {
+            val user = mock(SUser::class)
+
+            check {
+                one(user).setUserProperty(DisabledEMailStateProviderImpl.DISABLED_PROPERTY_KEY, "true")
+            }
+
+            DisabledEMailStateProviderImpl().setDisabled(user, true)
+        }
+    }
+
+    fun testSetDisableDescription() {
+        mocking {
+            val user = mock(SUser::class)
+
+            check {
+                one(user).setUserProperty(DISABLE_DESCRIPTION_PROPERTY_KEY, "description")
+            }
+
+            DisabledEMailStateProviderImpl().setEmailDisableDescription(user, "description")
+        }
+    }
+
+    fun testSetEmptyDisableDescription() {
+        mocking {
+            val user = mock(SUser::class)
+
+            check {
+                one(user).deleteUserProperty(DISABLE_DESCRIPTION_PROPERTY_KEY)
+            }
+
+            DisabledEMailStateProviderImpl().setEmailDisableDescription(user, "")
+        }
+    }
+
+    fun testRemoveDisableDescription() {
+        mocking {
+            val user = mock(SUser::class)
+
+            check {
+                one(user).deleteUserProperty(DISABLE_DESCRIPTION_PROPERTY_KEY)
+            }
+
+            DisabledEMailStateProviderImpl().removeEmailDisableDescription(user)
+        }
+    }
 }
