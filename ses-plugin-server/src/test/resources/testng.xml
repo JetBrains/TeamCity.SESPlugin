@@ -10,6 +10,7 @@
             <class name="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.CheckAjaxRequestTest"/>
             <class name="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxControllerTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParserImplTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.sqs.TaskSchedulerTest"/>
         </classes>
     </test>
 </suite>
