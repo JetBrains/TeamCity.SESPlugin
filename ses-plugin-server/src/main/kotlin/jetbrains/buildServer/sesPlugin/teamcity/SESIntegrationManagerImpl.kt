@@ -36,11 +36,11 @@ class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager,
     }
 
     @Synchronized
-    override fun getBeans(projectId: String): List<SQSBean> {
+    override fun getBeans(projectId: String): Sequence<SQSBean> {
         val f = myProjectManager.rootProject.getOwnFeaturesOfType(FEATURE_TYPE)
 
         return f.asSequence().map {
             SQSBeanMapImpl(it.parameters)
-        }.toList()
+        }
     }
 }

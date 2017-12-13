@@ -5,7 +5,7 @@ interface SESIntegrationManager {
 
     fun deleteBean(projectId: String): PersistResult
 
-    fun getBeans(projectId: String): List<SQSBean>
+    fun getBeans(projectId: String): Sequence<SQSBean>
 
     fun createFrom(map: Map<String, String>): SQSBean
 }

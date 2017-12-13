@@ -26,11 +26,7 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
                            request: HttpServletRequest) {
         val beans = sesIntegrationManager.getBeans("")
 
-        val propsBean = if (beans.isEmpty()) {
-            BasePropertiesBean(mapOf("aws.credentials.type" to "aws.access.keys", "aws.use.default.credential.provider.chain" to "true"))
-        } else {
-            BasePropertiesBean(beans[0].toMap())
-        }
+        val propsBean = BasePropertiesBean(beans.firstOrNull()?.toMap() ?: mapOf("aws.credentials.type" to "aws.access.keys", "aws.use.default.credential.provider.chain" to "true"))
 
         model.put("propertiesBean", propsBean)
 
