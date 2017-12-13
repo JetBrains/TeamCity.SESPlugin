@@ -5,7 +5,7 @@
        default-autowire="constructor">
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationConfigImpl"/>
-    <bean class="jetbrains.buildServer.sesPlugin.sqs.TaskScheduler" init-method="init">
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.TaskScheduler" init-method="init">
         <constructor-arg index="2" ref="rescanSQSTask"/>
         <constructor-arg index="3"
                          value="#{ T(java.lang.Math).min(T(java.util.concurrent.TimeUnit).MINUTES.toMillis(1), T(jetbrains.buildServer.serverSide.TeamCityProperties).getLong('teamcity.sesPlugin.sqsReadInitialDelay', T(java.util.concurrent.TimeUnit).MINUTES.toMillis(1))) }"/>

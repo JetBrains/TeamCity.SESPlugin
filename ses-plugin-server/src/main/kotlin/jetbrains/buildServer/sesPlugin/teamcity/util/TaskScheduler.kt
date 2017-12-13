@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.sqs
+package jetbrains.buildServer.sesPlugin.teamcity.util
 
 import jetbrains.buildServer.serverSide.ServerListener
 import jetbrains.buildServer.serverSide.ServerListenerAdapter

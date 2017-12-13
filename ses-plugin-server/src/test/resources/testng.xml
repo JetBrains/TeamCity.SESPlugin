@@ -7,10 +7,10 @@
             <class name="jetbrains.buildServer.sesPlugin.bounceHandler.RemoveVerifiedStateOnBounceTest"/>
             <class name="jetbrains.buildServer.sesPlugin.email.BouncedUsersFilterTest"/>
             <class name="jetbrains.buildServer.sesPlugin.email.DisabledEMailStateProviderImplTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.teamcity.util.TaskSchedulerTest"/>
             <class name="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.CheckAjaxRequestTest"/>
             <class name="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxControllerTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParserImplTest"/>
-            <class name="jetbrains.buildServer.sesPlugin.sqs.TaskSchedulerTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskImpl"/>
         </classes>
     </test>
