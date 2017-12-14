@@ -5,19 +5,13 @@
        default-autowire="constructor">
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationConfigImpl"/>
-    <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.TaskScheduler" init-method="init">
-        <constructor-arg index="2" ref="rescanSQSTask"/>
-        <constructor-arg index="3"
-                         value="#{ T(java.lang.Math).min(T(java.util.concurrent.TimeUnit).MINUTES.toMillis(1), T(jetbrains.buildServer.serverSide.TeamCityProperties).getLong('teamcity.sesPlugin.sqsReadInitialDelay', T(java.util.concurrent.TimeUnit).MINUTES.toMillis(1))) }"/>
-        <constructor-arg index="4"
-                         value="#{ T(java.lang.Math).min(T(java.util.concurrent.TimeUnit).MINUTES.toMillis(1), T(jetbrains.buildServer.serverSide.TeamCityProperties).getLong('teamcity.sesPlugin.sqsReadPeriod', T(java.util.concurrent.TimeUnit).MINUTES.toMillis(1))) }"/>
-    </bean>
-    <bean id="rescanSQSTask" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskImpl"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.email.BouncedUsersFilter"/>
     <bean class="jetbrains.buildServer.sesPlugin.email.DisabledEMailStateProviderImpl"/>
 
     <!-- util -->
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.TeamCityPropertiesImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.TaskScheduler" init-method="init"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.LogServiceImpl"/>
 
     <!-- UI -->
@@ -34,7 +28,17 @@
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.DeleteAjaxRequest"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.GetMessagesAjaxRequest"/>
 
+    <bean id="allUsersProvider"
+          class="jetbrains.buildServer.sesPlugin.teamcity.util.AllUsersProvider"/>
+
     <!-- SQS -->
+
+    <bean id="rescanSQSTask" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskImpl">
+        <constructor-arg index="2" ref="rescanSQSTaskDelay"/>
+        <constructor-arg index="3" ref="rescanSQSTaskInitialDelay"/>
+    </bean>
+    <bean id="rescanSQSTaskDelay" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskDelay"/>
+    <bean id="rescanSQSTaskInitialDelay" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskInitialDelay"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReceiverImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParserImpl"/>
@@ -46,9 +50,7 @@
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandlerImpl">
         <constructor-arg index="0" ref="allUsersProvider"/>
     </bean>
+
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.DisableEmailOnBounce"/>
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.RemoveVerifiedStateOnBounce"/>
-
-    <bean id="allUsersProvider"
-          class="jetbrains.buildServer.sesPlugin.teamcity.util.AllUsersProvider"/>
 </beans>

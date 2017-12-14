@@ -8,15 +8,16 @@ import java.util.concurrent.TimeUnit
 
 class TaskScheduler(private val executorServices: ExecutorServices,
                     private val eventDispatcher: EventDispatcher<ServerListener>,
-                    private val task: Runnable,
-                    private val initialDelay: Long,
-                    private val period: Long) : ServerListenerAdapter() {
+                    private val tasks: Collection<PeriodicTask>) : ServerListenerAdapter() {
 
     fun init() {
         eventDispatcher.addListener(this)
     }
 
     override fun serverStartup() {
-        executorServices.normalExecutorService.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.MILLISECONDS)
+        val normalExecutorService = executorServices.normalExecutorService
+        for (task in tasks) {
+            normalExecutorService.scheduleAtFixedRate(task.task, task.initialDelay, task.delay, TimeUnit.MILLISECONDS)
+        }
     }
 }

@@ -6,7 +6,8 @@ import jetbrains.buildServer.sesPlugin.util.check
 import jetbrains.buildServer.sesPlugin.util.mock
 import jetbrains.buildServer.sesPlugin.util.mocking
 import jetbrains.buildServer.util.EventDispatcher
-import org.jmock.Expectations
+import org.jmock.Expectations.any
+import org.jmock.Expectations.returnValue
 import org.testng.annotations.Test
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
@@ -16,33 +17,39 @@ class TaskSchedulerTest {
     fun testNothingDoneBeforeServerStartup() {
         mocking {
             val executorServices = mock(ExecutorServices::class)
-            val task = mock(Runnable::class)
+            val task = mock(PeriodicTask::class)
             val dispatcher = EventDispatcher.create(ServerListener::class.java)
 
-            val startupProcessor = TaskScheduler(executorServices, dispatcher, task, 10, 11)
+            val startupProcessor = TaskScheduler(executorServices, dispatcher, listOf(task))
 
             check {
-                never(executorServices).normalExecutorService
+                never(executorServices)
+                never(task)
             }
 
             startupProcessor.init()
         }
     }
 
-
     @Test
     fun test() {
         mocking {
             val executorServices = mock(ExecutorServices::class)
             val executor = mock(ScheduledExecutorService::class)
-            val task = mock(Runnable::class)
+            val task = mock(PeriodicTask::class)
+            val taskRunnable: () -> Unit = {}
             val dispatcher = EventDispatcher.create(ServerListener::class.java)
 
-            val startupProcessor = TaskScheduler(executorServices, dispatcher, task, 10, 11)
+            val startupProcessor = TaskScheduler(executorServices, dispatcher, listOf(task))
 
             check {
-                one(executorServices).normalExecutorService; will(Expectations.returnValue(executor))
-                one(executor).scheduleAtFixedRate(task, 10, 11, TimeUnit.MILLISECONDS)
+                one(executorServices).normalExecutorService; will(returnValue(executor))
+
+                one(task).task; will(returnValue(taskRunnable))
+                one(task).initialDelay; will(returnValue(10L))
+                one(task).delay; will(returnValue(11L))
+
+                one(executor).scheduleAtFixedRate(with(any(Runnable::class.java)), with(10L), with(11L), with(TimeUnit.MILLISECONDS))
             }
 
             startupProcessor.init()
