@@ -55,19 +55,25 @@
     <forms:button id="check">Check connection</forms:button>
     <forms:button id="receive">Receive messages now</forms:button>
     <span style="display: none" class="spinner"><i class="icon-refresh icon-spin"></i></span>
-</div>
 
-<script>
-    $j(BS.SESPlugin.EditSQSParams.init);
-</script>
-
-<div id="status">
-    <div>
-        <label for="disabledEmailsCount">Users with disabled emails count: </label><span
-            id="disabledEmailsCount">${fn:length(disabledUsers)}</span>
-        <c:forEach items="${disabledUsers}" var="user">
-            <div class="disabledUser"><span class="userName">User: <c:out value="${user.extendedName}"/></span> got
-                bounce on address <span class="email"><c:out value="${user.email}"/></span></div>
-        </c:forEach>
+    <div class="statusBlock">
+        <a onclick="return false;" href="#" id="statusLabel">${fn:length(disabledUsers)} emails are disabled due to
+            bounces</a>
+        <div id="status" class="hidden">
+            <div>
+                <label for="disabledEmailsCount">Users with disabled emails count: </label><span
+                    id="disabledEmailsCount">${fn:length(disabledUsers)}</span>
+                <c:forEach items="${disabledUsers}" var="user">
+                    <div class="disabledUser"><span class="userName">User '<c:out value="${user.extendedName}"/>'</span>
+                        got
+                        bounce on address '<span class="email"><c:out value="${user.email}"/></span>'
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
     </div>
+
+    <script>
+        $j(BS.SESPlugin.EditSQSParams.init);
+    </script>
 </div>

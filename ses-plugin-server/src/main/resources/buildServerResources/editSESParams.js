@@ -62,7 +62,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
 
             sendRequest('delete')
                 .done(function (data) {
-                    $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').val('');
+                    $j('#editSQSParams #editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').val('');
                     if (data.successful) {
                     }
                 })
@@ -74,10 +74,14 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                     alert(data.description)
                 });
             }
+        }).on('click', '#statusLabel', function () {
+            $j('#editSQSParams #status').show();
+            $j('#editSQSParams #statusLabel').hide();
         });
 
         awsCommonParamsUpdateVisibility();
-        if (!$j('.enableDisableSESIntegration').attr('checked')) {
+
+        if (!$j('#editSQSParams .enableDisableSESIntegration').attr('checked')) {
             BS.SESPlugin.EditSQSParams.disableAllInputs();
         }
     }
