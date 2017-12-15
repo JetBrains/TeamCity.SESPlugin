@@ -23,7 +23,9 @@
 
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxController" init-method="init"/>
 
-    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.CheckAjaxRequest"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.CheckAjaxRequest">
+        <constructor-arg index="0" ref="sqsMessagesReceiver"/>
+    </bean>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.SubmitAjaxRequest"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.DeleteAjaxRequest"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.GetMessagesAjaxRequest"/>
