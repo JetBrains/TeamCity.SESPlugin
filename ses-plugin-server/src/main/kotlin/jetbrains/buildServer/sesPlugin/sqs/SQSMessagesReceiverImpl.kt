@@ -10,6 +10,9 @@ import com.amazonaws.services.sqs.model.ChangeMessageVisibilityRequest
 import com.amazonaws.services.sqs.model.GetQueueUrlRequest
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest
 import jetbrains.buildServer.serverSide.TeamCityProperties
+import jetbrains.buildServer.sesPlugin.sqs.data.AmazonSQSNotification
+import jetbrains.buildServer.sesPlugin.sqs.result.CheckConnectionResult
+import jetbrains.buildServer.sesPlugin.sqs.result.ReceiveMessagesResult
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
 import jetbrains.buildServer.util.amazon.AWSCommonParams

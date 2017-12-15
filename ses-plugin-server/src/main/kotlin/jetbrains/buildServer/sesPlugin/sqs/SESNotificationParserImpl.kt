@@ -1,6 +1,7 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
 import com.google.gson.Gson
+import jetbrains.buildServer.sesPlugin.sqs.data.SESNotificationData
 
 class SESNotificationParserImpl : SESNotificationParser {
     private val gson: Gson = Gson()

@@ -1,5 +1,9 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
+import jetbrains.buildServer.sesPlugin.sqs.data.AmazonSQSNotification
+import jetbrains.buildServer.sesPlugin.sqs.data.SESNotificationData
+import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSNotificationParseResult
+import jetbrains.buildServer.sesPlugin.sqs.result.ReceiveMessagesResult
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 
 class SESSQSMessagesReceiver(private val sqsMessagesReceiver: SQSMessagesReceiver<AmazonSQSNotification>,

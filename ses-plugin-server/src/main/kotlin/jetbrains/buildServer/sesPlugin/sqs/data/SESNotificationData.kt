@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.sqs
+package jetbrains.buildServer.sesPlugin.sqs.data
 
 
 // "{\"eventType\":\"Bounce\",\"bounce\":{\"bounceType\":\"Permanent\",\"bounceSubType\":\"General\",\"bouncedRecipients\":
@@ -26,35 +26,3 @@ data class SESNotificationData(
         var mail: MailData
 )
 
-data class MailData(
-        var timestamp: String,
-        var source: String,
-        var sourceArn: String,
-        var sendingAccountId: String,
-        var messageId: String,
-        var destination: List<String>,
-        var headersTruncated: Boolean,
-        var headers: List<HeaderData>
-//        , var commonHeaders: ?
-)
-
-data class HeaderData(
-        var name: String,
-        var value: String
-)
-
-data class BounceData(
-        var bounceType: String,
-        var bounceSubType: String,
-        var bouncedRecipients: List<Recipient>,
-        var timestamp: String,
-        var feedbackId: String,
-        var reportingMTA: String
-)
-
-data class Recipient(
-        var emailAddress: String,
-        var action: String,
-        var status: String,
-        var diagnosticCode: String
-)

@@ -15,6 +15,7 @@
             <class name="jetbrains.buildServer.sesPlugin.sqs.SESNotificationParserImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReaderImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SESSQSMessagesReceiverTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.sqs.data.DataClassesTest"/>
         </classes>
     </test>
 </suite>

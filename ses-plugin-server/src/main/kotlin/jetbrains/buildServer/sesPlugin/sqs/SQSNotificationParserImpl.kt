@@ -1,6 +1,8 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
 import com.google.gson.*
+import jetbrains.buildServer.sesPlugin.sqs.data.AmazonSQSNotification
+import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSNotificationParseResult
 import java.lang.reflect.Type
 
 class SQSNotificationParserImpl : SQSNotificationParser {
