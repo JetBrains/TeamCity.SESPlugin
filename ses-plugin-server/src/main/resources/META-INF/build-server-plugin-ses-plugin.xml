@@ -40,8 +40,13 @@
     <bean id="rescanSQSTaskDelay" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskDelay"/>
     <bean id="rescanSQSTaskInitialDelay" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskInitialDelay"/>
 
-    <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReceiverImpl"/>
+    <bean id="sqsMessagesReceiver" class="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReceiverImpl"
+          autowire-candidate="false"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParserImpl"/>
+    <bean id="sesMessagesReceiver" class="jetbrains.buildServer.sesPlugin.sqs.SESSQSMessagesReceiver">
+        <constructor-arg index="0" ref="sqsMessagesReceiver"/>
+    </bean>
+    <bean class="jetbrains.buildServer.sesPlugin.sqs.SESNotificationParserImpl"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReaderImpl"/>
 

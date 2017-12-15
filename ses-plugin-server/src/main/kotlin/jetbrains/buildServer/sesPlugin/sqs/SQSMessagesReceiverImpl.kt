@@ -14,19 +14,19 @@ import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
 import jetbrains.buildServer.util.amazon.AWSCommonParams
 
-class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotificationParser) : SQSMessagesReceiver {
+class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotificationParser) : SQSMessagesReceiver<AmazonSQSNotification>, SQSConnectionChecker {
 
     private fun prepareRequest() =
             ReceiveMessageRequest().withMaxNumberOfMessages(10)
 
-    override fun receiveMessages(bean: SQSBean): ReceiveMessagesResult {
+    override fun receiveMessages(bean: SQSBean): ReceiveMessagesResult<AmazonSQSNotification> {
         val params = bean.toMap()
 
         if (isDisabled(params)) {
             return ReceiveMessagesResult(emptyList(), null, "Disabled")
         }
 
-        return AWSCommonParams.withAWSClients<ReceiveMessagesResult, Exception>(params) {
+        return AWSCommonParams.withAWSClients<ReceiveMessagesResult<AmazonSQSNotification>, Exception>(params) {
             val credentials: AWSCredentials = it.credentials ?: return@withAWSClients ReceiveMessagesResult(emptyList(), null, "No credentials provided")
 
             val sqs = try {

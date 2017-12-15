@@ -12,7 +12,7 @@ class SQSNotificationParserImpl : SQSNotificationParser {
         gson = gsonBuilder.create()
     }
 
-    override fun parse(data: String): AmazonSQSNotificationParseResult {
+    override fun parse(data: String): AmazonSQSNotificationParseResult<AmazonSQSNotification> {
         var res: AmazonSQSNotification?
         var ex: SQSNotificationParseException?
         try {
@@ -45,7 +45,7 @@ class SQSNotificationParserImpl : SQSNotificationParser {
             val MessageId = obj["MessageId"]?.asString ?: throw JsonParseException("MessageId not found")
             val TopicArn = obj["TopicArn"]?.asString ?: throw JsonParseException("TopicArn not found")
             val Subject = obj["Subject"]?.asString ?: throw JsonParseException("Subject not found")
-            val Message = if (obj["Message"] != null) gson.fromJson<JsonObject>(obj["Message"].asString, JsonObject::class.java) else throw JsonParseException("Message not found")
+            val Message = obj["Message"]?.asString ?: throw JsonParseException("Message not found")
             val Timestamp = obj["Timestamp"].asString ?: throw JsonParseException("Timestamp not found")
             val SignatureVersion = obj["SignatureVersion"].asString ?: throw JsonParseException("SignatureVersion not found")
             val Signature = obj["Signature"].asString ?: throw JsonParseException("Signature not found")

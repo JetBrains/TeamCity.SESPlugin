@@ -1,0 +1,96 @@
+package jetbrains.buildServer.sesPlugin.sqs
+
+import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
+import jetbrains.buildServer.sesPlugin.util.check
+import jetbrains.buildServer.sesPlugin.util.mock
+import jetbrains.buildServer.sesPlugin.util.mocking
+import org.assertj.core.api.BDDAssertions.then
+import org.jmock.Expectations.returnValue
+import org.jmock.Expectations.throwException
+import org.testng.annotations.Test
+
+@Suppress("UNCHECKED_CAST")
+class SESSQSMessagesReceiverTest {
+    @Test
+    fun testNoopOnException() {
+        mocking {
+            val sqsMessagesReceiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<AmazonSQSNotification>
+            val sesNotificationParser = mock(SESNotificationParser::class)
+            val bean = mock(SQSBean::class)
+
+            val initException = Exception("some")
+            val initDescription = "other"
+
+            check {
+                one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(ReceiveMessagesResult<AmazonSQSNotification>(emptyList(), initException, initDescription)))
+            }
+
+            val receiver = SESSQSMessagesReceiver(sqsMessagesReceiver, sesNotificationParser)
+
+            val (messages, exception, description) = receiver.receiveMessages(bean)
+            then(messages).isEmpty()
+            then(exception).isSameAs(initException)
+            then(description).isSameAs(initDescription)
+        }
+    }
+
+    @Test
+    fun testMessagesTransformed() {
+        mocking {
+            val sqsMessagesReceiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<AmazonSQSNotification>
+            val sesNotificationParser = mock(SESNotificationParser::class)
+            val bean = mock(SQSBean::class)
+
+            val message = "someMessage"
+            val notification = AmazonSQSNotification("", "", "", "", message, "", "", "", "", "")
+            val data = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+
+            check {
+                one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(ReceiveMessagesResult(listOf(AmazonSQSNotificationParseResult(notification)))))
+                one(sesNotificationParser).parse(message); will(returnValue(data))
+            }
+
+            val receiver = SESSQSMessagesReceiver(sqsMessagesReceiver, sesNotificationParser)
+            val (messages, exception, description) = receiver.receiveMessages(bean)
+
+            then(exception).isNull()
+            then(description).isEqualTo("ok")
+            then(messages).hasSize(1)
+            then(messages.first().result).isSameAs(data)
+        }
+    }
+
+    @Test
+    fun testParseExceptionHandled() {
+        mocking {
+            val sqsMessagesReceiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<AmazonSQSNotification>
+            val sesNotificationParser = mock(SESNotificationParser::class)
+            val bean = mock(SQSBean::class)
+
+            val message1 = "someMessage"
+            val message2 = "otherMessage"
+            val notification1 = AmazonSQSNotification("", "", "", "", message1, "", "", "", "", "")
+            val notification2 = AmazonSQSNotification("", "", "", "", message2, "", "", "", "", "")
+            val data = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+
+            val initException = Exception("some")
+
+            check {
+                one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(ReceiveMessagesResult(listOf(AmazonSQSNotificationParseResult(notification1), AmazonSQSNotificationParseResult(notification2)))))
+                one(sesNotificationParser).parse(message1); will(throwException(initException))
+                one(sesNotificationParser).parse(message2); will(returnValue(data))
+            }
+
+            val receiver = SESSQSMessagesReceiver(sqsMessagesReceiver, sesNotificationParser)
+            val (messages, exception, description) = receiver.receiveMessages(bean)
+
+            then(exception).isNull()
+            then(description).isEqualTo("ok")
+            then(messages).hasSize(2)
+            then(messages[0].result).isNull()
+            then(messages[0].exception).isNotNull()
+            then(messages[1].result).isSameAs(data)
+            then(messages[1].exception).isNull()
+        }
+    }
+}

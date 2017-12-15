@@ -1,13 +1,11 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
-import com.google.gson.JsonObject
-
 data class AmazonSQSNotification(
         var Type: String,
         var MessageId: String,
         var TopicArn: String,
         var Subject: String,
-        var Message: JsonObject,
+        var Message: String,
         var Timestamp: String,
         var SignatureVersion: String,
         var Signature: String,

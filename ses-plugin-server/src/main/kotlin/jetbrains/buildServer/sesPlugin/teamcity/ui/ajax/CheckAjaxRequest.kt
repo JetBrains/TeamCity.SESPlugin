@@ -1,10 +1,10 @@
 package jetbrains.buildServer.sesPlugin.teamcity.ui.ajax
 
 import jetbrains.buildServer.controllers.BasePropertiesBean
-import jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReceiver
+import jetbrains.buildServer.sesPlugin.sqs.SQSConnectionChecker
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManager
 
-class CheckAjaxRequest(private val sqsMessagesReceiver: SQSMessagesReceiver,
+class CheckAjaxRequest(private val sqsMessagesReceiver: SQSConnectionChecker,
                        private val sesIntegrationManager: SESIntegrationManager) : AjaxRequest {
 
     override val id: String = "check"

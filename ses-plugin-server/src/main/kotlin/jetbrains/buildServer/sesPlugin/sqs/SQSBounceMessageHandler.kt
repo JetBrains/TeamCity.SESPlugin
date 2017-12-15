@@ -1,30 +1,28 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
-import com.google.gson.JsonObject
 import jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandler
 
 class SQSBounceMessageHandler(private val bounceHandler: BounceHandler) : SQSMessageHandler {
     override fun accepts(type: String) = type == "Bounce"
 
-    override fun handle(data: JsonObject) {
-        val data2 = data["bounce"].asJsonObject
-        if (isCriticalBounce(data2)) {
-            if (subtype(data2) == "Suppressed") {
+    override fun handle(data: SESNotificationData) {
+        if (isCriticalBounce(data.bounce)) {
+            if (data.bounce.bounceSubType == "Suppressed") {
                 // todo inform admin
             }
 
-            for (recipient in bounces(data2)) {
-                val email = bounceMail(recipient)
-                val action = bounceAction(recipient)
+            for (recipient in data.bounce.bouncedRecipients) {
+                val email = recipient.emailAddress
+                val action = recipient.action
                 val failed = (action == "failed")
-                val diagnostics = diagnostics(recipient)
+                val diagnostics = recipient.diagnosticCode
 
                 if (failed) {
                     bounceHandler.handleBounce(email)
                 }
             }
-        } else if (isHandableBounce(data2)) {
-            when (subtype(data2)) {
+        } else if (isHandableBounce(data)) {
+            when (data.bounce.bounceSubType) {
                 "MessageTooLarge" -> {
                 }
                 "ContentRejected" -> {
@@ -39,23 +37,11 @@ class SQSBounceMessageHandler(private val bounceHandler: BounceHandler) : SQSMes
         }
     }
 
-    private fun subtype(data: JsonObject) = data["bounceSubType"].asString
+    private fun isHandableBounce(data: SESNotificationData) = data.bounce.bounceType == "Transient"
 
-    private fun isHandableBounce(data: JsonObject) = data["bounceType"].asString == "Transient"
+    private fun isPermanent(data: BounceData) = data.bounceType == "Permanent"
 
-    private fun diagnostics(recipient: JsonObject) = recipient["diagnosticCode"]
+    private fun isUndetermined(data: BounceData) = data.bounceType == "Undetermined"
 
-    private fun bounceAction(recipient: JsonObject) = recipient["action"].asString
-
-    private fun bounceMail(recipient: JsonObject) = recipient["emailAddress"].asString
-
-    private fun bounces(data: JsonObject): List<JsonObject> {
-        return if (data["bouncedRecipients"] == null || !data["bouncedRecipients"].isJsonArray) emptyList() else data["bouncedRecipients"].asJsonArray.map { it.asJsonObject }
-    }
-
-    private fun isPermanent(data: JsonObject) = data["bounceType"].asString == "Permanent"
-
-    private fun isUndetermined(data: JsonObject) = data["bounceType"].asString == "Undetermined"
-
-    private fun isCriticalBounce(data: JsonObject) = isPermanent(data) || isUndetermined(data)
+    private fun isCriticalBounce(data: BounceData) = isPermanent(data) || isUndetermined(data)
 }
