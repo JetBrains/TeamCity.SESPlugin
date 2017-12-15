@@ -17,7 +17,7 @@ class SQSMessagesReceiverImplTest {
                 will(returnValue(true))
             }
 
-            val (messages, exception, description) = SQSMessagesReceiverImpl(mock(SQSNotificationParser::class)).receiveMessages(bean)
+            val (messages, exception, description) = SQSMessagesReceiverImpl(mock(SQSNotificationParser::class), mock(AWSClientsProvider::class)).receiveMessages(bean)
             then(messages).isEmpty()
             then(exception).isNull()
             then(description).isEqualTo("Disabled")
@@ -34,7 +34,7 @@ class SQSMessagesReceiverImplTest {
                 will(returnValue(true))
             }
 
-            val (status, exception, description) = SQSMessagesReceiverImpl(mock(SQSNotificationParser::class)).checkConnection(bean)
+            val (status, exception, description) = SQSMessagesReceiverImpl(mock(SQSNotificationParser::class), mock(AWSClientsProvider::class)).checkConnection(bean)
             then(status).isFalse()
             then(exception).isNull()
             then(description).isEqualTo("Disabled")

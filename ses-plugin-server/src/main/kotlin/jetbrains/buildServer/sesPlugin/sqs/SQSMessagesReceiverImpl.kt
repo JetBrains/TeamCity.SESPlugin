@@ -17,7 +17,8 @@ import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
 import jetbrains.buildServer.util.amazon.AWSCommonParams
 
-class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotificationParser) : SQSMessagesReceiver<AmazonSQSNotification>, SQSConnectionChecker {
+class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotificationParser,
+                              private val awsClientsProvider: AWSClientsProvider) : SQSMessagesReceiver<AmazonSQSNotification>, SQSConnectionChecker {
 
     private fun prepareRequest() =
             ReceiveMessageRequest().withMaxNumberOfMessages(10)
@@ -29,40 +30,40 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
 
         val params = bean.toMap()
 
-        return AWSCommonParams.withAWSClients<ReceiveMessagesResult<AmazonSQSNotification>, Exception>(params) {
-            val credentials: AWSCredentials = it.credentials ?: return@withAWSClients ReceiveMessagesResult(emptyList(), null, "No credentials provided")
+        return awsClientsProvider.withClient(bean) {
+            val credentials: AWSCredentials = this.credentials ?: return@withClient ReceiveMessagesResult(emptyList(), null, "No credentials provided")
 
             val sqs = try {
                 AmazonSQSClientBuilder.standard()
-                        .withRegion(it.region)
+                        .withRegion(this.region)
                         .withCredentials(AWSCredentialsProviderChain(AWSStaticCredentialsProvider(credentials), DefaultAWSCredentialsProviderChain.getInstance()))
                         .build()
             } catch (ex: Exception) {
-                return@withAWSClients ReceiveMessagesResult(emptyList(), ex, "Cannot open connection to Amazon SQS")
+                return@withClient ReceiveMessagesResult(emptyList(), ex, "Cannot open connection to Amazon SQS")
             }
 
-            if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
+            if (Thread.currentThread().isInterrupted) return@withClient ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
 
             val queueUrlResult = try {
                 sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(params[Constants.QUEUE_NAME_PARAM]).withQueueOwnerAWSAccountId(params[Constants.ACCOUNT_ID_PARAM]))
             } catch (ex: Exception) {
                 tryShutdownSilently(sqs)
-                return@withAWSClients ReceiveMessagesResult(emptyList(), ex, "Cannot get queue url with name ${params[Constants.QUEUE_NAME_PARAM]} and owner ${params[Constants.ACCOUNT_ID_PARAM]}")
+                return@withClient ReceiveMessagesResult(emptyList(), ex, "Cannot get queue url with name ${params[Constants.QUEUE_NAME_PARAM]} and owner ${params[Constants.ACCOUNT_ID_PARAM]}")
             }
 
-            if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
+            if (Thread.currentThread().isInterrupted) return@withClient ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
 
             val messagesResult = try {
                 sqs.receiveMessage(prepareRequest().withQueueUrl(queueUrlResult.queueUrl))
             } catch (ex: Exception) {
                 tryShutdownSilently(sqs)
-                return@withAWSClients ReceiveMessagesResult(emptyList(), ex, "No credentials provided")
+                return@withClient ReceiveMessagesResult(emptyList(), ex, "No credentials provided")
             }
 
             try {
                 if (TeamCityProperties.getBooleanOrTrue("teamcity.sesIntegration.markMessagesAsUnread")) {
                     for (i in messagesResult.messages) {
-                        if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
+                        if (Thread.currentThread().isInterrupted) return@withClient ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
 
                         sqs.changeMessageVisibility(ChangeMessageVisibilityRequest().withQueueUrl(queueUrlResult.queueUrl).withReceiptHandle(i.receiptHandle).withVisibilityTimeout(0))
                     }
@@ -71,9 +72,9 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
                 tryShutdownSilently(sqs)
             }
 
-            if (Thread.currentThread().isInterrupted) return@withAWSClients ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
+            if (Thread.currentThread().isInterrupted) return@withClient ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
 
-            return@withAWSClients messagesResult.messages.map {
+            return@withClient messagesResult.messages.map {
                 sqsNotificationParser.parse(it.body)
             }.let {
                 ReceiveMessagesResult(it)
