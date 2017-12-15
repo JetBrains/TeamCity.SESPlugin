@@ -23,11 +23,11 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
             ReceiveMessageRequest().withMaxNumberOfMessages(10)
 
     override fun receiveMessages(bean: SQSBean): ReceiveMessagesResult<AmazonSQSNotification> {
-        val params = bean.toMap()
-
-        if (isDisabled(params)) {
+        if (bean.isDisabled()) {
             return ReceiveMessagesResult(emptyList(), null, "Disabled")
         }
+
+        val params = bean.toMap()
 
         return AWSCommonParams.withAWSClients<ReceiveMessagesResult<AmazonSQSNotification>, Exception>(params) {
             val credentials: AWSCredentials = it.credentials ?: return@withAWSClients ReceiveMessagesResult(emptyList(), null, "No credentials provided")
@@ -82,11 +82,11 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
     }
 
     override fun checkConnection(bean: SQSBean): CheckConnectionResult {
-        val params = bean.toMap()
-
         if (bean.isDisabled()) {
             return CheckConnectionResult(false, null, "Disabled")
         }
+
+        val params = bean.toMap()
 
         return AWSCommonParams.withAWSClients<CheckConnectionResult, Exception>(params) {
             val credentials: AWSCredentials = it.credentials ?: return@withAWSClients CheckConnectionResult(false, null, "no credentials provided")
