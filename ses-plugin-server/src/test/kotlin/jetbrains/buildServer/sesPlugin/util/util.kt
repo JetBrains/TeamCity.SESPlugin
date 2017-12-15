@@ -1,5 +1,7 @@
 package jetbrains.buildServer.sesPlugin.util
 
+import org.assertj.core.api.AbstractThrowableAssert
+import org.assertj.core.api.BDDAssertions
 import org.jmock.Expectations
 import org.jmock.Mockery
 import org.jmock.api.Action
@@ -42,6 +44,16 @@ fun InvocationExpectation.on(obj: Any) = setObjectMatcher(MockObjectMatcher(obj)
 fun InvocationExpectation.func(meth: KFunction<*>) = setMethodMatcher(MethodMatcher(meth.javaMethod))
 fun InvocationExpectation.count(count: Int) = setCardinality(Cardinality.exactly(count))
 fun InvocationExpectation.will(returnValue: Action) = setAction(returnValue)
+
+fun then(action: () -> Unit): AbstractThrowableAssert<*, out Throwable> {
+    return try {
+        action.invoke()
+
+        BDDAssertions.then(null as Exception?)
+    } catch (e: Exception) {
+        BDDAssertions.then(e)
+    }
+}
 
 fun <T : Any> Mockery.mock(clazz: KClass<T>, name: String? = null): T {
     return if (name != null) this.mock(clazz.java, name) else this.mock(clazz.java)

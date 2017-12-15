@@ -14,8 +14,6 @@ import jetbrains.buildServer.sesPlugin.sqs.data.AmazonSQSNotification
 import jetbrains.buildServer.sesPlugin.sqs.result.CheckConnectionResult
 import jetbrains.buildServer.sesPlugin.sqs.result.ReceiveMessagesResult
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
-import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
-import jetbrains.buildServer.util.amazon.AWSCommonParams
 
 class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotificationParser,
                               private val awsClientsProvider: AWSClientsProvider) : SQSMessagesReceiver<AmazonSQSNotification>, SQSConnectionChecker {
@@ -27,8 +25,6 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
         if (bean.isDisabled()) {
             return ReceiveMessagesResult(emptyList(), null, "Disabled")
         }
-
-        val params = bean.toMap()
 
         return awsClientsProvider.withClient(bean) {
             val credentials: AWSCredentials = this.credentials ?: return@withClient ReceiveMessagesResult(emptyList(), null, "No credentials provided")
@@ -45,10 +41,10 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
             if (Thread.currentThread().isInterrupted) return@withClient ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
 
             val queueUrlResult = try {
-                sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(params[Constants.QUEUE_NAME_PARAM]).withQueueOwnerAWSAccountId(params[Constants.ACCOUNT_ID_PARAM]))
+                sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(bean.queueName).withQueueOwnerAWSAccountId(bean.accountId))
             } catch (ex: Exception) {
                 tryShutdownSilently(sqs)
-                return@withClient ReceiveMessagesResult(emptyList(), ex, "Cannot get queue url with name ${params[Constants.QUEUE_NAME_PARAM]} and owner ${params[Constants.ACCOUNT_ID_PARAM]}")
+                return@withClient ReceiveMessagesResult(emptyList(), ex, "Cannot get queue url with name ${bean.queueName} and owner ${bean.accountId}")
             }
 
             if (Thread.currentThread().isInterrupted) return@withClient ReceiveMessagesResult(emptyList(), null, "Execution is interrupted")
@@ -87,34 +83,29 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
             return CheckConnectionResult(false, null, "Disabled")
         }
 
-        val params = bean.toMap()
-
-        return AWSCommonParams.withAWSClients<CheckConnectionResult, Exception>(params) {
-            val credentials: AWSCredentials = it.credentials ?: return@withAWSClients CheckConnectionResult(false, null, "no credentials provided")
+        return awsClientsProvider.withClient(bean) {
+            val credentials: AWSCredentials = this.credentials ?: return@withClient CheckConnectionResult(false, null, "no credentials provided")
 
             val sqs = try {
                 AmazonSQSClientBuilder.standard()
-                        .withRegion(it.region)
+                        .withRegion(this.region)
                         .withCredentials(AWSCredentialsProviderChain(AWSStaticCredentialsProvider(credentials), DefaultAWSCredentialsProviderChain.getInstance()))
                         .build()
             } catch (ex: Exception) {
-                return@withAWSClients CheckConnectionResult(false, ex, "Cannot open connection to Amazon SQS")
+                return@withClient CheckConnectionResult(false, ex, "Cannot open connection to Amazon SQS")
             }
 
             try {
-                sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(params[Constants.QUEUE_NAME_PARAM]).withQueueOwnerAWSAccountId(params[Constants.ACCOUNT_ID_PARAM]))
+                sqs.getQueueUrl(GetQueueUrlRequest().withQueueName(bean.queueName).withQueueOwnerAWSAccountId(bean.accountId))
             } catch (ex: Exception) {
-                return@withAWSClients CheckConnectionResult(false, ex, "Cannot get queue url")
+                return@withClient CheckConnectionResult(false, ex, "Cannot get queue url")
             } finally {
                 tryShutdownSilently(sqs)
             }
 
-            return@withAWSClients CheckConnectionResult(true)
+            return@withClient CheckConnectionResult(true)
         }
     }
-
-    private fun isDisabled(params: Map<String, String>) =
-            !(params[Constants.ENABLED]?.toBoolean() ?: false)
 
     private fun tryShutdownSilently(sqs: AmazonSQS) {
         try {
