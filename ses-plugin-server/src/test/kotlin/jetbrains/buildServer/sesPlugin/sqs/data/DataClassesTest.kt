@@ -2,6 +2,10 @@
 
 package jetbrains.buildServer.sesPlugin.sqs.data
 
+import jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParseException
+import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSNotificationParseResult
+import jetbrains.buildServer.sesPlugin.sqs.result.CheckConnectionResult
+import jetbrains.buildServer.sesPlugin.sqs.result.ReceiveMessagesResult
 import org.testng.annotations.Test
 
 @Suppress("UnusedEquals")
@@ -141,6 +145,53 @@ class DataClassesTest {
                 }
                 mail = MailData("", "", "", "", "", emptyList(), false, emptyList())
             }
+        }
+
+        val copy = data.copy()
+        data.toString()
+        data == data
+        data == copy
+        data.hashCode()
+    }
+
+    @Test
+    fun testAmazonSQSNotificationParseResult() {
+        val data = AmazonSQSNotificationParseResult("", SQSNotificationParseException(""))
+        with(data) {
+            result
+            exception
+        }
+
+        val copy = data.copy()
+        data.toString()
+        data == data
+        data == copy
+        data.hashCode()
+    }
+
+    @Test
+    fun testCheckConnectionResult() {
+        val data = CheckConnectionResult(true, SQSNotificationParseException(""), "")
+        with(data) {
+            status
+            exception
+            description
+        }
+
+        val copy = data.copy()
+        data.toString()
+        data == data
+        data == copy
+        data.hashCode()
+    }
+
+    @Test
+    fun testReceiveMessagesResult() {
+        val data = ReceiveMessagesResult<String>(emptyList(), SQSNotificationParseException(""), "")
+        with(data) {
+            messages
+            exception
+            description
         }
 
         val copy = data.copy()
