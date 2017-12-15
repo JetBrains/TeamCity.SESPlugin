@@ -84,7 +84,7 @@ class SQSMessagesReceiverImpl(private val sqsNotificationParser: SQSNotification
     override fun checkConnection(bean: SQSBean): CheckConnectionResult {
         val params = bean.toMap()
 
-        if (isDisabled(params)) {
+        if (bean.isDisabled()) {
             return CheckConnectionResult(false, null, "Disabled")
         }
 
