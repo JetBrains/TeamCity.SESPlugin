@@ -1,7 +1,10 @@
+@file:Suppress("UNUSED_VARIABLE")
+
 package jetbrains.buildServer.sesPlugin.sqs.data
 
 import org.testng.annotations.Test
 
+@Suppress("UnusedEquals")
 /**
  * Stub test for data classes
  */
@@ -34,6 +37,12 @@ class DataClassesTest {
         }
 
         val (Type, MessageId, TopicArn, Subject, Message, Timestamp, SignatureVersion, Signature, SigningCertURL, UnsubscribeURL) = AmazonSQSNotification("", "", "", "", "", "", "", "", "", "")
+
+        val copy = data.copy()
+        data.toString()
+        data == data
+        data == copy
+        data.hashCode()
     }
 
     @Test
@@ -109,5 +118,11 @@ class DataClassesTest {
                 mail = MailData("", "", "", "", "", emptyList(), false, emptyList())
             }
         }
+
+        val copy = data.copy()
+        data.toString()
+        data == data
+        data == copy
+        data.hashCode()
     }
 }
