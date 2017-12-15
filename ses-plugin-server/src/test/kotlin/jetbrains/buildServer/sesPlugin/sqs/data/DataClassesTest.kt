@@ -61,6 +61,12 @@ class DataClassesTest {
                         action
                         status
                         diagnosticCode
+
+                        toString()
+                        val copy = copy()
+                        hashCode()
+                        this == this
+                        this == copy
                     }
                 }
                 timestamp
@@ -78,9 +84,27 @@ class DataClassesTest {
                         with(header) {
                             name
                             value
+
+                            toString()
+                            val copy = copy()
+                            hashCode()
+                            this == this
+                            this == copy
                         }
                     }
+
+                    toString()
+                    val copy = copy()
+                    hashCode()
+                    this == this
+                    this == copy
                 }
+
+                toString()
+                val copy = copy()
+                hashCode()
+                this == this
+                this == copy
             }
 
             eventType = "!"
