@@ -8,6 +8,7 @@ import org.jmock.api.Action
 import org.jmock.internal.Cardinality
 import org.jmock.internal.InvocationExpectation
 import org.jmock.internal.matcher.MethodMatcher
+import org.jmock.internal.matcher.MethodNameMatcher
 import org.jmock.internal.matcher.MockObjectMatcher
 import java.io.IOException
 import java.io.InputStream
@@ -41,6 +42,7 @@ fun Mockery.invocation(meth: KFunction<*>, action: InvocationExpectation.() -> U
 
 fun InvocationExpectation.on(obj: Any) = setObjectMatcher(MockObjectMatcher(obj))
 
+fun InvocationExpectation.func(name: String) = setMethodMatcher(MethodNameMatcher(name))
 fun InvocationExpectation.func(meth: KFunction<*>) = setMethodMatcher(MethodMatcher(meth.javaMethod))
 fun InvocationExpectation.count(count: Int) = setCardinality(Cardinality.exactly(count))
 fun InvocationExpectation.will(returnValue: Action) = setAction(returnValue)
