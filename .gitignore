@@ -1,0 +1,6 @@
+.idea/**
+build/**
+servers/**
+target/**
+ses-plugin-server/target/**
+**/*.iml
