@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.sqs
+package jetbrains.buildServer.sesPlugin.sqs.awsCommunication
 
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.model.GetQueueUrlRequest

@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.sqs
+package jetbrains.buildServer.sesPlugin.sqs.awsCommunication
 
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 

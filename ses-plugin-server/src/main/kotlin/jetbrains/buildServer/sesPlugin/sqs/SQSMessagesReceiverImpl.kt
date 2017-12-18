@@ -3,6 +3,8 @@ package jetbrains.buildServer.sesPlugin.sqs
 import com.amazonaws.services.sqs.model.ChangeMessageVisibilityRequest
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest
 import jetbrains.buildServer.serverSide.TeamCityProperties
+import jetbrains.buildServer.sesPlugin.sqs.awsCommunication.AmazonSQSCommunicator
+import jetbrains.buildServer.sesPlugin.sqs.awsCommunication.SQSConnectionChecker
 import jetbrains.buildServer.sesPlugin.sqs.data.AmazonSQSNotification
 import jetbrains.buildServer.sesPlugin.sqs.result.CheckConnectionResult
 import jetbrains.buildServer.sesPlugin.sqs.result.ReceiveMessagesResult

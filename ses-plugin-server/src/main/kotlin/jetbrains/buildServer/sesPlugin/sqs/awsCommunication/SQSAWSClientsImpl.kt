@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.sqs
+package jetbrains.buildServer.sesPlugin.sqs.awsCommunication
 
 import com.amazonaws.auth.AWSCredentials
 import jetbrains.buildServer.util.amazon.AWSClients

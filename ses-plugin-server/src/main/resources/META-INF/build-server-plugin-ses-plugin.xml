@@ -44,10 +44,10 @@
 
     <bean id="sqsMessagesReceiver" class="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReceiverImpl"
           autowire-candidate="false"/>
-    <bean class="jetbrains.buildServer.sesPlugin.sqs.AmazonSQSCommunicatorImpl"/>
-    <bean class="jetbrains.buildServer.sesPlugin.sqs.AWSClientsProviderImpl"/>
-    <bean class="jetbrains.buildServer.sesPlugin.sqs.QueueUrlProviderImpl"/>
-    <bean class="jetbrains.buildServer.sesPlugin.sqs.AmazonSQSClientFactoryImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.sqs.awsCommunication.AmazonSQSCommunicatorImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.sqs.awsCommunication.AWSClientsProviderImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.sqs.awsCommunication.QueueUrlProviderImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.sqs.awsCommunication.AmazonSQSClientFactoryImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParserImpl"/>
     <bean id="sesMessagesReceiver" class="jetbrains.buildServer.sesPlugin.sqs.SESSQSMessagesReceiver">
         <constructor-arg index="0" ref="sqsMessagesReceiver"/>

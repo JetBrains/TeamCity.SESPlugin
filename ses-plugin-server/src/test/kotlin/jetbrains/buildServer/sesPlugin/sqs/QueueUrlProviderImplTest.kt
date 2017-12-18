@@ -2,6 +2,7 @@ package jetbrains.buildServer.sesPlugin.sqs
 
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.model.GetQueueUrlResult
+import jetbrains.buildServer.sesPlugin.sqs.awsCommunication.QueueUrlProviderImpl
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.util.*
 import org.assertj.core.api.BDDAssertions.then

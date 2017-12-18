@@ -1,5 +1,6 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
+import jetbrains.buildServer.sesPlugin.sqs.awsCommunication.*
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.util.*
 import org.assertj.core.api.BDDAssertions.then
