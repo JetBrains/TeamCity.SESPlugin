@@ -3,6 +3,5 @@ package jetbrains.buildServer.sesPlugin.sqs.awsCommunication
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 
 interface AmazonSQSCommunicator {
-    @Throws(AmazonSQSCommunicationException::class)
-    fun <T> withCommunication(bean: SQSBean, func: (data: AmazonSQSCommunicationData) -> T): T
+    fun <T> performTask(bean: SQSBean, communicatorTask: AmazonSQSCommunicatorTask<T>): T
 }

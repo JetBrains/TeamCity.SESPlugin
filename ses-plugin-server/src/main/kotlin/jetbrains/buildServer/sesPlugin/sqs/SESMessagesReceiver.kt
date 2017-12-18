@@ -2,15 +2,15 @@ package jetbrains.buildServer.sesPlugin.sqs
 
 import jetbrains.buildServer.sesPlugin.sqs.data.AmazonSQSNotification
 import jetbrains.buildServer.sesPlugin.sqs.data.SESNotificationData
+import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSCommunicationResult
 import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSNotificationParseResult
-import jetbrains.buildServer.sesPlugin.sqs.result.ReceiveMessagesResult
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 
-class SESSQSMessagesReceiver(private val sqsMessagesReceiver: SQSMessagesReceiver<AmazonSQSNotification>,
-                             private val sesNotificationParser: SESNotificationParser) : SQSMessagesReceiver<SESNotificationData> {
-    override fun receiveMessages(bean: SQSBean): ReceiveMessagesResult<SESNotificationData> {
+class SESMessagesReceiver(private val sqsMessagesReceiver: SQSMessagesReceiver<AmazonSQSNotification>,
+                          private val sesNotificationParser: SESNotificationParser) : SQSMessagesReceiver<SESNotificationData> {
+    override fun receiveMessages(bean: SQSBean): AmazonSQSCommunicationResult<SESNotificationData> {
         val received = sqsMessagesReceiver.receiveMessages(bean)
-        if (received.exception != null) return ReceiveMessagesResult(emptyList(), received.exception, received.description)
+        if (received.exception != null) return AmazonSQSCommunicationResult(emptyList(), received.exception, received.description)
 
         val res = ArrayList<AmazonSQSNotificationParseResult<SESNotificationData>>()
         received.messages.forEach {
@@ -24,7 +24,7 @@ class SESSQSMessagesReceiver(private val sqsMessagesReceiver: SQSMessagesReceive
                 res.add(AmazonSQSNotificationParseResult(exception = it.exception))
             }
         }
-        return ReceiveMessagesResult(res)
+        return AmazonSQSCommunicationResult(res)
     }
 
 }

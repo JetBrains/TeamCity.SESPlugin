@@ -4,14 +4,14 @@ import com.intellij.openapi.diagnostic.Logger
 import jetbrains.buildServer.sesPlugin.sqs.data.SESNotificationData
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 
-class SQSMessagesReaderImpl(private val sqsMessagesReceiverImpl: SQSMessagesReceiver<SESNotificationData>,
+class SQSMessagesReaderImpl(private val sqsMessagesReceiver: SQSMessagesReceiver<SESNotificationData>,
                             messageHandlers: Collection<SQSMessageHandler>) : SQSMessagesReader {
 
     private val messageHandlers: Sequence<SQSMessageHandler> = messageHandlers.asSequence()
     private val logger = Logger.getInstance(SQSMessagesReaderImpl::class.qualifiedName)
 
     private fun readQueue(sqsBean: SQSBean): Int {
-        val receiveMessagesResult = sqsMessagesReceiverImpl.receiveMessages(sqsBean)
+        val receiveMessagesResult = sqsMessagesReceiver.receiveMessages(sqsBean)
         if (receiveMessagesResult.exception != null) {
             logger.warnAndDebugDetails("Cannot read Amazon SQS queue: ${receiveMessagesResult.description}", receiveMessagesResult.exception)
 

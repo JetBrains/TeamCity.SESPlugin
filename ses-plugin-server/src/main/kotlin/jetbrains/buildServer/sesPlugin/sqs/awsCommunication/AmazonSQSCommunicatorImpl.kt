@@ -4,15 +4,19 @@ import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 
 class AmazonSQSCommunicatorImpl(private val awsClientsProvider: AWSClientsProvider,
                                 private val amazonSQSClientFactory: AmazonSQSClientFactory,
-                                private val queueUrlGetter: QueueUrlProvider) : AmazonSQSCommunicator {
+                                private val queueUrlProvider: QueueUrlProvider) : AmazonSQSCommunicator {
 
-    @Throws(AmazonSQSCommunicationException::class)
-    override fun <T> withCommunication(bean: SQSBean, func: (data: AmazonSQSCommunicationData) -> T): T {
+    override fun <T> performTask(bean: SQSBean, communicatorTask: AmazonSQSCommunicatorTask<T>): T {
+        if (bean.isDisabled()) {
+            throw IllegalStateException("Queue is disabled")
+        }
+
         return awsClientsProvider.withClient(bean) {
-            amazonSQSClientFactory.createAmazonSQSClient(this).use {
+            amazonSQSClientFactory.createAmazonSQSClient(this).use { sqs ->
                 if (Thread.currentThread().isInterrupted) throw InterruptedException("Execution is interrupted")
 
-                func.invoke(AmazonSQSCommunicationData(it, queueUrlGetter.getQueueUrl(it, bean)))
+
+                return@withClient communicatorTask.perform(sqs, queueUrlProvider.getQueueUrl(sqs, bean))
             }
         }
     }

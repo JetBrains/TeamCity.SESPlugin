@@ -3,8 +3,8 @@ package jetbrains.buildServer.sesPlugin.sqs
 import jetbrains.buildServer.sesPlugin.sqs.data.BounceData
 import jetbrains.buildServer.sesPlugin.sqs.data.MailData
 import jetbrains.buildServer.sesPlugin.sqs.data.SESNotificationData
+import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSCommunicationResult
 import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSNotificationParseResult
-import jetbrains.buildServer.sesPlugin.sqs.result.ReceiveMessagesResult
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.util.*
 import org.assertj.core.api.BDDAssertions.then
@@ -22,8 +22,8 @@ class SQSMessagesReaderImplTest {
             val bean2 = mock(SQSBean::class, "bean2")
 
             check {
-                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(ReceiveMessagesResult<SESNotificationData>(emptyList())))
-                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(ReceiveMessagesResult<SESNotificationData>(emptyList())))
+                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult<SESNotificationData>(emptyList())))
+                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(AmazonSQSCommunicationResult<SESNotificationData>(emptyList())))
             }
 
             val reader = SQSMessagesReaderImpl(receiver, listOf())
@@ -49,9 +49,9 @@ class SQSMessagesReaderImplTest {
             val handler2 = mock(SQSMessageHandler::class, "handler2")
 
             check {
-                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(ReceiveMessagesResult(
+                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult(
                     listOf(AmazonSQSNotificationParseResult(message1), AmazonSQSNotificationParseResult(message2), AmazonSQSNotificationParseResult(message3), AmazonSQSNotificationParseResult(message4)))))
-                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(ReceiveMessagesResult(
+                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(AmazonSQSCommunicationResult(
                     listOf(AmazonSQSNotificationParseResult(message1), AmazonSQSNotificationParseResult(message2), AmazonSQSNotificationParseResult(message3), AmazonSQSNotificationParseResult(message4)))))
 
                 allowing(handler1).accepts("type"); will(Expectations.returnValue(false))
@@ -90,7 +90,7 @@ class SQSMessagesReaderImplTest {
             val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
-                one(receiver).receiveMessages(bean); will(Expectations.returnValue(ReceiveMessagesResult(
+                one(receiver).receiveMessages(bean); will(Expectations.returnValue(AmazonSQSCommunicationResult(
                     listOf(AmazonSQSNotificationParseResult(message)))))
 
                 one(handler1).accepts("type"); will(Expectations.returnValue(true))
@@ -119,7 +119,7 @@ class SQSMessagesReaderImplTest {
             val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
-                one(receiver).receiveMessages(bean); will(Expectations.returnValue(ReceiveMessagesResult(
+                one(receiver).receiveMessages(bean); will(Expectations.returnValue(AmazonSQSCommunicationResult(
                     listOf(AmazonSQSNotificationParseResult(message)))))
 
                 one(handler1).accepts("type"); will(Expectations.returnValue(false))
@@ -148,8 +148,8 @@ class SQSMessagesReaderImplTest {
             val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
-                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(ReceiveMessagesResult<SESNotificationData>(emptyList(), Exception("some"))))
-                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(ReceiveMessagesResult(listOf(AmazonSQSNotificationParseResult(message)))))
+                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult<SESNotificationData>(emptyList(), Exception("some"))))
+                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(message)))))
 
                 one(handler).accepts("type"); will(Expectations.returnValue(true))
 
@@ -175,8 +175,8 @@ class SQSMessagesReaderImplTest {
             val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
-                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(ReceiveMessagesResult(listOf(AmazonSQSNotificationParseResult<SESNotificationData>(exception = SQSNotificationParseException("some"))))))
-                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(ReceiveMessagesResult(listOf(AmazonSQSNotificationParseResult(message)))))
+                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult<SESNotificationData>(exception = SQSNotificationParseException("some"))))))
+                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(message)))))
 
                 one(handler).accepts("type"); will(Expectations.returnValue(true))
 
@@ -202,7 +202,7 @@ class SQSMessagesReaderImplTest {
             val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
-                one(receiver).receiveMessages(bean); will(Expectations.returnValue(ReceiveMessagesResult(listOf(AmazonSQSNotificationParseResult(message)))))
+                one(receiver).receiveMessages(bean); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(message)))))
 
                 one(handler).accepts("type"); will(Expectations.returnValue(true))
 

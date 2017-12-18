@@ -4,8 +4,8 @@ import jetbrains.buildServer.sesPlugin.sqs.data.AmazonSQSNotification
 import jetbrains.buildServer.sesPlugin.sqs.data.BounceData
 import jetbrains.buildServer.sesPlugin.sqs.data.MailData
 import jetbrains.buildServer.sesPlugin.sqs.data.SESNotificationData
+import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSCommunicationResult
 import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSNotificationParseResult
-import jetbrains.buildServer.sesPlugin.sqs.result.ReceiveMessagesResult
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.util.check
 import jetbrains.buildServer.sesPlugin.util.mock
@@ -16,7 +16,7 @@ import org.jmock.Expectations.throwException
 import org.testng.annotations.Test
 
 @Suppress("UNCHECKED_CAST")
-class SESSQSMessagesReceiverTest {
+class SESMessagesReceiverTest {
     @Test
     fun testNoopOnException() {
         mocking {
@@ -28,10 +28,10 @@ class SESSQSMessagesReceiverTest {
             val initDescription = "other"
 
             check {
-                one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(ReceiveMessagesResult<AmazonSQSNotification>(emptyList(), initException, initDescription)))
+                one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(AmazonSQSCommunicationResult<AmazonSQSNotification>(emptyList(), initException, initDescription)))
             }
 
-            val receiver = SESSQSMessagesReceiver(sqsMessagesReceiver, sesNotificationParser)
+            val receiver = SESMessagesReceiver(sqsMessagesReceiver, sesNotificationParser)
 
             val (messages, exception, description) = receiver.receiveMessages(bean)
             then(messages).isEmpty()
@@ -52,11 +52,11 @@ class SESSQSMessagesReceiverTest {
             val data = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
-                one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(ReceiveMessagesResult(listOf(AmazonSQSNotificationParseResult(notification)))))
+                one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(notification)))))
                 one(sesNotificationParser).parse(message); will(returnValue(data))
             }
 
-            val receiver = SESSQSMessagesReceiver(sqsMessagesReceiver, sesNotificationParser)
+            val receiver = SESMessagesReceiver(sqsMessagesReceiver, sesNotificationParser)
             val (messages, exception, description) = receiver.receiveMessages(bean)
 
             then(exception).isNull()
@@ -82,12 +82,12 @@ class SESSQSMessagesReceiverTest {
             val initException = Exception("some")
 
             check {
-                one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(ReceiveMessagesResult(listOf(AmazonSQSNotificationParseResult(notification1), AmazonSQSNotificationParseResult(notification2)))))
+                one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(notification1), AmazonSQSNotificationParseResult(notification2)))))
                 one(sesNotificationParser).parse(message1); will(throwException(initException))
                 one(sesNotificationParser).parse(message2); will(returnValue(data))
             }
 
-            val receiver = SESSQSMessagesReceiver(sqsMessagesReceiver, sesNotificationParser)
+            val receiver = SESMessagesReceiver(sqsMessagesReceiver, sesNotificationParser)
             val (messages, exception, description) = receiver.receiveMessages(bean)
 
             then(exception).isNull()

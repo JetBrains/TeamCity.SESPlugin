@@ -14,8 +14,7 @@
             <class name="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskImpl"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SESNotificationParserImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReaderImplTest"/>
-            <class name="jetbrains.buildServer.sesPlugin.sqs.SESSQSMessagesReceiverTest"/>
-            <class name="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReceiverImplTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.sqs.SESMessagesReceiverTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.AmazonSQSCommunicatorImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.QueueUrlProviderImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.data.DataClassesTest"/>

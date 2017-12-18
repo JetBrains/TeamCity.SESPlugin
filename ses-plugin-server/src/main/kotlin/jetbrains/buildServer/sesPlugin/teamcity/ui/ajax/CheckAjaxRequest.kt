@@ -1,7 +1,7 @@
 package jetbrains.buildServer.sesPlugin.teamcity.ui.ajax
 
 import jetbrains.buildServer.controllers.BasePropertiesBean
-import jetbrains.buildServer.sesPlugin.sqs.awsCommunication.SQSConnectionChecker
+import jetbrains.buildServer.sesPlugin.sqs.SQSConnectionChecker
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManager
 
 class CheckAjaxRequest(private val sqsMessagesReceiver: SQSConnectionChecker,

@@ -5,6 +5,6 @@ import jetbrains.buildServer.util.amazon.AWSCommonParams
 
 class AWSClientsProviderImpl : AWSClientsProvider {
     override fun <T> withClient(bean: SQSBean, func: SQSAWSClients.() -> T): T {
-        return AWSCommonParams.withAWSClients<T, Exception>(bean.toMap()) { func.invoke(SQSAWSClientsImpl(it)) }
+        return AWSCommonParams.withAWSClients<T, Exception>(bean.toMap()) { awsClients -> func.invoke(SQSAWSClientsImpl(awsClients)) }
     }
 }

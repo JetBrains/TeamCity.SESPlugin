@@ -3,7 +3,7 @@ package jetbrains.buildServer.sesPlugin.sqs
 import jetbrains.buildServer.sesPlugin.sqs.awsCommunication.*
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.util.*
-import org.assertj.core.api.BDDAssertions.then
+import org.assertj.core.api.BDDAssertions
 import org.jmock.Expectations.returnValue
 import org.jmock.Mockery
 import org.jmock.api.Invocation
@@ -11,36 +11,57 @@ import org.jmock.lib.action.ActionSequence
 import org.jmock.lib.action.CustomAction
 import org.testng.annotations.Test
 
+@Suppress("UNCHECKED_CAST")
 class AmazonSQSCommunicatorImplTest {
     @Test
-    fun testReceive() {
+    fun testDisabledBean() {
         mocking {
             val bean = mock(SQSBean::class)
-            val awsClientsProvider = mock(AWSClientsProvider::class)
-            val clients = mock(SQSAWSClients::class)
-            val factory = mock(AmazonSQSClientFactory::class)
-            val getter = mock(QueueUrlProvider::class)
-            val amazonSQS = mock(AutoCloseableAmazonSQS::class)
-
-            val queueUrl = "TheQueueUrl"
+            val task = mock(AmazonSQSCommunicatorTask::class) as AmazonSQSCommunicatorTask<String>
 
             check {
+                one(bean).isDisabled(); will(returnValue(true))
+            }
+
+            then { receiver().performTask(bean, task) }.isInstanceOf(IllegalStateException::class.java)
+        }
+    }
+
+    @Test
+    fun testPerformTask() {
+        mocking {
+            val bean = mock(SQSBean::class)
+            val task = mock(AmazonSQSCommunicatorTask::class) as AmazonSQSCommunicatorTask<Any>
+
+            val provider: AWSClientsProvider = mock(AWSClientsProvider::class)
+            val factory: AmazonSQSClientFactory = mock(AmazonSQSClientFactory::class)
+            val queueUrl: QueueUrlProvider = mock(QueueUrlProvider::class)
+
+            val clients = mock(SQSAWSClients::class)
+            val amazonSQS = mock(AutoCloseableAmazonSQS::class)
+
+            val result = "The result"
+
+            check {
+                one(bean).isDisabled(); will(returnValue(false))
                 one(factory).createAmazonSQSClient(clients); will(returnValue(amazonSQS))
-                one(getter).getQueueUrl(amazonSQS, bean); will(returnValue(queueUrl))
+                one(queueUrl).getQueueUrl(amazonSQS, bean); will(returnValue("someQueue"))
+
+                one(task).perform(amazonSQS, "someQueue"); will(returnValue(result))
                 one(amazonSQS).close()
             }
             invocation {
                 func("withClient")
-                on(awsClientsProvider)
+                on(provider)
                 will(
                         ActionSequence(
                                 object : CustomAction("call the callback") {
                                     override fun invoke(p0: Invocation?): Any {
                                         if (p0 != null) {
-                                            (p0.getParameter(1) as kotlin.Function1<SQSAWSClients, String>).invoke(clients)
-
+                                            return (p0.getParameter(1) as Function1<SQSAWSClients, String>).invoke(clients)
+                                        } else {
+                                            throw RuntimeException("")
                                         }
-                                        return Object()
                                     }
                                 }, returnValue(clients)
                         )
@@ -49,14 +70,11 @@ class AmazonSQSCommunicatorImplTest {
                 count(1)
             }
 
-            communicator(awsClientsProvider, factory, getter).withCommunication(bean) {
-                then(it.queueUrl).isEqualTo(queueUrl)
-                then(it.amazonSQS).isSameAs(amazonSQS)
-            }
+            BDDAssertions.then(receiver(provider, factory, queueUrl).performTask(bean, task)).isSameAs(result)
         }
     }
 
-    private fun Mockery.communicator(provider: AWSClientsProvider = mock(AWSClientsProvider::class),
-                                     factory: AmazonSQSClientFactory = mock(AmazonSQSClientFactory::class),
-                                     getter: QueueUrlProvider = mock(QueueUrlProvider::class)): AmazonSQSCommunicator = AmazonSQSCommunicatorImpl(provider, factory, getter)
+    private fun Mockery.receiver(provider: AWSClientsProvider = mock(AWSClientsProvider::class),
+                                 factory: AmazonSQSClientFactory = mock(AmazonSQSClientFactory::class),
+                                 queueUrl: QueueUrlProvider = mock(QueueUrlProvider::class)): AmazonSQSCommunicatorImpl = AmazonSQSCommunicatorImpl(provider, factory, queueUrl)
 }

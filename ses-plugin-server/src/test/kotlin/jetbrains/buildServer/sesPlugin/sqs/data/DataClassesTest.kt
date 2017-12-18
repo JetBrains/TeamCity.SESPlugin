@@ -3,9 +3,9 @@
 package jetbrains.buildServer.sesPlugin.sqs.data
 
 import jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParseException
+import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSCommunicationResult
 import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSNotificationParseResult
 import jetbrains.buildServer.sesPlugin.sqs.result.CheckConnectionResult
-import jetbrains.buildServer.sesPlugin.sqs.result.ReceiveMessagesResult
 import org.testng.annotations.Test
 
 @Suppress("UnusedEquals")
@@ -187,7 +187,7 @@ class DataClassesTest {
 
     @Test
     fun testReceiveMessagesResult() {
-        val data = ReceiveMessagesResult<String>(emptyList(), SQSNotificationParseException(""), "")
+        val data = AmazonSQSCommunicationResult<String>(emptyList(), SQSNotificationParseException(""), "")
         with(data) {
             messages
             exception
