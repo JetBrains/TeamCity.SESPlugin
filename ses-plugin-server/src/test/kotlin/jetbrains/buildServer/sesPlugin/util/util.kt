@@ -2,6 +2,7 @@ package jetbrains.buildServer.sesPlugin.util
 
 import org.assertj.core.api.AbstractThrowableAssert
 import org.assertj.core.api.BDDAssertions
+import org.hamcrest.Matcher
 import org.jmock.Expectations
 import org.jmock.Mockery
 import org.jmock.api.Action
@@ -46,6 +47,9 @@ fun InvocationExpectation.func(name: String) = setMethodMatcher(MethodNameMatche
 fun InvocationExpectation.func(meth: KFunction<*>) = setMethodMatcher(MethodMatcher(meth.javaMethod))
 fun InvocationExpectation.count(count: Int) = setCardinality(Cardinality.exactly(count))
 fun InvocationExpectation.will(returnValue: Action) = setAction(returnValue)
+fun InvocationExpectation.with(parametersMatcher: Matcher<Array<Any>>) {
+    setParametersMatcher(parametersMatcher)
+}
 
 fun then(action: () -> Unit): AbstractThrowableAssert<*, out Throwable> {
     return try {

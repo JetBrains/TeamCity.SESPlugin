@@ -17,7 +17,7 @@ class ReceiveMessagesTask(private val properties: TeamCityProperties,
         val messagesResult = try {
             sqs.receiveMessage(prepareRequest().withQueueUrl(queueUrl))
         } catch (ex: Exception) {
-            return AmazonSQSCommunicationResult(emptyList(), ex, "No credentials provided")
+            return AmazonSQSCommunicationResult(emptyList(), ex, "Cannot communicate with Amazon SQS")
         }
 
         if (properties.getBoolean("teamcity.sesIntegration.markMessagesAsUnread", false)) {
