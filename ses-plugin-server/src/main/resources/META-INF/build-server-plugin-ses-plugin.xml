@@ -46,6 +46,7 @@
           autowire-candidate="false"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.AmazonSQSCommunicatorImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.AWSClientsProviderImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.sqs.QueueUrlProviderImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.AmazonSQSClientFactoryImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParserImpl"/>
     <bean id="sesMessagesReceiver" class="jetbrains.buildServer.sesPlugin.sqs.SESSQSMessagesReceiver">

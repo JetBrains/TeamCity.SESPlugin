@@ -57,8 +57,12 @@ fun then(action: () -> Unit): AbstractThrowableAssert<*, out Throwable> {
     }
 }
 
-fun <T : Any> Mockery.mock(clazz: KClass<T>, name: String? = null): T {
-    return if (name != null) this.mock(clazz.java, name) else this.mock(clazz.java)
+fun <T : Any> Mockery.mock(clazz: KClass<T>): T {
+    return this.mock(clazz.java)
+}
+
+fun <T : Any> Mockery.mock(clazz: KClass<T>, name: String): T {
+    return this.mock(clazz.java, name)
 }
 
 fun Any.getResource(name: String): TestResource {
