@@ -13,7 +13,6 @@ import org.jmock.Expectations.returnValue
 import org.jmock.Expectations.throwException
 import org.jmock.Mockery
 import org.testng.annotations.Test
-import java.io.IOException
 
 class ReceiveMessagesTaskTest {
     @Test
@@ -21,7 +20,7 @@ class ReceiveMessagesTaskTest {
         mocking {
             val amazonSQS = mock(AmazonSQS::class)
 
-            val initException = IOException()
+            val initException = RuntimeException()
             invocation {
                 on(amazonSQS)
                 func("receiveMessage")
