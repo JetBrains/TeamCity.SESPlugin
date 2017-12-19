@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.teamcity.ui
+package jetbrains.buildServer.sesPlugin.teamcity.util
 
 import jetbrains.buildServer.controllers.BasePropertiesBean
 import jetbrains.buildServer.serverSide.crypt.RSACipher

@@ -5,6 +5,7 @@ import jetbrains.buildServer.controllers.BasePropertiesBean
 import jetbrains.buildServer.sesPlugin.data.AjaxRequestResult
 import jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.AjaxRequest
 import jetbrains.buildServer.sesPlugin.teamcity.util.GsonView
+import jetbrains.buildServer.sesPlugin.teamcity.util.PluginPropertiesUtil
 import jetbrains.buildServer.web.openapi.WebControllerManager
 import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
