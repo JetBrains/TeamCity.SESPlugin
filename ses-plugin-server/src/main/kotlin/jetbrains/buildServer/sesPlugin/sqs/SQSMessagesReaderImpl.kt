@@ -60,7 +60,7 @@ class SQSMessagesReaderImpl(private val sqsMessagesReceiver: SQSMessagesReceiver
     class UnknownMessageHandler : SQSMessageHandler {
         override fun accepts(type: String) = true
 
-        override fun handle(data: SESNotificationData) {
+        override fun handle(data: BounceNotification) {
             // todo log
         }
     }

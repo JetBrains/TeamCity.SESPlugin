@@ -1,5 +1,7 @@
 package jetbrains.buildServer.sesPlugin.data
 
+import jetbrains.buildServer.sesPlugin.sqs.BounceNotification
+
 
 // "{\"eventType\":\"Bounce\",\"bounce\":{\"bounceType\":\"Permanent\",\"bounceSubType\":\"General\",\"bouncedRecipients\":
 // [{\"emailAddress\":\"bounce@simulator.amazonses.com\",\"action\":\"failed\",\"status\":\"5.1.1\",\"diagnosticCode\":\"smtp; 550 5.1.1 user unknown\"}],
@@ -24,5 +26,10 @@ data class SESNotificationData(
         var eventType: String,
         var bounce: BounceData,
         var mail: MailData
-)
+) : BounceNotification {
+    override fun getBounceType() = bounce.bounceType
 
+    override fun getBounceSubType() = bounce.bounceSubType
+
+    override fun getRecipients() = bounce.bouncedRecipients
+}

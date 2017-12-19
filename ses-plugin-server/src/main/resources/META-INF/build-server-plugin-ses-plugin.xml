@@ -58,7 +58,7 @@
 
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReaderImpl"/>
 
-    <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSBounceMessageHandler"/>
+    <bean class="jetbrains.buildServer.sesPlugin.sqs.SESBounceMessageHandler"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandlerImpl">
         <constructor-arg index="0" ref="allUsersProvider"/>
