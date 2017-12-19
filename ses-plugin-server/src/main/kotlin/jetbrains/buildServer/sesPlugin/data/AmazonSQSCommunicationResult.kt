@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.sqs.result
+package jetbrains.buildServer.sesPlugin.data
 
 data class AmazonSQSCommunicationResult<out T>(
         val messages: List<AmazonSQSNotificationParseResult<T>>,

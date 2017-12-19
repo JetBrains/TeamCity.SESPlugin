@@ -3,8 +3,8 @@ package jetbrains.buildServer.sesPlugin.sqs.awsCommunication
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.model.Message
 import com.amazonaws.services.sqs.model.ReceiveMessageResult
+import jetbrains.buildServer.sesPlugin.data.AmazonSQSNotificationParseResult
 import jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParser
-import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSNotificationParseResult
 import jetbrains.buildServer.sesPlugin.teamcity.util.TeamCityProperties
 import jetbrains.buildServer.sesPlugin.util.*
 import org.assertj.core.api.BDDAssertions

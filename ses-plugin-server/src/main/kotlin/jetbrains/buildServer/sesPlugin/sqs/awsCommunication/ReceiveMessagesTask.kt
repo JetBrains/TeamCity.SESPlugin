@@ -3,9 +3,9 @@ package jetbrains.buildServer.sesPlugin.sqs.awsCommunication
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.model.ChangeMessageVisibilityRequest
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest
+import jetbrains.buildServer.sesPlugin.data.AmazonSQSCommunicationResult
+import jetbrains.buildServer.sesPlugin.data.AmazonSQSNotification
 import jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParser
-import jetbrains.buildServer.sesPlugin.sqs.data.AmazonSQSNotification
-import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSCommunicationResult
 import jetbrains.buildServer.sesPlugin.teamcity.util.TeamCityProperties
 
 class ReceiveMessagesTask(private val properties: TeamCityProperties,

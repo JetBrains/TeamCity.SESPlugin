@@ -17,7 +17,6 @@
             <class name="jetbrains.buildServer.sesPlugin.sqs.SESMessagesReceiverTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.AmazonSQSCommunicatorImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.QueueUrlProviderImplTest"/>
-            <class name="jetbrains.buildServer.sesPlugin.sqs.data.DataClassesTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.awsCommunication.ReceiveMessagesTaskTest"/>
         </classes>
     </test>

@@ -1,6 +1,7 @@
 package jetbrains.buildServer.sesPlugin.teamcity.util
 
 import com.google.gson.Gson
+import jetbrains.buildServer.sesPlugin.data.GsonContainer
 import org.springframework.web.servlet.view.AbstractView
 import java.io.IOException
 import java.io.OutputStream
@@ -53,9 +54,4 @@ class GsonView : AbstractView() {
     private fun filterModel(model: Map<String, Any>): Map<String, Any> {
         return model.filterValues { it is JsonModelComponent }
     }
-
-    private data class GsonContainer (
-            val model: Any
-    )
-
 }

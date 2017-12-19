@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.sqs.result
+package jetbrains.buildServer.sesPlugin.data
 
 import jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParseException
 

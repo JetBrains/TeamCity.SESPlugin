@@ -1,11 +1,6 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
-import jetbrains.buildServer.sesPlugin.sqs.data.AmazonSQSNotification
-import jetbrains.buildServer.sesPlugin.sqs.data.BounceData
-import jetbrains.buildServer.sesPlugin.sqs.data.MailData
-import jetbrains.buildServer.sesPlugin.sqs.data.SESNotificationData
-import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSCommunicationResult
-import jetbrains.buildServer.sesPlugin.sqs.result.AmazonSQSNotificationParseResult
+import jetbrains.buildServer.sesPlugin.data.*
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.util.check
 import jetbrains.buildServer.sesPlugin.util.mock

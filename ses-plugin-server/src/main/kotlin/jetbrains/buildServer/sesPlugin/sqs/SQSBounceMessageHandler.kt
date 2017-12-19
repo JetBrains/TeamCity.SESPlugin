@@ -1,8 +1,8 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
 import jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandler
-import jetbrains.buildServer.sesPlugin.sqs.data.BounceData
-import jetbrains.buildServer.sesPlugin.sqs.data.SESNotificationData
+import jetbrains.buildServer.sesPlugin.data.BounceData
+import jetbrains.buildServer.sesPlugin.data.SESNotificationData
 
 class SQSBounceMessageHandler(private val bounceHandler: BounceHandler) : SQSMessageHandler {
     override fun accepts(type: String) = type == "Bounce"

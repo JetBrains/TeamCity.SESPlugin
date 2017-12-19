@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.sqs.result
+package jetbrains.buildServer.sesPlugin.data
 
 data class CheckConnectionResult(
         val status: Boolean,

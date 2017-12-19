@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.teamcity
+package jetbrains.buildServer.sesPlugin.data
 
 data class PersistResult (
         val persisted: Boolean,

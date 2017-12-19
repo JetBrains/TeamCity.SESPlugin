@@ -1,5 +1,7 @@
 package jetbrains.buildServer.sesPlugin.teamcity
 
+import jetbrains.buildServer.sesPlugin.data.PersistResult
+
 interface SESIntegrationManager {
     fun persistBean(bean: SQSBean, projectId: String): PersistResult
 

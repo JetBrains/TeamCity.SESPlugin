@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.teamcity.ui.ajax
+package jetbrains.buildServer.sesPlugin.data
 
 import jetbrains.buildServer.sesPlugin.teamcity.util.JsonModelComponent
 

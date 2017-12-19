@@ -1,7 +1,7 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
 import com.intellij.openapi.diagnostic.Logger
-import jetbrains.buildServer.sesPlugin.sqs.data.SESNotificationData
+import jetbrains.buildServer.sesPlugin.data.SESNotificationData
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 
 class SQSMessagesReaderImpl(private val sqsMessagesReceiver: SQSMessagesReceiver<SESNotificationData>,

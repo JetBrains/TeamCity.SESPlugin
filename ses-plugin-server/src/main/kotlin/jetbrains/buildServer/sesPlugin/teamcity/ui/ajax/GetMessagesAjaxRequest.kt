@@ -1,6 +1,7 @@
 package jetbrains.buildServer.sesPlugin.teamcity.ui.ajax
 
 import jetbrains.buildServer.controllers.BasePropertiesBean
+import jetbrains.buildServer.sesPlugin.data.AjaxRequestResult
 import jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReader
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManager
 

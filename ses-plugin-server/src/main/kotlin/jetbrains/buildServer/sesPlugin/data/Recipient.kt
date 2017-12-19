@@ -1,4 +1,4 @@
-package jetbrains.buildServer.sesPlugin.sqs.data
+package jetbrains.buildServer.sesPlugin.data
 
 data class Recipient(
         var emailAddress: String,

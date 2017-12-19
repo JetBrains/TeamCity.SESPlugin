@@ -2,6 +2,7 @@ package jetbrains.buildServer.sesPlugin.teamcity
 
 import jetbrains.buildServer.serverSide.ConfigActionFactory
 import jetbrains.buildServer.serverSide.ProjectManager
+import jetbrains.buildServer.sesPlugin.data.PersistResult
 
 class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager,
                                 private val myConfigActionFactory: ConfigActionFactory) : SESIntegrationManager {
