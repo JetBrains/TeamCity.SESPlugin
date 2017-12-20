@@ -18,6 +18,8 @@
             <class name="jetbrains.buildServer.sesPlugin.sqs.AmazonSQSCommunicatorImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.QueueUrlProviderImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.awsCommunication.ReceiveMessagesTaskTest"/>
+
+            <class name="jetbrains.buildServer.server.responsible.ResponsibleContactProviderImplTest"/>
         </classes>
     </test>
 </suite>

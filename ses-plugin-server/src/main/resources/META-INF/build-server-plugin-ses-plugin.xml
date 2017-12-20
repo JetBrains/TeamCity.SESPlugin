@@ -66,4 +66,7 @@
 
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.DisableEmailOnBounce"/>
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.RemoveVerifiedStateOnBounce"/>
+
+    <!-- responsible contact -->
+    <bean class="jetbrains.buildServer.server.responsible.ResponsibleContactProviderImpl"/>
 </beans>
