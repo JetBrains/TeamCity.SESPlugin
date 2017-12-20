@@ -5,8 +5,8 @@ import jetbrains.buildServer.serverSide.SProject
 import java.util.*
 
 interface ResponsibleContactProvider {
-    fun get(project: SProject): Optional<ResponsibleContact>
-    fun get(buildType: SBuildType): Optional<ResponsibleContact>
-    fun getGlobal(): Optional<ResponsibleContact>
+    fun get(project: SProject): Optional<String>
+    fun get(buildType: SBuildType): Optional<String>
+    fun getGlobal(): Optional<String>
 }
 
