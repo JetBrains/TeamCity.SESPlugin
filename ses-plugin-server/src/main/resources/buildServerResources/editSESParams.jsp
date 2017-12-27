@@ -50,13 +50,13 @@
         <input type="hidden" id="publicKey" name="publicKey" value="${publicKey}"/>
     </form>
 
-    <forms:button id="submit">Submit</forms:button>
-    <forms:button id="delete">Delete integration...</forms:button>
-    <forms:button id="check">Check connection</forms:button>
-    <forms:button id="receive">Receive messages now</forms:button>
+    <forms:submit label="Save" id="submit"/>
+    <forms:button className="hidden" id="delete">Delete integration...</forms:button>
+    <forms:button id="check">Test connection</forms:button>
+    <forms:button className="hidden" id="receive">Receive messages now</forms:button>
     <span style="display: none" class="spinner"><i class="icon-refresh icon-spin"></i></span>
 
-    <div class="statusBlock">
+    <div class="statusBlock hidden">
         <a onclick="return false;" href="#" id="statusLabel">${fn:length(disabledUsers)} emails are disabled due to
             bounces</a>
         <div id="status" class="hidden">
