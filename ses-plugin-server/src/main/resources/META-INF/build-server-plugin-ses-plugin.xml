@@ -58,7 +58,7 @@
 
     <bean class="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReaderImpl"/>
 
-    <bean class="jetbrains.buildServer.sesPlugin.sqs.SESBounceMessageHandler"/>
+    <bean class="jetbrains.buildServer.sesPlugin.sqs.BounceMessageHandler"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.ComplaintMessageHandler"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandlerImpl">

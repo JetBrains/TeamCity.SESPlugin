@@ -7,9 +7,9 @@ import jetbrains.buildServer.sesPlugin.data.SESNotification
 import jetbrains.buildServer.sesPlugin.teamcity.util.LogService
 import jetbrains.buildServer.sesPlugin.teamcity.util.NoOpLogService
 
-class SESBounceMessageHandler(private val bounceHandler: BounceHandler,
-                              private val logService: LogService = NoOpLogService()) : SQSMessageHandler {
-    private val logger = Logger.getInstance(SESBounceMessageHandler::class.qualifiedName)
+class BounceMessageHandler(private val bounceHandler: BounceHandler,
+                           private val logService: LogService = NoOpLogService()) : SQSMessageHandler {
+    private val logger = Logger.getInstance(BounceMessageHandler::class.qualifiedName)
 
     override fun accepts(type: String) = type == "Bounce"
 
@@ -19,8 +19,8 @@ class SESBounceMessageHandler(private val bounceHandler: BounceHandler,
 
         when {
             isCriticalBounce(bounceType) -> {
-                for (recipient in data.getRecipients()) {
-                    val email = recipient.emailAddress
+                val emails = data.getRecipients().asSequence().map {
+                    val email = it.emailAddress
 
                     logService.log {
                         if (data.getBounceSubType() == "Suppressed") {
@@ -30,12 +30,14 @@ class SESBounceMessageHandler(private val bounceHandler: BounceHandler,
                         }
                     }
 
-                    try {
-                        bounceHandler.handleBounce(email)
-                    } catch (e: Exception) {
-                        logService.log {
-                            logger.warnAndDebugDetails("Exception occurred while handling bounce '$data' with '$bounceHandler'", e)
-                        }
+                    email
+                }
+
+                try {
+                    bounceHandler.handleBounces(emails)
+                } catch (e: Exception) {
+                    logService.log {
+                        logger.warnAndDebugDetails("Exception occurred while handling bounces", e)
                     }
                 }
             }

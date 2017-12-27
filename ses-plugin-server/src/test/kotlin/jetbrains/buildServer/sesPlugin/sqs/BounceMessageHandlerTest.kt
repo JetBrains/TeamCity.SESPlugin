@@ -12,7 +12,7 @@ import org.jmock.Expectations
 import org.jmock.Mockery
 import org.testng.annotations.Test
 
-class SESBounceMessageHandlerTest {
+class BounceMessageHandlerTest {
     @Test
     fun testAccepts() {
         mocking {
@@ -100,9 +100,9 @@ class SESBounceMessageHandlerTest {
                 one(logService)
             }
 
-            SESBounceMessageHandler(bounceHandler, logService).handle(bounce)
+            BounceMessageHandler(bounceHandler, logService).handle(bounce)
         }
     }
 
-    private fun Mockery.handler(handler: BounceHandler = mock(BounceHandler::class)): SESBounceMessageHandler = SESBounceMessageHandler(handler)
+    private fun Mockery.handler(handler: BounceHandler = mock(BounceHandler::class)): BounceMessageHandler = BounceMessageHandler(handler)
 }

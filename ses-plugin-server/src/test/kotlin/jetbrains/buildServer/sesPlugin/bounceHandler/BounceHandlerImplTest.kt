@@ -11,31 +11,7 @@ import org.testng.annotations.Test
 class BounceHandlerImplTest {
 
     @Test
-    fun testHandleBounce() {
-        mocking {
-            val userBounceHandler1 = mock(UserBounceHandler::class, "userBounceHandler1")
-            val userBounceHandler2 = mock(UserBounceHandler::class, "userBounceHandler2")
-            val userSetProvider = mock(UserSetProvider::class)
-            val user = mock(SUser::class)
-
-            val handler = BounceHandlerImpl(userSetProvider, listOf(userBounceHandler1, userBounceHandler2))
-
-            val mail = "mail"
-
-            check {
-                one(userSetProvider).users; will(Expectations.returnValue(setOf(user)));
-                one(user).email; will(Expectations.returnValue(mail));
-                one(userBounceHandler1).handleBounce(user);
-                one(userBounceHandler2).handleBounce(user);
-            }
-
-            handler.handleBounce(mail)
-        }
-
-    }
-
-    @Test
-    fun testHandleBounce2Users() {
+    fun testBulkHandle() {
         mocking {
             val userBounceHandler = mock(UserBounceHandler::class)
             val userSetProvider = mock(UserSetProvider::class)
@@ -44,40 +20,18 @@ class BounceHandlerImplTest {
 
             val handler = BounceHandlerImpl(userSetProvider, listOf(userBounceHandler))
 
-            val mail = "mail"
+            val mail1 = "mail1"
+            val mail2 = "mail2"
 
             check {
-                one(userSetProvider).users; will(Expectations.returnValue(setOf(user1, user2)));
-                one(user1).email; will(Expectations.returnValue(mail));
-                one(user2).email; will(Expectations.returnValue(mail));
-                one(userBounceHandler).handleBounce(user1);
-                one(userBounceHandler).handleBounce(user2);
+                one(userSetProvider).users; will(Expectations.returnValue(setOf(user1, user2)))
+                one(user2).email; will(Expectations.returnValue("mail1"))
+                one(user1).email; will(Expectations.returnValue("mail2"))
+                one(userBounceHandler).handleBounce(user1)
+                one(userBounceHandler).handleBounce(user2)
             }
 
-            handler.handleBounce(mail)
+            handler.handleBounces(sequenceOf(mail1, mail2))
         }
-
-    }
-
-    @Test
-    fun testHandleBounceNoUsers() {
-        mocking {
-            val userBounceHandler = mock(UserBounceHandler::class)
-            val userSetProvider = mock(UserSetProvider::class)
-            val user = mock(SUser::class)
-
-            val handler = BounceHandlerImpl(userSetProvider, listOf(userBounceHandler))
-
-            val mail = "mail"
-
-            check {
-                one(userSetProvider).users; will(Expectations.returnValue(setOf(user)));
-                one(user).email; will(Expectations.returnValue("otherMail"));
-                never(userBounceHandler).handleBounce(user);
-            }
-
-            handler.handleBounce(mail)
-        }
-
     }
 }

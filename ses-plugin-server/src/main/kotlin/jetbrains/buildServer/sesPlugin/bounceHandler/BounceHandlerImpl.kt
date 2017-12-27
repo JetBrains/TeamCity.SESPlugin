@@ -9,11 +9,12 @@ import jetbrains.buildServer.sesPlugin.teamcity.util.UserSetProvider
 class BounceHandlerImpl(private val userProvider: UserSetProvider,
                         private val userHandlers: Collection<UserBounceHandler>,
                         private val loggerService: LogService = NoOpLogService()) : BounceHandler {
-    private val logger = Logger.getInstance(this::javaClass.name)
 
-    override fun handleBounce(mail: String) {
+    override fun handleBounces(mails: Sequence<String>) {
+        val set = mails.toHashSet()
+
         userProvider.users.filter {
-            it.email == mail
+            set.contains(it.email)
         }.forEach {
             loggerService.log {
                 logger.warn("Got bounce for user ${LogUtil.describe(it)}")
@@ -22,4 +23,6 @@ class BounceHandlerImpl(private val userProvider: UserSetProvider,
             userHandlers.forEach { handler -> handler.handleBounce(it) }
         }
     }
+
+    private val logger = Logger.getInstance(this::javaClass.name)
 }
