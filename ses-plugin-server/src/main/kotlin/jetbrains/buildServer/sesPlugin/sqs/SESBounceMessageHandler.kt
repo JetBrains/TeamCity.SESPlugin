@@ -2,6 +2,8 @@ package jetbrains.buildServer.sesPlugin.sqs
 
 import com.intellij.openapi.diagnostic.Logger
 import jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandler
+import jetbrains.buildServer.sesPlugin.data.SESBounceNotification
+import jetbrains.buildServer.sesPlugin.data.SESNotification
 import jetbrains.buildServer.sesPlugin.teamcity.util.LogService
 import jetbrains.buildServer.sesPlugin.teamcity.util.NoOpLogService
 
@@ -11,7 +13,8 @@ class SESBounceMessageHandler(private val bounceHandler: BounceHandler,
 
     override fun accepts(type: String) = type == "Bounce"
 
-    override fun handle(data: BounceNotification) {
+    override fun handle(data: SESNotification) {
+        if (data !is SESBounceNotification) throw IllegalArgumentException()
         val bounceType = data.getBounceType()
 
         when {

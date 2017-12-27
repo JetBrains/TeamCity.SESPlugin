@@ -44,7 +44,7 @@ class SESMessagesReceiverTest {
 
             val message = "someMessage"
             val notification = AmazonSQSNotification("", "", "", "", message, "", "", "", "", "")
-            val data = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val data = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
                 one(sqsMessagesReceiver).receiveMessages(bean); will(returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(notification)))))
@@ -72,7 +72,7 @@ class SESMessagesReceiverTest {
             val message2 = "otherMessage"
             val notification1 = AmazonSQSNotification("", "", "", "", message1, "", "", "", "", "")
             val notification2 = AmazonSQSNotification("", "", "", "", message2, "", "", "", "", "")
-            val data = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val data = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             val initException = Exception("some")
 

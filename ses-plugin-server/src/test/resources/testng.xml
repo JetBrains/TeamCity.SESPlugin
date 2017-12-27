@@ -13,6 +13,7 @@
             <class name="jetbrains.buildServer.sesPlugin.sqs.SQSNotificationParserImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskImpl"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SESNotificationParserImplTest"/>
+            <class name="jetbrains.buildServer.sesPlugin.sqs.SESBounceMessageHandlerTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SQSMessagesReaderImplTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.SESMessagesReceiverTest"/>
             <class name="jetbrains.buildServer.sesPlugin.sqs.AmazonSQSCommunicatorImplTest"/>

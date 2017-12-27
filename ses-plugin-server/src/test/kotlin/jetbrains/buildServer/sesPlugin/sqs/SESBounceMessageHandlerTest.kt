@@ -2,6 +2,7 @@ package jetbrains.buildServer.sesPlugin.sqs
 
 import jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandler
 import jetbrains.buildServer.sesPlugin.data.Recipient
+import jetbrains.buildServer.sesPlugin.data.SESBounceNotification
 import jetbrains.buildServer.sesPlugin.teamcity.util.LogService
 import jetbrains.buildServer.sesPlugin.util.check
 import jetbrains.buildServer.sesPlugin.util.mock
@@ -24,12 +25,12 @@ class SESBounceMessageHandlerTest {
     @Test
     fun testHandlePermanentBounce() {
         mocking {
-            val bounce = mock(BounceNotification::class)
+            val bounce = mock(SESBounceNotification::class)
             val bounceHandler = mock(BounceHandler::class)
             check {
                 one(bounceHandler).handleBounce("theMail")
                 one(bounce).getBounceType(); will(Expectations.returnValue("Permanent"))
-                one(bounce).getBounceSubType(); will(Expectations.returnValue("Something"))
+//                one(bounce).getBounceSubType(); will(Expectations.returnValue("Something")) // currently wrapped with logger callback
                 one(bounce).getRecipients(); will(Expectations.returnValue(listOf(Recipient("theMail", "failed", "", ""))))
             }
 
@@ -40,12 +41,12 @@ class SESBounceMessageHandlerTest {
     @Test
     fun testHandlePermanentBounceExceptionThrown() {
         mocking {
-            val bounce1 = mock(BounceNotification::class, "bounce1")
+            val bounce1 = mock(SESBounceNotification::class, "bounce1")
             val bounceHandler = mock(BounceHandler::class)
             check {
                 one(bounceHandler).handleBounce("theMail"); will(Expectations.throwException(RuntimeException("oups")))
                 one(bounce1).getBounceType(); will(Expectations.returnValue("Permanent"))
-                one(bounce1).getBounceSubType(); will(Expectations.returnValue("Something"))
+//                one(bounce1).getBounceSubType(); will(Expectations.returnValue("Something")) // currently wrapped with logger callback
                 one(bounce1).getRecipients(); will(Expectations.returnValue(listOf(Recipient("theMail", "failed", "", ""))))
             }
 
@@ -57,12 +58,12 @@ class SESBounceMessageHandlerTest {
     @Test
     fun testHandlePermanentBounceSuppressed() {
         mocking {
-            val bounce = mock(BounceNotification::class)
+            val bounce = mock(SESBounceNotification::class)
             val bounceHandler = mock(BounceHandler::class)
             check {
                 one(bounceHandler).handleBounce("theMail")
                 one(bounce).getBounceType(); will(Expectations.returnValue("Permanent"))
-                one(bounce).getBounceSubType(); will(Expectations.returnValue("Suppressed"))
+//                one(bounce).getBounceSubType(); will(Expectations.returnValue("Suppressed")) // currently wrapped with logger callback
                 one(bounce).getRecipients(); will(Expectations.returnValue(listOf(Recipient("theMail", "failed", "", ""))))
             }
 
@@ -73,7 +74,7 @@ class SESBounceMessageHandlerTest {
     @Test
     fun testHandleNonCriticalBounce() {
         mocking {
-            val bounce = mock(BounceNotification::class)
+            val bounce = mock(SESBounceNotification::class)
             val bounceHandler = mock(BounceHandler::class)
             check {
                 never(bounceHandler)
@@ -89,7 +90,7 @@ class SESBounceMessageHandlerTest {
     @Test
     fun testHandleUnknownBounce() {
         mocking {
-            val bounce = mock(BounceNotification::class)
+            val bounce = mock(SESBounceNotification::class)
             val bounceHandler = mock(BounceHandler::class)
             val logService = mock(LogService::class)
             check {

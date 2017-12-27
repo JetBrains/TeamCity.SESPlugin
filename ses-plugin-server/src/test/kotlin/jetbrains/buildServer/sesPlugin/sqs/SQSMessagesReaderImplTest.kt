@@ -12,14 +12,14 @@ class SQSMessagesReaderImplTest {
     @Test
     fun testReadAllQueuesChecksAllSources() {
         mocking {
-            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<SESNotificationData>
+            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<BounceNotification>
 
             val bean1 = mock(SQSBean::class, "bean1")
             val bean2 = mock(SQSBean::class, "bean2")
 
             check {
-                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult<SESNotificationData>(emptyList())))
-                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(AmazonSQSCommunicationResult<SESNotificationData>(emptyList())))
+                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult<BounceNotification>(emptyList())))
+                one(receiver).receiveMessages(bean2); will(Expectations.returnValue(AmazonSQSCommunicationResult<BounceNotification>(emptyList())))
             }
 
             val reader = SQSMessagesReaderImpl(receiver, listOf())
@@ -31,15 +31,15 @@ class SQSMessagesReaderImplTest {
     @Test
     fun testSumHandledMessages() {
         mocking {
-            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<SESNotificationData>
+            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<BounceNotification>
 
             val bean1 = mock(SQSBean::class, "bean1")
             val bean2 = mock(SQSBean::class, "bean2")
 
-            val message1 = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
-            val message2 = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
-            val message3 = SESNotificationData("otherType", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
-            val message4 = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val message1 = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val message2 = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val message3 = BounceNotification("otherType", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val message4 = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             val handler1 = mock(SQSMessageHandler::class, "handler1")
             val handler2 = mock(SQSMessageHandler::class, "handler2")
@@ -76,14 +76,14 @@ class SQSMessagesReaderImplTest {
     @Test
     fun testFirstHandlerAcceptingGetsTheMessage() {
         mocking {
-            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<SESNotificationData>
+            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<BounceNotification>
 
             val handler1 = mock(SQSMessageHandler::class, "handler1")
             val handler2 = mock(SQSMessageHandler::class, "handler2")
 
             val bean = mock(SQSBean::class)
 
-            val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val message = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
                 one(receiver).receiveMessages(bean); will(Expectations.returnValue(AmazonSQSCommunicationResult(
@@ -105,14 +105,14 @@ class SQSMessagesReaderImplTest {
     @Test
     fun testCorrectHandlerAcceptingGetsTheMessage() {
         mocking {
-            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<SESNotificationData>
+            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<BounceNotification>
 
             val handler1 = mock(SQSMessageHandler::class, "handler1")
             val handler2 = mock(SQSMessageHandler::class, "handler2")
 
             val bean = mock(SQSBean::class)
 
-            val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val message = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
                 one(receiver).receiveMessages(bean); will(Expectations.returnValue(AmazonSQSCommunicationResult(
@@ -134,17 +134,17 @@ class SQSMessagesReaderImplTest {
     @Test
     fun testExceptionHandled() {
         mocking {
-            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<SESNotificationData>
+            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<BounceNotification>
 
             val bean1 = mock(SQSBean::class, "bean1")
             val bean2 = mock(SQSBean::class, "bean2")
 
             val handler = mock(SQSMessageHandler::class)
 
-            val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val message = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
-                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult<SESNotificationData>(emptyList(), Exception("some"))))
+                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult<BounceNotification>(emptyList(), Exception("some"))))
                 one(receiver).receiveMessages(bean2); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(message)))))
 
                 one(handler).accepts("type"); will(Expectations.returnValue(true))
@@ -161,17 +161,17 @@ class SQSMessagesReaderImplTest {
     @Test
     fun testParseExceptionHandled() {
         mocking {
-            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<SESNotificationData>
+            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<BounceNotification>
 
             val bean1 = mock(SQSBean::class, "bean1")
             val bean2 = mock(SQSBean::class, "bean2")
 
             val handler = mock(SQSMessageHandler::class)
 
-            val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val message = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
-                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult<SESNotificationData>(exception = SQSNotificationParseException("some"))))))
+                one(receiver).receiveMessages(bean1); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult<BounceNotification>(exception = SQSNotificationParseException("some"))))))
                 one(receiver).receiveMessages(bean2); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(message)))))
 
                 one(handler).accepts("type"); will(Expectations.returnValue(true))
@@ -189,13 +189,13 @@ class SQSMessagesReaderImplTest {
     @Test
     fun testHandleExceptionHandled() {
         mocking {
-            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<SESNotificationData>
+            val receiver = mock(SQSMessagesReceiver::class) as SQSMessagesReceiver<BounceNotification>
 
             val bean = mock(SQSBean::class)
 
             val handler = mock(SQSMessageHandler::class)
 
-            val message = SESNotificationData("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
+            val message = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
             check {
                 one(receiver).receiveMessages(bean); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(message)))))

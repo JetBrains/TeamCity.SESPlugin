@@ -1,13 +1,13 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
 import com.intellij.openapi.diagnostic.Logger
-import jetbrains.buildServer.sesPlugin.data.SESNotificationData
+import jetbrains.buildServer.sesPlugin.data.SESNotification
 import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 
-class SQSMessagesReaderImpl(private val sqsMessagesReceiver: SQSMessagesReceiver<SESNotificationData>,
+class SQSMessagesReaderImpl(private val sqsMessagesReceiver: SQSMessagesReceiver<SESNotification>,
                             messageHandlers: Collection<SQSMessageHandler>) : SQSMessagesReader {
 
-    private val messageHandlers: Sequence<SQSMessageHandler> = messageHandlers.asSequence()
+    private val messageHandlers: Sequence<SQSMessageHandler> = messageHandlers.asSequence() + sequenceOf(UnknownMessageHandler())
     private val logger = Logger.getInstance(SQSMessagesReaderImpl::class.qualifiedName)
 
     private fun readQueue(sqsBean: SQSBean): Int {
@@ -28,7 +28,9 @@ class SQSMessagesReaderImpl(private val sqsMessagesReceiver: SQSMessagesReceiver
 
                         val eventType = message.eventType
 
-                        messageHandlers.find(eventType) {
+                        messageHandlers.first {
+                            it.accepts(eventType)
+                        }.apply {
                             handle(message)
                             processed++
                         }
@@ -48,20 +50,4 @@ class SQSMessagesReaderImpl(private val sqsMessagesReceiver: SQSMessagesReceiver
         return beans.map { readQueue(it) }.sum()
     }
 
-    private fun Sequence<SQSMessageHandler>.find(type: String, f: SQSMessageHandler.() -> Unit) {
-
-        val find = this.find {
-            it.accepts(type)
-        } ?: UnknownMessageHandler()
-
-        find.apply(f)
-    }
-
-    class UnknownMessageHandler : SQSMessageHandler {
-        override fun accepts(type: String) = true
-
-        override fun handle(data: BounceNotification) {
-            // todo log
-        }
-    }
 }
