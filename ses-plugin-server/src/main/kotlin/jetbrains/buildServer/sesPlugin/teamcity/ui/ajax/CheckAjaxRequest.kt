@@ -14,8 +14,13 @@ class CheckAjaxRequest(private val sqsMessagesReceiver: SQSConnectionChecker,
         val bean = sesIntegrationManager.createFrom(data.properties)
         // todo validate?
 
-        val checkConnectionResult = sqsMessagesReceiver.checkConnection(bean)
+        return try {
+            val checkConnectionResult = sqsMessagesReceiver.checkConnection(bean)
 
-        return AjaxRequestResult(checkConnectionResult.status, checkConnectionResult.description, checkConnectionResult.exception)
+            AjaxRequestResult(checkConnectionResult.status, checkConnectionResult.description, checkConnectionResult.exception)
+        } catch (e: Exception) {
+            AjaxRequestResult(false, "Error occurred: ${e.message}", e)
+        }
+
     }
 }
