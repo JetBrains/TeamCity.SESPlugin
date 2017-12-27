@@ -3,11 +3,9 @@ package jetbrains.buildServer.sesPlugin.sqs
 import jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandler
 import jetbrains.buildServer.sesPlugin.data.Recipient
 import jetbrains.buildServer.sesPlugin.data.SESComplaintNotification
-import jetbrains.buildServer.sesPlugin.teamcity.util.LogService
-import jetbrains.buildServer.sesPlugin.util.check
-import jetbrains.buildServer.sesPlugin.util.mock
-import jetbrains.buildServer.sesPlugin.util.mocking
+import jetbrains.buildServer.sesPlugin.util.*
 import org.assertj.core.api.BDDAssertions.then
+import org.hamcrest.CustomMatcher
 import org.jmock.Expectations.returnValue
 import org.jmock.Mockery
 import org.testng.annotations.Test
@@ -28,12 +26,21 @@ class ComplaintMessageHandlerTest {
             val bounceHandler = mock(BounceHandler::class)
             val data = mock(SESComplaintNotification::class)
             check {
-                one(bounceHandler).handleBounce("mail")
                 one(data).getComplainedRecipients(); will(returnValue(sequenceOf(Recipient("mail", "no", "bad", "code"))))
             }
+            invocation(BounceHandler::handleBounces) {
+                on(bounceHandler)
+                with(object : CustomMatcher<Array<Any>>("") {
+                    override fun matches(p0: Any?): Boolean {
+                        val a = p0 as Array<Any>
+                        return (a[0] as Sequence<String>).first() == "mail"
+                    }
+                })
+            }
+
             handler(bounceHandler).handle(data)
         }
     }
 
-    private fun Mockery.handler(bounceHandler: BounceHandler = mock(BounceHandler::class), logService: LogService = mock(LogService::class)) = ComplaintMessageHandler(bounceHandler, logService)
+    private fun Mockery.handler(bounceHandler: BounceHandler = mock(BounceHandler::class)) = ComplaintMessageHandler(bounceHandler)
 }

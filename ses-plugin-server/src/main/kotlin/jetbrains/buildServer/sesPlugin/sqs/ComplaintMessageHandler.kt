@@ -5,9 +5,10 @@ import jetbrains.buildServer.sesPlugin.bounceHandler.BounceHandler
 import jetbrains.buildServer.sesPlugin.data.SESComplaintNotification
 import jetbrains.buildServer.sesPlugin.data.SESNotification
 import jetbrains.buildServer.sesPlugin.teamcity.util.LogService
+import jetbrains.buildServer.sesPlugin.teamcity.util.NoOpLogService
 
 class ComplaintMessageHandler(private val bounceHandler: BounceHandler,
-                              private val logService: LogService) : SQSMessageHandler {
+                              private val logService: LogService = NoOpLogService()) : SQSMessageHandler {
 
     private val logger: Logger = Logger.getInstance(ComplaintMessageHandler::class.qualifiedName)
 
