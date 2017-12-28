@@ -26,8 +26,12 @@ class ReceiveMessagesTaskTest {
                 func("receiveMessage")
                 will(throwException(initException))
             }
+            val properties = mock(TeamCityProperties::class)
+            check {
+                one(properties).getInt("teamcity.sesIntegration.maxNumberOfMessages", 10); will(returnValue(10))
+            }
 
-            val (messages, exception, _) = task().perform(amazonSQS, "someQueue")
+            val (messages, exception, _) = task(properties).perform(amazonSQS, "someQueue")
             BDDAssertions.then(messages).isEmpty()
             BDDAssertions.then(exception).isSameAs(initException)
 
@@ -57,6 +61,7 @@ class ReceiveMessagesTaskTest {
             check {
                 one(properties).getBoolean("teamcity.sesIntegration.markMessagesAsUnread", false); will(returnValue(false))
                 one(properties).getBoolean("teamcity.sesIntegration.deleteReadMessages", true); will(returnValue(false))
+                one(properties).getInt("teamcity.sesIntegration.maxNumberOfMessages", 10); will(returnValue(10))
             }
 
             val (resMessages, exception, _) = task(properties, parser).perform(amazonSQS, "someQueue")
@@ -95,6 +100,7 @@ class ReceiveMessagesTaskTest {
             check {
                 one(properties).getBoolean("teamcity.sesIntegration.markMessagesAsUnread", false); will(returnValue(false))
                 one(properties).getBoolean("teamcity.sesIntegration.deleteReadMessages", true); will(returnValue(false))
+                one(properties).getInt("teamcity.sesIntegration.maxNumberOfMessages", 10); will(returnValue(10))
             }
 
             val (resMessages, exception, _) = task(properties, parser).perform(amazonSQS, "someQueue")
