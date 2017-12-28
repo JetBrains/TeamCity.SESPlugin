@@ -24,9 +24,17 @@ class BounceMessageHandler(private val bounceHandler: BounceHandler,
 
                     logService.log {
                         if (data.getBounceSubType() == "Suppressed") {
-                            logger.warn("Got suppressed bounce for email '$email': $data")
+                            if (logger.isDebugEnabled) {
+                                logger.info("Got suppressed bounce for email '$email'")
+                            } else {
+                                logger.debug("Got suppressed bounce for email '$email': $data")
+                            }
                         } else {
-                            logger.info("Got hard bounce for email '$email': $data")
+                            if (logger.isDebugEnabled) {
+                                logger.debug("Got hard bounce for email '$email': $data")
+                            } else {
+                                logger.info("Got hard bounce for email '$email'")
+                            }
                         }
                     }
 
@@ -43,7 +51,7 @@ class BounceMessageHandler(private val bounceHandler: BounceHandler,
             }
 
             isHandableBounce(bounceType) -> {
-                logger.info("Got soft bounce (${data.getBounceSubType()})")
+                logger.debug("Got soft bounce (${data.getBounceSubType()})")
 //                when (data.getBounceSubType()) {
 //                    "MessageTooLarge" -> {
 //                    }
