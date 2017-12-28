@@ -13,6 +13,7 @@
 <jsp:useBean id="constants" class="jetbrains.buildServer.sesPlugin.teamcity.util.Constants"/>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 <%--@elvariable id="publicKey" type="java.lang.String"--%>
+<%--@elvariable id="debug" type="java.lang.Boolean"--%>
 
 <div id="editSQSParams">
     <form id="editSQSParamsForm">
@@ -53,10 +54,11 @@
     <forms:submit label="Save" id="submit"/>
     <forms:button className="hidden" id="delete">Delete integration...</forms:button>
     <forms:button id="check">Test connection</forms:button>
-    <forms:button className="hidden" id="receive">Receive messages now</forms:button>
+    <c:if test="${debug}"><c:set value="hidden" var="hidden"/></c:if>
+    <forms:button className="${hidden}" id="receive">Receive messages now</forms:button>
     <span style="display: none" class="spinner"><i class="icon-refresh icon-spin"></i></span>
 
-    <div class="statusBlock hidden">
+    <div class="statusBlock ${hidden}">
         <a onclick="return false;" href="#" id="statusLabel">${fn:length(disabledUsers)} emails are disabled due to
             bounces</a>
         <div id="status" class="hidden">

@@ -5,6 +5,7 @@ import jetbrains.buildServer.controllers.admin.AdminPage
 import jetbrains.buildServer.serverSide.crypt.RSACipher
 import jetbrains.buildServer.sesPlugin.email.emailDisabled
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl
+import jetbrains.buildServer.sesPlugin.teamcity.util.TeamCityProperties
 import jetbrains.buildServer.sesPlugin.teamcity.util.UserSetProvider
 import jetbrains.buildServer.web.openapi.Groupable
 import jetbrains.buildServer.web.openapi.PagePlaces
@@ -14,7 +15,8 @@ import javax.servlet.http.HttpServletRequest
 class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
                              pluginDescriptor: PluginDescriptor,
                              private val sesIntegrationManager: SESIntegrationManagerImpl,
-                             private val userSetProvider: UserSetProvider)
+                             private val userSetProvider: UserSetProvider,
+                             private val properties: TeamCityProperties)
     : AdminPage(pagePlaces, "sesParams", pluginDescriptor.getPluginResourcesPath("editSESParams.jsp"), "Amazon SES Integration") {
 
     init {
@@ -34,6 +36,7 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
         model.put("disabledUsers", list)
 
         model.put("publicKey", RSACipher.getHexEncodedPublicKey())
+        model.put("debug", properties.getBoolean("teamcity.sesIntegration.enableDebug", false))
     }
 
     override fun getGroup() = Groupable.SERVER_RELATED_GROUP
