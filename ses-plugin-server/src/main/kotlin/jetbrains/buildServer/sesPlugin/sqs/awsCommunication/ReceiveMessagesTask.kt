@@ -13,7 +13,7 @@ import jetbrains.buildServer.sesPlugin.teamcity.util.TeamCityProperties
 class ReceiveMessagesTask(private val properties: TeamCityProperties,
                           private val sqsNotificationParser: SQSNotificationParser) : AmazonSQSCommunicatorTask<AmazonSQSCommunicationResult<AmazonSQSNotification>> {
     private fun prepareRequest() =
-            ReceiveMessageRequest().withMaxNumberOfMessages(properties.getInt("teamcity.sesIntegration.maxNumberOfMessages", 100))
+            ReceiveMessageRequest().withMaxNumberOfMessages(properties.getInt("teamcity.sesIntegration.maxNumberOfMessages", 10))
 
     override fun perform(sqs: AmazonSQS, queueUrl: String): AmazonSQSCommunicationResult<AmazonSQSNotification> {
         val messagesResult = try {
