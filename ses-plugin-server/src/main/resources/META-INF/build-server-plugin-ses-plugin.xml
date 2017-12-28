@@ -38,8 +38,10 @@
         <constructor-arg index="2" ref="rescanSQSTaskDelay"/>
         <constructor-arg index="3" ref="rescanSQSTaskInitialDelay"/>
     </bean>
-    <bean id="rescanSQSTaskDelay" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskDelay"/>
-    <bean id="rescanSQSTaskInitialDelay" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskInitialDelay"/>
+    <bean id="rescanSQSTaskDelay" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskDelay"
+          autowire-candidate="false"/>
+    <bean id="rescanSQSTaskInitialDelay" class="jetbrains.buildServer.sesPlugin.sqs.RescanSQSTaskInitialDelay"
+          autowire-candidate="false"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.sqs.awsCommunication.AmazonSQSCommunicatorImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.sqs.awsCommunication.ReceiveMessagesTask"/>
