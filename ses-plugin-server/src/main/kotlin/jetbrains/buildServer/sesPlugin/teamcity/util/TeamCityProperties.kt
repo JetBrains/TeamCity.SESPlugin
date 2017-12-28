@@ -3,6 +3,9 @@ package jetbrains.buildServer.sesPlugin.teamcity.util
 import java.util.*
 
 interface TeamCityProperties {
+    fun getInt(key: String, default: Int): Int
+    fun getInt(key: String): Optional<Int>
+
     fun getLong(key: String, default: Long): Long
     fun getLong(key: String): Optional<Long>
 
