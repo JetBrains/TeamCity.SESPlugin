@@ -23,6 +23,7 @@
 
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxController" init-method="init"/>
 
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.SQSBeanValidatorImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.CheckAjaxRequest"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.SubmitAjaxRequest"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.DeleteAjaxRequest"/>

@@ -26,7 +26,7 @@
 
             <l:settingsGroup title="SQS Queue Parameters">
                 <tr>
-                    <th><label for="${constants.ACCOUNT_ID_PARAM}">Owner Account ID: <l:star/></label></th>
+                    <th><label for="${constants.ACCOUNT_ID_PARAM}">${constants.ACCOUNT_ID_LABEL}: <l:star/></label></th>
                     <td>
                         <props:textProperty name="${constants.ACCOUNT_ID_PARAM}"
                                             value="${propertiesBean.properties[constants.ACCOUNT_ID_PARAM]}"
@@ -35,7 +35,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <th><label for="${constants.QUEUE_NAME_PARAM}">SQS Queue Name: <l:star/></label></th>
+                    <th><label for="${constants.QUEUE_NAME_PARAM}">${constants.QUEUE_NAME_LABEL}: <l:star/></label></th>
                     <td>
                         <props:textProperty name="${constants.QUEUE_NAME_PARAM}"
                                             value="${propertiesBean.properties[constants.QUEUE_NAME_PARAM]}"
