@@ -16,7 +16,7 @@ class ComplaintMessageHandlerTest {
         mocking {
             val bounceHandler = mock(BounceHandler::class)
             then(handler(bounceHandler).accepts("asdf")).isFalse()
-            then(handler(bounceHandler).accepts("Complaint")).isFalse()
+            then(handler(bounceHandler).accepts("Complaint")).isTrue()
         }
     }
 

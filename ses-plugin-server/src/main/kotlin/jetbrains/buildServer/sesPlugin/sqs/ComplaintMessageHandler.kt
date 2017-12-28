@@ -29,5 +29,5 @@ class ComplaintMessageHandler(private val bounceHandler: BounceHandler,
 
     }
 
-    override fun accepts(type: String) = type == "Compliant"
+    override fun accepts(type: String) = type == "Complaint"
 }
