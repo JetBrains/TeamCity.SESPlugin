@@ -14,6 +14,7 @@ import org.jmock.Expectations.throwException
 import org.jmock.Mockery
 import org.testng.annotations.Test
 
+@Suppress("UNCHECKED_CAST")
 class ReceiveMessagesTaskTest {
     @Test
     fun testExceptionInCommunication() {
@@ -100,6 +101,48 @@ class ReceiveMessagesTaskTest {
             check {
                 one(properties).getBoolean("teamcity.sesIntegration.markMessagesAsUnread", false); will(returnValue(false))
                 one(properties).getBoolean("teamcity.sesIntegration.deleteReadMessages", true); will(returnValue(false))
+                one(properties).getInt("teamcity.sesIntegration.maxNumberOfMessages", 10); will(returnValue(10))
+            }
+
+            val (resMessages, exception, _) = task(properties, parser).perform(amazonSQS, "someQueue")
+            BDDAssertions.then(resMessages).hasSize(1)
+            BDDAssertions.then(resMessages[0].result).isEqualTo("Hi there")
+            BDDAssertions.then(exception).isNull()
+        }
+    }
+
+    @Test
+    fun testDelete() {
+        mocking {
+            val amazonSQS = mock(AmazonSQS::class)
+            val properties = mock(TeamCityProperties::class)
+            val parser = mock(SQSNotificationParser::class)
+
+            val messages = ReceiveMessageResult()
+            messages.withMessages(Message().withBody("hi!"))
+            invocation {
+                on(amazonSQS)
+                func("receiveMessage")
+                will(returnValue(messages))
+            }
+            invocation {
+                on(parser)
+                func(SQSNotificationParser::parse)
+                will(returnValue(AmazonSQSNotificationParseResult("Hi there")))
+                with(object : CustomMatcher<Array<Any>>("") {
+                    override fun matches(p0: Any?): Boolean {
+                        val a = p0 as Array<Any>
+                        return a[0] == "hi!"
+                    }
+                })
+            }
+            invocation {
+                on(amazonSQS)
+                func("deleteMessageBatch")
+            }
+            check {
+                one(properties).getBoolean("teamcity.sesIntegration.markMessagesAsUnread", false); will(returnValue(false))
+                one(properties).getBoolean("teamcity.sesIntegration.deleteReadMessages", true); will(returnValue(true))
                 one(properties).getInt("teamcity.sesIntegration.maxNumberOfMessages", 10); will(returnValue(10))
             }
 

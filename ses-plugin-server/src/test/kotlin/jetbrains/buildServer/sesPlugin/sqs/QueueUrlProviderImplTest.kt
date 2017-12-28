@@ -43,11 +43,6 @@ class QueueUrlProviderImplTest {
                 one(bean).queueName; will(returnValue("aaa"))
                 one(bean).accountId; will(throwException(initialException))
             }
-            invocation {
-                on(sqs)
-                func("getQueueUrl")
-                will(returnValue(GetQueueUrlResult().withQueueUrl("some")))
-            }
 
             jetbrains.buildServer.sesPlugin.util.then { (QueueUrlProviderImpl().getQueueUrl(sqs, bean)) }.isSameAs(initialException)
         }

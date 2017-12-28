@@ -32,7 +32,9 @@ fun mocking(action: Mockery.() -> Unit) {
 }
 
 fun Mockery.invocation(action: InvocationExpectation.() -> Unit) {
-    this.addExpectation(InvocationExpectation().apply(action))
+    val invocationExpectation = InvocationExpectation()
+    invocationExpectation.count(1)
+    this.addExpectation(invocationExpectation.apply(action))
 }
 
 fun Mockery.invocation(meth: KFunction<*>, action: InvocationExpectation.() -> Unit) {
@@ -46,6 +48,7 @@ fun InvocationExpectation.on(obj: Any) = setObjectMatcher(MockObjectMatcher(obj)
 fun InvocationExpectation.func(name: String) = setMethodMatcher(MethodNameMatcher(name))
 fun InvocationExpectation.func(meth: KFunction<*>) = setMethodMatcher(MethodMatcher(meth.javaMethod))
 fun InvocationExpectation.count(count: Int) = setCardinality(Cardinality.exactly(count))
+fun InvocationExpectation.count(cardinality: Cardinality) = setCardinality(cardinality)
 fun InvocationExpectation.will(returnValue: Action) = setAction(returnValue)
 fun InvocationExpectation.with(parametersMatcher: Matcher<Array<Any>>) {
     setParametersMatcher(parametersMatcher)

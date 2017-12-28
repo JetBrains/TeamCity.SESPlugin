@@ -5,6 +5,7 @@ import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 import jetbrains.buildServer.sesPlugin.util.*
 import org.assertj.core.api.BDDAssertions.then
 import org.jmock.Expectations
+import org.jmock.internal.Cardinality
 import org.testng.annotations.Test
 
 @Suppress("UNCHECKED_CAST")
@@ -58,11 +59,13 @@ class SQSMessagesReaderImplTest {
                 invocation {
                     on(handler1)
                     func(SQSMessageHandler::handle)
+                    count(Cardinality.ALLOWING)
                 }
 
                 invocation {
                     on(handler2)
                     func(SQSMessageHandler::handle)
+                    count(Cardinality.ALLOWING)
                 }
             }
 
