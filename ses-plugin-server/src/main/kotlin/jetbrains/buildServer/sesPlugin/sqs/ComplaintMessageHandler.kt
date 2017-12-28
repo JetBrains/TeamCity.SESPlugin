@@ -16,6 +16,14 @@ class ComplaintMessageHandler(private val bounceHandler: BounceHandler,
         if (data !is SESComplaintNotification) throw IllegalArgumentException()
 
         val mails = data.getComplainedRecipients().asSequence().map {
+            logService.log {
+                if (logger.isDebugEnabled) {
+                    logger.debug("Got complaint for email '${it.emailAddress}': $data")
+                } else {
+                    logger.info("Got complaint for email '${it.emailAddress}'")
+                }
+            }
+
             it.emailAddress
         }
 
