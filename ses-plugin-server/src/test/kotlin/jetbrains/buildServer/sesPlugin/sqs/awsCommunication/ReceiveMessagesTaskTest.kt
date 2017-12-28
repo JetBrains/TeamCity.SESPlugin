@@ -56,6 +56,7 @@ class ReceiveMessagesTaskTest {
             }
             check {
                 one(properties).getBoolean("teamcity.sesIntegration.markMessagesAsUnread", false); will(returnValue(false))
+                one(properties).getBoolean("teamcity.sesIntegration.deleteReadMessages", true); will(returnValue(false))
             }
 
             val (resMessages, exception, _) = task(properties, parser).perform(amazonSQS, "someQueue")
@@ -93,6 +94,7 @@ class ReceiveMessagesTaskTest {
             }
             check {
                 one(properties).getBoolean("teamcity.sesIntegration.markMessagesAsUnread", false); will(returnValue(false))
+                one(properties).getBoolean("teamcity.sesIntegration.deleteReadMessages", true); will(returnValue(false))
             }
 
             val (resMessages, exception, _) = task(properties, parser).perform(amazonSQS, "someQueue")
