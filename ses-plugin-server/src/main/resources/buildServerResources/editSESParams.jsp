@@ -17,6 +17,8 @@
 
 <div id="editSQSParams">
     <form id="editSQSParamsForm">
+        <div class="successMessage hidden" id="successMessage"></div>
+
         <table class="runnerFormTable" id="editSQSParamsTable">
             <tr>
                 <th><label for="${constants.ENABLED}">Enable SES Integration: </label></th>

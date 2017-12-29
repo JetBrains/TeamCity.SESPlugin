@@ -39,8 +39,12 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
         function sumbit() {
             sendRequest('submit')
                 .done(function (data) {
-                    $j('#modifiedMessage').hide();
-                    resetFieldsValues();
+                    if (data.successful) {
+                        $j('#modifiedMessage').hide();
+                        resetFieldsValues();
+                    }
+                    $j('#successMessage')[0].innerHTML = data.description;
+                    $j('#successMessage').show();
                 })
                 .fail(function (data) {
                 });
@@ -53,7 +57,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
             });
         }
 
-        $j('#modifiedMessage').on('click', function () {
+        $j('#modifiedMessage .submitButton').on('click', function () {
             sumbit();
         });
 
@@ -63,6 +67,8 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
         $j('#editSQSParams').on('focusin', 'input', function (e) {
             $j(document.getElementById('error_' + $j(e.target).attr('id'))).empty();
         }).on('change', 'input', function (e) {
+            $j('#successMessage').hide();
+
             var anyChanged = false;
 
             var $elt = $j(e.target);

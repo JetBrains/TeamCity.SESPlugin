@@ -18,6 +18,6 @@ class SubmitAjaxRequest(private val sesIntegrationManager: SESIntegrationManager
 
         val persistResult = sesIntegrationManager.persistBean(sesIntegrationManager.createFrom(properties), id)
 
-        return AjaxRequestResult(persistResult.persisted, persistResult.details)
+        return AjaxRequestResult(persistResult.persisted, if (persistResult.persisted) "Settings saved" else "Cannot save settings: ${persistResult.details}")
     }
 }
