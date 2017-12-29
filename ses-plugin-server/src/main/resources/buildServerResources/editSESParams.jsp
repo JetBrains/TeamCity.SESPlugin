@@ -33,6 +33,7 @@
                                             value="${propertiesBean.properties[constants.ACCOUNT_ID_PARAM]}"
                                             className="longField" maxlength="256"/>
                         <span class="smallNote">Owner ID</span>
+                        <span class="error" id="error_${constants.ACCOUNT_ID_PARAM}"></span>
                     </td>
                 </tr>
                 <tr>
@@ -42,6 +43,7 @@
                                             value="${propertiesBean.properties[constants.QUEUE_NAME_PARAM]}"
                                             className="longField" maxlength="256"/>
                         <span class="smallNote">Queue Name to pull SES events from</span>
+                        <span class="error" id="error_${constants.QUEUE_NAME_PARAM}"></span>
                     </td>
                 </tr>
             </l:settingsGroup>
@@ -74,6 +76,8 @@
             </div>
         </div>
     </div>
+
+    <forms:modified/>
 
     <script>
         $j(BS.SESPlugin.EditSQSParams.init);

@@ -17,7 +17,7 @@ class CheckAjaxRequest(private val sqsMessagesReceiver: SQSConnectionChecker,
 
         val validate = beanValidator.validate(bean)
         if (!validate.status) {
-            return AjaxRequestResult(false, "All mandatory fields should be filled: ${validate.errorFields}")
+            return AjaxRequestResult(false, "All mandatory fields should be filled: ${validate.errorFields}", null, validate.errorFields)
         }
 
         return try {

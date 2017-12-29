@@ -36,17 +36,68 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
             });
         }
 
-        $j('#editSQSParams').on('click', '#submit', function (e) {
+        function sumbit() {
             sendRequest('submit')
                 .done(function (data) {
+                    $j('#modifiedMessage').hide();
+                    resetFieldsValues();
                 })
                 .fail(function (data) {
                 });
+        }
+
+        function resetFieldsValues() {
+            $j('#editSQSParams input').each(function (idx, elt) {
+                var $elt = $j(elt);
+                $elt.data('initValue', $elt.val());
+            });
+        }
+
+        $j('#modifiedMessage').on('click', function () {
+            sumbit();
+        });
+
+
+        resetFieldsValues();
+
+        $j('#editSQSParams').on('focusin', 'input', function (e) {
+            $j(document.getElementById('error_' + $j(e.target).attr('id'))).empty();
+        }).on('change', 'input', function (e) {
+            var anyChanged = false;
+
+            var $elt = $j(e.target);
+            if ($elt.data('initValue') !== $elt.val()) {
+                anyChanged = true;
+            }
+
+            if (!anyChanged) {
+                $j('#editSQSParams input').each(function (idx, elt) {
+                    var $elt = $j(elt);
+                    if ($elt.data('initValue') !== $elt.val()) {
+                        anyChanged = true;
+                        return false;
+                    }
+                });
+            }
+
+            if (anyChanged) {
+                $j('#modifiedMessage').show();
+            } else {
+                $j('#modifiedMessage').hide();
+            }
+        }).on('click', '#submit', function (e) {
+            sumbit();
         }).on('click', '#check', function (e) {
             if (BS.SESPlugin.EditSQSParams.isEnabled()) {
                 sendRequest('check')
                     .done(function (data) {
-                        alert(data.description)
+                        if (data.errorFields && data.errorFields.length > 0) {
+                            for (var i = 0; i < data.errorFields.length; ++i) {
+                                BS.SESPlugin.EditSQSParams.FormCrutch.showError(data.errorFields[i], "Should not be empty");
+                            }
+                        } else {
+                            alert(data.description)
+                        }
                     })
                     .fail(function (data) {
                     });
@@ -71,7 +122,13 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
         }).on('click', '#receive', function () {
             if (BS.SESPlugin.EditSQSParams.isEnabled()) {
                 sendRequest('receive').done(function (data) {
-                    alert(data.description)
+                    if (data.errorFields && data.errorFields.length > 0) {
+                        for (var i = 0; i < data.errorFields.length; ++i) {
+                            BS.SESPlugin.EditSQSParams.FormCrutch.showError(data.errorFields[i], "Should not be empty");
+                        }
+                    } else {
+                        alert(data.description)
+                    }
                 });
             }
         }).on('click', '#statusLabel', function () {
