@@ -10,7 +10,6 @@ class DisabledMailsReport(private val usersProvider: DisabledUsersProvider) : He
         private val category = ItemCategory(id, name, ItemSeverity.INFO)
         private val displayText = "Email address was disabled for some users"
         val countKey = "count"
-
     }
 
     override fun report(scope: HealthStatusScope, consumer: HealthStatusItemConsumer) {
