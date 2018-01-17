@@ -3,6 +3,7 @@ package jetbrains.buildServer.sesPlugin.teamcity
 import jetbrains.buildServer.serverSide.ConfigActionFactory
 import jetbrains.buildServer.serverSide.ProjectManager
 import jetbrains.buildServer.sesPlugin.data.PersistResult
+import jetbrains.buildServer.sesPlugin.teamcity.util.Constants
 
 class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager,
                                 private val myConfigActionFactory: ConfigActionFactory) : SESIntegrationManager {
@@ -22,6 +23,7 @@ class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager,
         return PersistResult(true, "OK")
     }
 
+    @Synchronized
     override fun deleteBean(projectId: String): PersistResult {
         var deleted = false
         myProjectManager.rootProject.getOwnFeaturesOfType(FEATURE_TYPE).forEach {
@@ -43,5 +45,16 @@ class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager,
         return f.asSequence().map {
             SQSBeanMapImpl(it.parameters)
         }
+    }
+
+    @Synchronized
+    override fun setEnabled(projectId: String, state: Boolean) {
+        myProjectManager.rootProject.getOwnFeaturesOfType(FEATURE_TYPE).forEach {
+            val parameters = HashMap(it.parameters)
+
+            parameters[Constants.ENABLED] = state.toString()
+            myProjectManager.rootProject.updateFeature(it.id, FEATURE_TYPE, parameters)
+        }
+
     }
 }

@@ -28,6 +28,7 @@
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.SubmitAjaxRequest"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.DeleteAjaxRequest"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.GetMessagesAjaxRequest"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.EnableAjaxRequest"/>
 
     <bean id="allUsersProvider" autowire-candidate="false"
           class="jetbrains.buildServer.sesPlugin.teamcity.util.AllUsersProvider"/>

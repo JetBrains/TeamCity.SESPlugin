@@ -19,12 +19,26 @@
     <form id="editSQSParamsForm">
         <div class="successMessage hidden" id="successMessage"></div>
 
-        <table class="runnerFormTable" id="editSQSParamsTable">
-            <tr>
-                <th><label for="${constants.ENABLED}">Enable SES Integration: </label></th>
-                <td><props:checkboxProperty className="enableDisableSESIntegration" name="${constants.ENABLED}"/></td>
-            </tr>
+        <div id="enableDisable">
+            <props:checkboxProperty className="hidden enableDisableSESIntegration" name="${constants.ENABLED}"/>
+            <c:choose>
+                <c:when test="${propertiesBean.properties[constants.ENABLED] != 'true'}">
+                    <div class="headerNote">
+                        <span class="icon icon16 build-status-icon build-status-icon_paused"></span>SES integration is
+                        <strong>disabled</strong>. &nbsp;&nbsp;<a class="btn btn_mini" href="#"
+                                                                  id="enable-btn">Enable</a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="enableNote">
+                        SES integration is <strong>enabled</strong>&nbsp;&nbsp;<a class="btn btn_mini" href="#"
+                                                                                  id="disable-btn">Disable</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
 
+        <table class="runnerFormTable" id="editSQSParamsTable">
             <jsp:include page="editAWSCommonParams.jsp"/>
 
             <l:settingsGroup title="SQS Queue Parameters">
@@ -69,12 +83,19 @@
             <div>
                 <label for="disabledEmailsCount">Users with disabled emails count: </label><span
                     id="disabledEmailsCount">${fn:length(disabledUsers)}</span>
-                <c:forEach items="${disabledUsers}" var="user">
-                    <div class="disabledUser"><span class="userName">User '<c:out value="${user.extendedName}"/>'</span>
-                        got
-                        bounce on address '<span class="email"><c:out value="${user.email}"/></span>'
-                    </div>
-                </c:forEach>
+                <table class="highlightable dark userList borderBottom">
+                    <tr>
+                        <th>User</th>
+                        <th>Email address</th>
+                    </tr>
+                    <c:forEach items="${disabledUsers}" var="user">
+                        <tr>
+                            <td class="user"><bs:userLink user="${user}"><c:out
+                                    value="${user.descriptiveName}"/></bs:userLink></td>
+                            <td class="email"><c:out value="${user.email}"/></td>
+                        </tr>
+                    </c:forEach>
+                </table>
             </div>
         </div>
     </div>

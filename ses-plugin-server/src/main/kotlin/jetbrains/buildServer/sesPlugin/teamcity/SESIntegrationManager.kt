@@ -10,4 +10,6 @@ interface SESIntegrationManager {
     fun getBeans(projectId: String): Sequence<SQSBean>
 
     fun createFrom(map: Map<String, String>): SQSBean
+
+    fun setEnabled(projectId: String, state: Boolean)
 }
