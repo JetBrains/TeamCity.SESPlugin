@@ -129,6 +129,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                         }
                     } else {
                         alert(data.description)
+                        BS.reload();
                     }
                 });
             }
