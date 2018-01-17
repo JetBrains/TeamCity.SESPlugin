@@ -21,6 +21,7 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
     init {
         addJsFile(pluginDescriptor.getPluginResourcesPath("editSESParams.js"))
         addCssFile(pluginDescriptor.getPluginResourcesPath("editSESParams.css"))
+        setPosition(jetbrains.buildServer.web.openapi.PositionConstraint.between(mutableListOf("email"), mutableListOf("jabber")))
     }
 
     override fun fillModel(model: MutableMap<String, Any>,
