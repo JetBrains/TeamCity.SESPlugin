@@ -13,6 +13,7 @@
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.TeamCityPropertiesImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.TaskScheduler" init-method="init"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.LogServiceImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.SessionUserProviderImpl"/>
 
     <!-- UI -->
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.BouncedUserNotificationController" init-method="register"/>

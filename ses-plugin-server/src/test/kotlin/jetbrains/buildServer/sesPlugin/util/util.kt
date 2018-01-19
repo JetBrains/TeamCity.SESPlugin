@@ -39,6 +39,7 @@ fun Mockery.invocation(action: InvocationExpectation.() -> Unit) {
 
 fun Mockery.invocation(meth: KFunction<*>, action: InvocationExpectation.() -> Unit) {
     val invocationExpectation = InvocationExpectation()
+    invocationExpectation.count(1)
     invocationExpectation.setMethodMatcher(MethodMatcher(meth.javaMethod))
     this.addExpectation(invocationExpectation.apply(action))
 }
