@@ -2,6 +2,7 @@ package jetbrains.buildServer.sesPlugin.teamcity.ui
 
 import jetbrains.buildServer.controllers.BasePropertiesBean
 import jetbrains.buildServer.controllers.admin.AdminPage
+import jetbrains.buildServer.serverSide.auth.Permission
 import jetbrains.buildServer.serverSide.crypt.RSACipher
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManagerImpl
 import jetbrains.buildServer.sesPlugin.teamcity.util.DisabledUsersProvider
@@ -23,6 +24,9 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
         addCssFile(pluginDescriptor.getPluginResourcesPath("editSESParams.css"))
         setPosition(jetbrains.buildServer.web.openapi.PositionConstraint.between(mutableListOf("email"), mutableListOf("jabber")))
     }
+
+    override fun isAvailable(request: HttpServletRequest) =
+            checkHasGlobalPermission(request, Permission.CHANGE_SERVER_SETTINGS)
 
     override fun fillModel(model: MutableMap<String, Any>,
                            request: HttpServletRequest) {
