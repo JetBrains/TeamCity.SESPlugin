@@ -23,7 +23,6 @@ class EditSQSAjaxController(private val ajaxRequests: List<AjaxRequest>,
     }
 
     override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? {
-        // todo handle permissions
         val modelAndView = ModelAndView(GsonView())
 
         val user = request.user()
