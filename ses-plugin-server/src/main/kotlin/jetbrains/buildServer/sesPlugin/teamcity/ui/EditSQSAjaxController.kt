@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletResponse
 class EditSQSAjaxController(private val ajaxRequests: List<AjaxRequest>,
                             private val webControllerManager: WebControllerManager) : BaseController() {
 
-    private val URL = "/admin/editSQSParams.html"
+    companion object {
+        private val URL = "/admin/editSQSParams.html"
+    }
 
     fun init() {
         webControllerManager.registerController(URL, this)
