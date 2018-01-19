@@ -16,7 +16,19 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
     },
 
     isEnabled: function () {
-        return $j('#editSQSParamsTable .enableDisableSESIntegration')[0].checked;
+        return $j('#editSQSParams input[id=\'aws.sesIntegration.enabled\']')[0].checked;
+    },
+
+    isAnyFieldChanged: function () {
+        var a = false;
+        $j('#editSQSParams input').each(function (idx, elt) {
+            var $elt = $j(elt);
+            if ($elt.data('initValue') !== $elt.val()) {
+                a = true;
+                return false;
+            }
+        });
+        return a;
     },
 
     init: function () {
@@ -45,6 +57,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                     }
                     $j('#successMessage')[0].innerHTML = data.description;
                     $j('#successMessage').show();
+                    BS.SESPlugin.EditSQSParams.FormCrutch.setModified(false);
                 })
                 .fail(function (data) {
                 });
@@ -61,7 +74,6 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
             sumbit();
         });
 
-
         resetFieldsValues();
 
         $j('#editSQSParams').on('focusin', 'input', function (e) {
@@ -69,28 +81,11 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
         }).on('change', 'input', function (e) {
             $j('#successMessage').hide();
 
-            var anyChanged = false;
-
             var $elt = $j(e.target);
-            if ($elt.data('initValue') !== $elt.val()) {
-                anyChanged = true;
-            }
 
-            if (!anyChanged) {
-                $j('#editSQSParams input').each(function (idx, elt) {
-                    var $elt = $j(elt);
-                    if ($elt.data('initValue') !== $elt.val()) {
-                        anyChanged = true;
-                        return false;
-                    }
-                });
-            }
+            var anyChanged = $elt.data('initValue') !== $elt.val() || BS.SESPlugin.EditSQSParams.isAnyFieldChanged();
 
-            if (anyChanged) {
-                $j('#modifiedMessage').show();
-            } else {
-                $j('#modifiedMessage').hide();
-            }
+            BS.SESPlugin.EditSQSParams.FormCrutch.setModified(anyChanged);
         }).on('click', '#submit', function (e) {
             sumbit();
         }).on('click', '#check', function (e) {
@@ -134,19 +129,50 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                         }
                     } else {
                         alert(data.description)
+                        BS.reload();
                     }
                 });
             }
         }).on('click', '#statusLabel', function () {
             $j('#editSQSParams #status').show();
             $j('#editSQSParams #statusLabel').hide();
+        }).on('click', '#enable-btn', function () {
+            $j('input[id=\'aws.sesIntegration.enabled\']').val('true');
+            sendRequest('enable')
+                .done(function () {
+                    BS.reload();
+                });
+        }).on('click', '#disable-btn', function () {
+            var message;
+
+            if (BS.SESPlugin.EditSQSParams.FormCrutch.modified) {
+                message = "All unsaved changes will be discarded and SES integration will be disabled. Proceed?";
+            } else {
+                message = "SES integration will be disabled. Proceed?";
+            }
+            if (!confirm(message)) {
+                return;
+            }
+
+            $j('input[id=\'aws.sesIntegration.enabled\']').val('false');
+            sendRequest('enable')
+                .done(function () {
+                    BS.reload();
+                });
         });
 
         awsCommonParamsUpdateVisibility();
 
-        if (!$j('#editSQSParams .enableDisableSESIntegration').attr('checked')) {
+        if (!BS.SESPlugin.EditSQSParams.isEnabled()) {
             BS.SESPlugin.EditSQSParams.disableAllInputs();
         }
+
+        BS.SESPlugin.EditSQSParams.FormCrutch.setUpdateStateHandlers({
+            updateState: function () {
+            },
+            saveState: function () {
+            }
+        })
     }
 };
 

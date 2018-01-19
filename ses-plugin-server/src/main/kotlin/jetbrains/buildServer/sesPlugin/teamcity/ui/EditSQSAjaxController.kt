@@ -1,28 +1,45 @@
 package jetbrains.buildServer.sesPlugin.teamcity.ui
 
+import com.google.common.annotations.VisibleForTesting
 import jetbrains.buildServer.controllers.BaseController
 import jetbrains.buildServer.controllers.BasePropertiesBean
+import jetbrains.buildServer.serverSide.auth.Permission
 import jetbrains.buildServer.sesPlugin.data.AjaxRequestResult
 import jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.AjaxRequest
 import jetbrains.buildServer.sesPlugin.teamcity.util.GsonView
 import jetbrains.buildServer.sesPlugin.teamcity.util.PluginPropertiesUtil
+import jetbrains.buildServer.sesPlugin.teamcity.util.SessionUserProvider
 import jetbrains.buildServer.web.openapi.WebControllerManager
 import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class EditSQSAjaxController(private val ajaxRequests: List<AjaxRequest>,
-                            private val webControllerManager: WebControllerManager) : BaseController() {
+                            private val webControllerManager: WebControllerManager,
+                            private val sessionUserProvider: SessionUserProvider) : BaseController() {
 
-    private val URL = "/admin/editSQSParams.html"
+    companion object {
+        val URL = "/admin/editSQSParams.html"
+    }
 
     fun init() {
         webControllerManager.registerController(URL, this)
     }
 
-    override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? {
-        // todo handle permissions
+    @VisibleForTesting
+    public override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView {
         val modelAndView = ModelAndView(GsonView())
+
+        val user = sessionUserProvider.getUser(request)
+        if (user == null) {
+            modelAndView.model.put("result", AjaxRequestResult(false, "No user found"))
+            return modelAndView
+        }
+
+        if (!user.isPermissionGrantedGlobally(Permission.CHANGE_SERVER_SETTINGS)) {
+            modelAndView.model.put("result", AjaxRequestResult(false, "Not enough permissions"))
+            return modelAndView
+        }
 
         val res = doHandleInternal(request, response)
 

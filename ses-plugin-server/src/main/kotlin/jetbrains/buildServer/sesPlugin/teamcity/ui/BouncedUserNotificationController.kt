@@ -3,12 +3,11 @@ package jetbrains.buildServer.sesPlugin.teamcity.ui
 import jetbrains.buildServer.server.responsible.ResponsibleContactProvider
 import jetbrains.buildServer.sesPlugin.email.emailDisableDescription
 import jetbrains.buildServer.sesPlugin.email.emailDisabled
-import jetbrains.buildServer.users.SUser
+import jetbrains.buildServer.sesPlugin.teamcity.util.user
 import jetbrains.buildServer.web.openapi.PagePlaces
 import jetbrains.buildServer.web.openapi.PlaceId
 import jetbrains.buildServer.web.openapi.PluginDescriptor
 import jetbrains.buildServer.web.openapi.SimplePageExtension
-import jetbrains.buildServer.web.util.SessionUser
 import javax.servlet.http.HttpServletRequest
 
 
@@ -30,5 +29,3 @@ class BouncedUserNotificationController(pagePlaces: PagePlaces,
         }
     }
 }
-
-fun HttpServletRequest.user(): SUser? = SessionUser.getUser(this)

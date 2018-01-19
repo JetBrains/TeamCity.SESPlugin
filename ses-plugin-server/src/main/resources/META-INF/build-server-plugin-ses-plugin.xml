@@ -13,12 +13,14 @@
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.TeamCityPropertiesImpl"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.TaskScheduler" init-method="init"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.LogServiceImpl"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.util.SessionUserProviderImpl"/>
 
     <!-- UI -->
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.BouncedUserNotificationController" init-method="register"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.UserProfileNoteController" init-method="register"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSParamsAdminPage" init-method="register">
-        <constructor-arg index="3" ref="allUsersProvider"/>
+        <constructor-arg index="3" ref="blockedUsersProvider"/>
     </bean>
 
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSAjaxController" init-method="init"/>
@@ -28,9 +30,13 @@
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.SubmitAjaxRequest"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.DeleteAjaxRequest"/>
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.GetMessagesAjaxRequest"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.EnableAjaxRequest"/>
 
-    <bean id="allUsersProvider"
+    <bean id="allUsersProvider" autowire-candidate="false"
           class="jetbrains.buildServer.sesPlugin.teamcity.util.AllUsersProvider"/>
+
+    <bean id="blockedUsersProvider"
+          class="jetbrains.buildServer.sesPlugin.teamcity.util.DisabledUsersProviderImpl"/>
 
     <!-- SQS -->
 
@@ -70,6 +76,12 @@
 
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.DisableEmailOnBounce"/>
     <bean class="jetbrains.buildServer.sesPlugin.bounceHandler.RemoveVerifiedStateOnBounce"/>
+
+    <!-- health report -->
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.health.DisabledMailsReport">
+        <constructor-arg index="0" ref="blockedUsersProvider"/>
+    </bean>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.health.DisabledMailsPageExtension" init-method="register"/>
 
     <!-- responsible contact -->
     <bean class="jetbrains.buildServer.server.responsible.ResponsibleContactProviderImpl"/>
