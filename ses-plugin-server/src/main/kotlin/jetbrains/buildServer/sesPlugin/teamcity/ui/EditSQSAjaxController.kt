@@ -2,10 +2,12 @@ package jetbrains.buildServer.sesPlugin.teamcity.ui
 
 import jetbrains.buildServer.controllers.BaseController
 import jetbrains.buildServer.controllers.BasePropertiesBean
+import jetbrains.buildServer.serverSide.auth.Permission
 import jetbrains.buildServer.sesPlugin.data.AjaxRequestResult
 import jetbrains.buildServer.sesPlugin.teamcity.ui.ajax.AjaxRequest
 import jetbrains.buildServer.sesPlugin.teamcity.util.GsonView
 import jetbrains.buildServer.sesPlugin.teamcity.util.PluginPropertiesUtil
+import jetbrains.buildServer.sesPlugin.teamcity.util.user
 import jetbrains.buildServer.web.openapi.WebControllerManager
 import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
@@ -23,6 +25,17 @@ class EditSQSAjaxController(private val ajaxRequests: List<AjaxRequest>,
     override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? {
         // todo handle permissions
         val modelAndView = ModelAndView(GsonView())
+
+        val user = request.user()
+        if (user == null) {
+            modelAndView.model.put("result", AjaxRequestResult(false, "No user found"))
+            return modelAndView
+        }
+
+        if (!user.isPermissionGrantedGlobally(Permission.CHANGE_SERVER_SETTINGS)) {
+            modelAndView.model.put("result", AjaxRequestResult(false, "Not enough permissions"))
+            return modelAndView
+        }
 
         val res = doHandleInternal(request, response)
 
