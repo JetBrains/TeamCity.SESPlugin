@@ -16,6 +16,7 @@
 
     <!-- UI -->
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.BouncedUserNotificationController" init-method="register"/>
+    <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.UserProfileNoteController" init-method="register"/>
 
     <bean class="jetbrains.buildServer.sesPlugin.teamcity.ui.EditSQSParamsAdminPage" init-method="register">
         <constructor-arg index="3" ref="blockedUsersProvider"/>
