@@ -81,7 +81,10 @@
 
     <div class="statusBlock ${hidden}">
         <a showdiscardchangesmessage="false" onclick="return false;" href="#"
-           id="statusLabel">${fn:length(disabledUsers)} emails are disabled due to
+           id="statusLabel">${fn:length(disabledUsers)} <bs:plural txt="email" val="${fn:length(disabledUsers)}"/>
+            <c:choose><c:when
+                    test="${fn:length(disabledUsers) > 1}">are</c:when><c:otherwise>is</c:otherwise></c:choose> disabled
+            due to
             bounces</a>
         <div id="status" class="hidden">
             <div>
