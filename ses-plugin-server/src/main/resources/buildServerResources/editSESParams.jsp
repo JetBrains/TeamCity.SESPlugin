@@ -31,8 +31,10 @@
                 </c:when>
                 <c:otherwise>
                     <div class="enableNote">
-                        SES integration is <strong>enabled</strong>&nbsp;&nbsp;<a class="btn btn_mini" href="#"
-                                                                                  id="disable-btn">Disable</a>
+                        SES integration is <strong>enabled</strong>&nbsp;&nbsp;<a showdiscardchangesmessage="false"
+                                                                                  class="btn btn_mini" href="#"
+                                                                                  id="disable-btn"
+                                                                                  onclick="return false;">Disable</a>
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -70,14 +72,16 @@
     </form>
 
     <forms:submit label="Save" id="submit"/>
-    <forms:button className="hidden" id="delete">Delete integration...</forms:button>
-    <forms:button id="check">Test connection</forms:button>
+    <forms:button showdiscardchangesmessage="false" className="hidden" id="delete">Delete integration...</forms:button>
+    <forms:button showdiscardchangesmessage="false" id="check">Test connection</forms:button>
     <c:if test="${debug}"><c:set value="hidden" var="hidden"/></c:if>
-    <forms:button className="${hidden}" id="receive">Receive messages now</forms:button>
+    <forms:button showdiscardchangesmessage="false" className="${hidden}"
+                  id="receive">Receive messages now</forms:button>
     <span style="display: none" class="spinner"><i class="icon-refresh icon-spin"></i></span>
 
     <div class="statusBlock ${hidden}">
-        <a onclick="return false;" href="#" id="statusLabel">${fn:length(disabledUsers)} emails are disabled due to
+        <a showdiscardchangesmessage="false" onclick="return false;" href="#"
+           id="statusLabel">${fn:length(disabledUsers)} emails are disabled due to
             bounces</a>
         <div id="status" class="hidden">
             <div>
@@ -101,6 +105,11 @@
     </div>
 
     <forms:modified/>
+    <bs:dialog dialogId="testConnectionDialog" title="Test Connection" closeCommand="BS.TestConnectionDialog.close();"
+               closeAttrs="showdiscardchangesmessage='false'">
+        <div id="testConnectionStatus"></div>
+        <div id="testConnectionDetails" class="mono"></div>
+    </bs:dialog>
 
     <script>
         $j(BS.SESPlugin.EditSQSParams.init);
