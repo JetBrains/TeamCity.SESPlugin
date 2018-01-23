@@ -9,7 +9,9 @@ class SESIntegrationManagerImpl(private val myProjectManager: ProjectManager,
                                 private val myConfigActionFactory: ConfigActionFactory) : SESIntegrationManager {
     override fun createFrom(map: Map<String, String>): SQSBean = SQSBeanMapImpl(map)
 
-    private val FEATURE_TYPE = "sesIntegration"
+    companion object {
+        private val FEATURE_TYPE = "sesIntegration"
+    }
 
     @Synchronized
     override fun persistBean(bean: SQSBean, projectId: String): PersistResult {
