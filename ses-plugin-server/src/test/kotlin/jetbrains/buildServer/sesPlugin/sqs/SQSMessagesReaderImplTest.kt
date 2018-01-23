@@ -25,7 +25,7 @@ class SQSMessagesReaderImplTest {
 
             val reader = SQSMessagesReaderImpl(receiver, listOf())
 
-            then(reader.readAllQueues(sequenceOf(bean1, bean2))).isEqualTo(0)
+            then(reader.readAllQueues(sequenceOf(bean1, bean2)).countProcessed).isEqualTo(0)
         }
     }
 
@@ -71,7 +71,7 @@ class SQSMessagesReaderImplTest {
 
             val reader = SQSMessagesReaderImpl(receiver, listOf(handler1, handler2))
 
-            then(reader.readAllQueues(sequenceOf(bean1, bean2))).isEqualTo(8)
+            then(reader.readAllQueues(sequenceOf(bean1, bean2)).countProcessed).isEqualTo(8)
 
         }
     }
@@ -101,7 +101,7 @@ class SQSMessagesReaderImplTest {
 
             val reader = SQSMessagesReaderImpl(receiver, listOf(handler1, handler2))
 
-            then(reader.readAllQueues(sequenceOf(bean))).isEqualTo(1)
+            then(reader.readAllQueues(sequenceOf(bean)).countProcessed).isEqualTo(1)
         }
     }
 
@@ -130,7 +130,7 @@ class SQSMessagesReaderImplTest {
 
             val reader = SQSMessagesReaderImpl(receiver, listOf(handler1, handler2))
 
-            then(reader.readAllQueues(sequenceOf(bean))).isEqualTo(1)
+            then(reader.readAllQueues(sequenceOf(bean)).countProcessed).isEqualTo(1)
         }
     }
 
@@ -157,7 +157,7 @@ class SQSMessagesReaderImplTest {
 
             val reader = SQSMessagesReaderImpl(receiver, listOf(handler))
 
-            then(reader.readAllQueues(sequenceOf(bean1, bean2))).isEqualTo(1)
+            then(reader.readAllQueues(sequenceOf(bean1, bean2)).countProcessed).isEqualTo(1)
         }
     }
 
@@ -184,7 +184,7 @@ class SQSMessagesReaderImplTest {
 
             val reader = SQSMessagesReaderImpl(receiver, listOf(handler))
 
-            then(reader.readAllQueues(sequenceOf(bean1, bean2))).isEqualTo(1)
+            then(reader.readAllQueues(sequenceOf(bean1, bean2)).countProcessed).isEqualTo(1)
 
         }
     }
@@ -200,17 +200,20 @@ class SQSMessagesReaderImplTest {
 
             val message = BounceNotification("type", BounceData("", "", emptyList(), "", "", ""), MailData("", "", "", "", "", emptyList(), false, emptyList()))
 
+            val exception = Exception()
             check {
                 one(receiver).receiveMessages(bean); will(Expectations.returnValue(AmazonSQSCommunicationResult(listOf(AmazonSQSNotificationParseResult(message)))))
 
                 one(handler).accepts("type"); will(Expectations.returnValue(true))
 
-                one(handler).handle(message); will(Expectations.throwException(Exception()))
+                one(handler).handle(message); will(Expectations.throwException(exception))
             }
 
             val reader = SQSMessagesReaderImpl(receiver, listOf(handler))
 
-            then(reader.readAllQueues(sequenceOf(bean))).isEqualTo(0)
+            val res = reader.readAllQueues(sequenceOf(bean))
+            then(res.countProcessed).isEqualTo(0)
+            then(res.exception.isPresent).isFalse()
 
         }
     }

@@ -129,7 +129,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                             BS.SESPlugin.EditSQSParams.FormCrutch.showError(data.errorFields[i], "Should not be empty");
                         }
                     } else {
-                        alert(data.description)
+                        alert(data.description);
                         BS.reload();
                     }
                 });
