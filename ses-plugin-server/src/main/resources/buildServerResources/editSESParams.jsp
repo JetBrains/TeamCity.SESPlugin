@@ -73,7 +73,8 @@
 
     <forms:submit label="Save" id="submit"/>
     <forms:button showdiscardchangesmessage="false" className="hidden" id="delete">Delete integration...</forms:button>
-    <forms:button showdiscardchangesmessage="false" id="check">Test connection</forms:button>
+    <forms:button showdiscardchangesmessage="false" className="btn_primary submitButton"
+                  id="check">Test connection</forms:button>
     <c:if test="${debug}"><c:set value="hidden" var="hidden"/></c:if>
     <forms:button showdiscardchangesmessage="false" className="${hidden}"
                   id="receive">Receive messages now</forms:button>
