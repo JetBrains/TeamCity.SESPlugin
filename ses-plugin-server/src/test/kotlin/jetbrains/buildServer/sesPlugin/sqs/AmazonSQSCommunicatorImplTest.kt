@@ -29,7 +29,6 @@ class AmazonSQSCommunicatorImplTest {
             val result = "The result"
 
             check {
-                one(bean).isDisabled(); will(returnValue(false))
                 one(factory).createAmazonSQSClient(clients); will(returnValue(amazonSQS))
                 one(queueUrl).getQueueUrl(amazonSQS, bean); will(returnValue("someQueue"))
 
