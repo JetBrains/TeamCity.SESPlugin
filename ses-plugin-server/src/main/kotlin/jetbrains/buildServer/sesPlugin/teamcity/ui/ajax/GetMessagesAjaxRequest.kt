@@ -20,6 +20,6 @@ class GetMessagesAjaxRequest(private val sqsBounceMessagesService: SQSMessagesRe
         }
 
         val received = sqsBounceMessagesService.readAllQueues(sequenceOf(bean))
-        return AjaxRequestResult(true, "Received $received messages")
+        return AjaxRequestResult(received.successful, received.description)
     }
 }

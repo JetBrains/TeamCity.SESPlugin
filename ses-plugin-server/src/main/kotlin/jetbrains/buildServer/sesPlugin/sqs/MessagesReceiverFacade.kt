@@ -9,6 +9,10 @@ import jetbrains.buildServer.sesPlugin.teamcity.SQSBean
 class MessagesReceiverFacade(private val amazonSQSCommunicator: AmazonSQSCommunicator,
                              private val receiveMessagesTask: ReceiveMessagesTask) : SQSMessagesReceiver<AmazonSQSNotification> {
     override fun receiveMessages(bean: SQSBean): AmazonSQSCommunicationResult<AmazonSQSNotification> {
-        return amazonSQSCommunicator.performTask(bean, receiveMessagesTask)
+        return try {
+            amazonSQSCommunicator.performTask(bean, receiveMessagesTask)
+        } catch (ex: Exception) {
+            AmazonSQSCommunicationResult(emptyList(), ex, ex.message ?: ex.javaClass.name)
+        }
     }
 }

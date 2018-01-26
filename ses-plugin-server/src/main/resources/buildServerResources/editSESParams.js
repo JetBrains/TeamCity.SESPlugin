@@ -93,11 +93,12 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 sendRequest('check')
                     .done(function (data) {
                         if (data.errorFields && data.errorFields.length > 0) {
+                            BS.TestConnectionDialog.show(false, data.description);
                             for (var i = 0; i < data.errorFields.length; ++i) {
                                 BS.SESPlugin.EditSQSParams.FormCrutch.showError(data.errorFields[i], "Should not be empty");
                             }
                         } else {
-                            alert(data.description)
+                            BS.TestConnectionDialog.show(data.successful, data.description);
                         }
                     })
                     .fail(function (data) {
@@ -128,7 +129,7 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                             BS.SESPlugin.EditSQSParams.FormCrutch.showError(data.errorFields[i], "Should not be empty");
                         }
                     } else {
-                        alert(data.description)
+                        alert(data.description);
                         BS.reload();
                     }
                 });

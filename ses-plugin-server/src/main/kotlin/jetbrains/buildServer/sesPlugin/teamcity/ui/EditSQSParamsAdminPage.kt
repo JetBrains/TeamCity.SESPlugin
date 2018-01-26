@@ -21,6 +21,7 @@ class EditSQSParamsAdminPage(pagePlaces: PagePlaces,
 
     init {
         addJsFile(pluginDescriptor.getPluginResourcesPath("editSESParams.js"))
+        addJsFile("/js/bs/testConnection.js")
         addCssFile(pluginDescriptor.getPluginResourcesPath("editSESParams.css"))
         setPosition(jetbrains.buildServer.web.openapi.PositionConstraint.between(mutableListOf("email"), mutableListOf("jabber")))
     }
