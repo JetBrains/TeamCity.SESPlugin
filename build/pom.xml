@@ -9,12 +9,6 @@
     </parent>
     <artifactId>build</artifactId>
     <packaging>pom</packaging>
-    <properties>
-        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <teamcity.ses-plugin.plugin.version>snapshot-${maven.build.timestamp}</teamcity.ses-plugin.plugin.version>
-        <teamcity.ses-plugin.plugin.vendorName>Plugin vendor name</teamcity.ses-plugin.plugin.vendorName>
-        <teamcity.ses-plugin.plugin.vendorUrl>Plugin vendor URL</teamcity.ses-plugin.plugin.vendorUrl>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>jetbrains.buildServer.sesPlugin</groupId>
