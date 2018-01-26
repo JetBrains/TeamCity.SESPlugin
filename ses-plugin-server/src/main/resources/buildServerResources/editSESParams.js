@@ -3,20 +3,16 @@ BS.SESPlugin = BS.SESPlugin || {};
 BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
     disableAllInputs: function () {
         $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').attr('disabled', 'disabled');
+        $j('#editSQSParams').find('#submit').attr('disabled', 'disabled');
         $j('#editSQSParams').find('#check').attr('disabled', 'disabled');
         $j('#editSQSParams').find('#receive').attr('disabled', 'disabled');
     },
 
     enableAllInputs: function () {
-        if (BS.SESPlugin.EditSQSParams.isEnabled()) {
-            $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').removeAttr('disabled');
-            $j('#editSQSParams').find('#check').removeAttr('disabled');
-            $j('#editSQSParams').find('#receive').removeAttr('disabled');
-        }
-    },
-
-    isEnabled: function () {
-        return $j('#editSQSParams input[id=\'aws.sesIntegration.enabled\']')[0].checked;
+        $j('#editSQSParamsTable').find('input:not(.enableDisableSESIntegration)').removeAttr('disabled');
+        $j('#editSQSParams').find('#submit').removeAttr('disabled');
+        $j('#editSQSParams').find('#check').removeAttr('disabled');
+        $j('#editSQSParams').find('#receive').removeAttr('disabled');
     },
 
     isAnyFieldChanged: function () {
@@ -89,27 +85,19 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
         }).on('click', '#submit', function (e) {
             sumbit();
         }).on('click', '#check', function (e) {
-            if (BS.SESPlugin.EditSQSParams.isEnabled()) {
-                sendRequest('check')
-                    .done(function (data) {
-                        if (data.errorFields && data.errorFields.length > 0) {
-                            BS.TestConnectionDialog.show(false, data.description);
-                            for (var i = 0; i < data.errorFields.length; ++i) {
-                                BS.SESPlugin.EditSQSParams.FormCrutch.showError(data.errorFields[i], "Should not be empty");
-                            }
-                        } else {
-                            BS.TestConnectionDialog.show(data.successful, data.description);
+            sendRequest('check')
+                .done(function (data) {
+                    if (data.errorFields && data.errorFields.length > 0) {
+                        BS.TestConnectionDialog.show(false, data.description);
+                        for (var i = 0; i < data.errorFields.length; ++i) {
+                            BS.SESPlugin.EditSQSParams.FormCrutch.showError(data.errorFields[i], "Should not be empty");
                         }
-                    })
-                    .fail(function (data) {
-                    });
-            }
-        }).on('click', '.enableDisableSESIntegration', function (e) {
-            if (!e.target.checked) {
-                BS.SESPlugin.EditSQSParams.disableAllInputs();
-            } else {
-                BS.SESPlugin.EditSQSParams.enableAllInputs();
-            }
+                    } else {
+                        BS.TestConnectionDialog.show(data.successful, data.description);
+                    }
+                })
+                .fail(function (data) {
+                });
         }).on('click', '#delete', function () {
             if (!confirm("Delete all setting?")) return;
 
@@ -122,18 +110,16 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
                 .fail(function (data) {
                 });
         }).on('click', '#receive', function () {
-            if (BS.SESPlugin.EditSQSParams.isEnabled()) {
-                sendRequest('receive').done(function (data) {
-                    if (data.errorFields && data.errorFields.length > 0) {
-                        for (var i = 0; i < data.errorFields.length; ++i) {
-                            BS.SESPlugin.EditSQSParams.FormCrutch.showError(data.errorFields[i], "Should not be empty");
-                        }
-                    } else {
-                        alert(data.description);
-                        BS.reload();
+            sendRequest('receive').done(function (data) {
+                if (data.errorFields && data.errorFields.length > 0) {
+                    for (var i = 0; i < data.errorFields.length; ++i) {
+                        BS.SESPlugin.EditSQSParams.FormCrutch.showError(data.errorFields[i], "Should not be empty");
                     }
-                });
-            }
+                } else {
+                    alert(data.description);
+                    BS.reload();
+                }
+            });
         }).on('click', '#statusLabel', function () {
             $j('#editSQSParams #status').show();
             $j('#editSQSParams #statusLabel').hide();
@@ -163,10 +149,6 @@ BS.SESPlugin.EditSQSParams = BS.SESPlugin.EditSQSParams || {
         });
 
         awsCommonParamsUpdateVisibility();
-
-        if (!BS.SESPlugin.EditSQSParams.isEnabled()) {
-            BS.SESPlugin.EditSQSParams.disableAllInputs();
-        }
 
         BS.SESPlugin.EditSQSParams.FormCrutch.setUpdateStateHandlers({
             updateState: function () {

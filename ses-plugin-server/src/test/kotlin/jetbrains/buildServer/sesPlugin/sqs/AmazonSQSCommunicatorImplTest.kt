@@ -14,20 +14,6 @@ import org.testng.annotations.Test
 @Suppress("UNCHECKED_CAST")
 class AmazonSQSCommunicatorImplTest {
     @Test
-    fun testDisabledBean() {
-        mocking {
-            val bean = mock(SQSBean::class)
-            val task = mock(AmazonSQSCommunicatorTask::class) as AmazonSQSCommunicatorTask<String>
-
-            check {
-                one(bean).isDisabled(); will(returnValue(true))
-            }
-
-            then { receiver().performTask(bean, task) }.isInstanceOf(IllegalStateException::class.java)
-        }
-    }
-
-    @Test
     fun testPerformTask() {
         mocking {
             val bean = mock(SQSBean::class)

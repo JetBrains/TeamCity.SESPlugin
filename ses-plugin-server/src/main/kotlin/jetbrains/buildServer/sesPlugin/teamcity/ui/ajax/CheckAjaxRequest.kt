@@ -23,7 +23,7 @@ class CheckAjaxRequest(private val sqsMessagesReceiver: SQSConnectionChecker,
         return try {
             val checkConnectionResult = sqsMessagesReceiver.checkConnection(bean)
 
-            AjaxRequestResult(checkConnectionResult.status, checkConnectionResult.description, checkConnectionResult.exception)
+            AjaxRequestResult(checkConnectionResult.status, if (checkConnectionResult.status) "" else checkConnectionResult.description, checkConnectionResult.exception)
         } catch (e: Exception) {
             AjaxRequestResult(false, "Error occurred: ${e.message}", e)
         }

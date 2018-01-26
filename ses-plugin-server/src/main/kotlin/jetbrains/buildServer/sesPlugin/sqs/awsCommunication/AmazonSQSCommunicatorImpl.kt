@@ -7,10 +7,6 @@ class AmazonSQSCommunicatorImpl(private val awsClientsProvider: AWSClientsProvid
                                 private val queueUrlProvider: QueueUrlProvider) : AmazonSQSCommunicator {
 
     override fun <T> performTask(bean: SQSBean, communicatorTask: AmazonSQSCommunicatorTask<T>): T {
-        if (bean.isDisabled()) {
-            throw IllegalStateException("Queue is disabled")
-        }
-
         return awsClientsProvider.withClient(bean) {
             amazonSQSClientFactory.createAmazonSQSClient(this).use { sqs ->
                 if (Thread.currentThread().isInterrupted) throw InterruptedException("Execution is interrupted")
