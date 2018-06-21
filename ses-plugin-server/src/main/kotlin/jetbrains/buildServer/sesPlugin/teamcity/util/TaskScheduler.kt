@@ -21,7 +21,7 @@ class TaskScheduler(private val executorServices: ExecutorServices,
         for (task in tasks) {
             normalExecutorService.scheduleAtFixedRate({
                 try {
-                    task.task
+                    task.task.invoke()
                 } catch (ex: Throwable) {
                     logService.log {
                         Loggers.SERVER.warn("Error executing scheduled task in TeamCity SES plugin", ex)
