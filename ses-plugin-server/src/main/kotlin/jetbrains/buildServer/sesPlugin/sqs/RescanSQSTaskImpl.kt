@@ -1,18 +1,22 @@
 package jetbrains.buildServer.sesPlugin.sqs
 
+import jetbrains.buildServer.log.Loggers
 import jetbrains.buildServer.sesPlugin.teamcity.SESIntegrationManager
-import jetbrains.buildServer.sesPlugin.teamcity.util.ConfigurableLong
-import jetbrains.buildServer.sesPlugin.teamcity.util.ConfigurableLongImpl
-import jetbrains.buildServer.sesPlugin.teamcity.util.PeriodicTask
-import jetbrains.buildServer.sesPlugin.teamcity.util.TeamCityProperties
+import jetbrains.buildServer.sesPlugin.teamcity.util.*
 import java.util.concurrent.TimeUnit
 
 class RescanSQSTaskImpl(private val queueReader: SQSMessagesReader,
                         private val sesIntegrationManager: SESIntegrationManager,
                         private val _delay: ConfigurableLong,
-                        private val _initialDelay: ConfigurableLong) : PeriodicTask {
+                        private val _initialDelay: ConfigurableLong,
+                        private val logService: LogService = NoOpLogService()) : PeriodicTask {
     override val task: () -> Unit
-        get() = { queueReader.readAllQueues(sesIntegrationManager.getBeans("")) }
+        get() = {
+            logService.log {
+                Loggers.SERVER.debug("Amazon SES plugin: reading all queues")
+            }
+            queueReader.readAllQueues(sesIntegrationManager.getBeans(""))
+        }
 
     override val initialDelay: Long
         get() = _initialDelay.get()
