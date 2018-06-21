@@ -41,6 +41,7 @@ class TaskSchedulerTest {
             val task = mock(PeriodicTask::class)
             val taskRunnable: () -> Unit = {}
             val dispatcher = EventDispatcher.create(ServerListener::class.java)
+            val future = mock(ScheduledFuture::class)
 
             val startupProcessor = TaskScheduler(executorServices, dispatcher, listOf(task))
 
@@ -51,7 +52,14 @@ class TaskSchedulerTest {
                 one(task).initialDelay; will(returnValue(10L))
                 one(task).delay; will(returnValue(11L))
 
-                one(executor).scheduleAtFixedRate(with(any(Runnable::class.java)), with(10L), with(11L), with(TimeUnit.MILLISECONDS))
+                one(executor).scheduleAtFixedRate(with(any(Runnable::class.java)), with(10L), with(11L), with(TimeUnit.MILLISECONDS));
+                will(object : CustomAction("") {
+                    override fun invoke(p0: Invocation?): Any {
+                        (p0!!.getParameter(0) as Runnable).run()
+                        return future
+                    }
+
+                })
             }
 
             startupProcessor.init()
