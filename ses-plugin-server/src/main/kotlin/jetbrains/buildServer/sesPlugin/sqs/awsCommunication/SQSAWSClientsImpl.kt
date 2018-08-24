@@ -9,8 +9,8 @@ class SQSAWSClientsImpl(private val realClients: AWSClients) : SQSAWSClients {
         if (realClients.credentials == null) throw IllegalArgumentException("Cannot obtain credentials")
     }
 
-    override val credentials: AWSCredentials
-        get() = realClients.credentials!!
+    override val credentials: AWSCredentials?
+        get() = realClients.credentials
     override val region: String
         get() = realClients.region
 }

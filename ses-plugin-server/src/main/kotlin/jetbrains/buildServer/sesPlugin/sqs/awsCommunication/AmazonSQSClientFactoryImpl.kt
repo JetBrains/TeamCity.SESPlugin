@@ -9,6 +9,9 @@ class AmazonSQSClientFactoryImpl : AmazonSQSClientFactory {
     override fun createAmazonSQSClient(clients: SQSAWSClients): AutoCloseableAmazonSQS =
             AutoCloseableAmazonSQSImpl(AmazonSQSClientBuilder.standard()
                     .withRegion(clients.region)
-                    .withCredentials(AWSCredentialsProviderChain(AWSStaticCredentialsProvider(clients.credentials), DefaultAWSCredentialsProviderChain.getInstance()))
+                    .withCredentials(buildCredentials(clients))
                     .build())
+
+    private fun buildCredentials(clients: SQSAWSClients) =
+            AWSCredentialsProviderChain(if (clients.credentials != null) AWSStaticCredentialsProvider(clients.credentials) else DefaultAWSCredentialsProviderChain.getInstance())
 }
