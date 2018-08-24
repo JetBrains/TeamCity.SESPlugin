@@ -1,6 +1,5 @@
 package jetbrains.buildServer.sesPlugin.sqs.awsCommunication
 
-import com.amazonaws.auth.AWSCredentialsProviderChain
 import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder
@@ -13,5 +12,5 @@ class AmazonSQSClientFactoryImpl : AmazonSQSClientFactory {
                     .build())
 
     private fun buildCredentials(clients: SQSAWSClients) =
-            AWSCredentialsProviderChain(if (clients.credentials != null) AWSStaticCredentialsProvider(clients.credentials) else DefaultAWSCredentialsProviderChain.getInstance())
+            if (clients.credentials != null) AWSStaticCredentialsProvider(clients.credentials) else DefaultAWSCredentialsProviderChain.getInstance()
 }
