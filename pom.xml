@@ -25,7 +25,7 @@
     <properties>
         <teamcity-version>2017.2</teamcity-version>
         <kotlin.version>1.1.50</kotlin.version>
-        <aws-sdk.version>1.11.210</aws-sdk.version>
+        <aws-sdk.version>1.11.853</aws-sdk.version>
     </properties>
 
     <dependencies>
