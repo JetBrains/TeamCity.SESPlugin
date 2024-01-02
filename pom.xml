@@ -57,20 +57,10 @@
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
         <repository>
-            <id>JetBrains</id>
-            <url>https://repository.jetbrains.com/all</url>
-        </repository>
-        <repository>
             <id>teamcity-repository</id>
             <url>https://download.jetbrains.com/teamcity-repository</url>
         </repository>
     </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>JetBrains</id>
-            <url>https://repository.jetbrains.com/all</url>
-        </pluginRepository>
-    </pluginRepositories>
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
